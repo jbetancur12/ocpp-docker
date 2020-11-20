@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import cookieParser from 'cookie-parser';
 import compress from 'compression';
 import cors from 'cors';
@@ -7,9 +8,14 @@ import helmet from 'helmet';
 import Template from './../template';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
+import devBundle from './devBundle';
+
+const CURRENT_WORKING_DIR = process.cwd();
 
 const app = express();
 /*... configure express ... */
+
+devBundle.compile(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
