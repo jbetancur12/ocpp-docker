@@ -42,9 +42,6 @@ export default function Home() {
           Welcome to the MERN Skeleton home page.
         </Typography>
       </CardContent>
-      <Link to='/users'>Users</Link>
-      <Link to='/signup'>Signup</Link>
-      <Link to='/signin'>Signin</Link>
     </Card>
   );
 }
