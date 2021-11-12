@@ -9,7 +9,7 @@ const config = {
       (process.env.IP || 'localhost') +
       ':' +
       (process.env.MONGO_PORT || '27018') +
-      '/mernprojectv1',
+      '/ocpp',
 };
 
 export default config;

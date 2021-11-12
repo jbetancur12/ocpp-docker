@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import Template from './../template';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
+import chargerPointsRoutes from './routes/chargerPoint.routes';
 import devBundle from './devBundle';
 
 import React from 'react';
@@ -35,6 +36,7 @@ app.use(cors());
 app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')));
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+app.use('/', chargerPointsRoutes);
 
 app.get('*', (req, res) => {
   const sheets = new ServerStyleSheets();

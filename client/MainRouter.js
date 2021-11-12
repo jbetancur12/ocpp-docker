@@ -8,6 +8,7 @@ import Profile from './user/Profile';
 import EditProfile from './user/EditProfile';
 import PrivateRoute from './auth/PrivateRoute';
 import Menu from './core/Menu';
+import Dashboard from "./dashboard/Dashboard";
 
 const MainRouter = () => {
   return (
@@ -19,6 +20,7 @@ const MainRouter = () => {
         <Route path='/signup' component={Signup} />
         <Route path='/signin' component={Signin} />
         <PrivateRoute path='/user/edit/:userId' component={EditProfile} />
+        <PrivateRoute exact path='/dashboard' component={Dashboard} />
         <Route path='/user/:userId' component={Profile} />
       </Switch>
     </div>
