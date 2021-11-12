@@ -48,6 +48,7 @@ app.get('*', (req, res) => {
       </StaticRouter>,
     ),
   );
+
   if (context.url) {
     return res.redirect(303, context.url);
   }

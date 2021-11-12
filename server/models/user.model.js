@@ -20,6 +20,11 @@ const UserSchema = new Schema({
     type: String,
     required: 'Password is required',
   },
+  about: {
+    type: String,
+    trim: true,
+  },
+  photo: { data: Buffer, contentType: String },
   salt: String,
   created: {
     type: Date,

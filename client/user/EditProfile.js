@@ -31,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 300,
   },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 300,
+  },
+  input: {
+    display: 'none',
+  },
   submit: {
     margin: 'auto',
     marginBottom: theme.spacing(2),
@@ -113,6 +121,25 @@ export default function EditProfile({ match }) {
           value={values.name}
           onChange={handleChange('name')}
           margin='normal'
+        />
+        <br />
+        <input
+          accept='image/*'
+          type='file'
+          onChange={handleChange('photo')}
+          style={{ display: 'none' }}
+          id='icon-button-file'
+          className={classes.input}
+        />
+        <br />
+        <TextField
+          id='multiline-flexible'
+          label='About'
+          multiline
+          rows='2'
+          value={values.about}
+          onChange={handleChange('about')}
+          className={classes.textField}
         />
         <br />
         <TextField
