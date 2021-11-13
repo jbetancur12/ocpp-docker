@@ -4,15 +4,10 @@ import Controls from "../components/controls/Controls";
 import { useForm, Form } from "../components/useForm";
 //import * as employeeService from "../../services/employeeService";
 
-const genderItems = [
-  { id: "male", title: "Male" },
-  { id: "female", title: "Female" },
-  { id: "other", title: "Other" },
-];
 
 const initialFValues = {
   id: 0,
-  chargerPointID: "",
+  charger_box_id: "",
 };
 
 export default function StationForm(props) {
@@ -22,8 +17,8 @@ export default function StationForm(props) {
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
-    if ("chargerPointID" in fieldValues)
-    temp.chargerPointID = fieldValues.chargerPointID ? "" : "This field is required.";
+    if ("charger_box_id" in fieldValues)
+    temp.charger_box_id = fieldValues.charger_box_id ? "" : "This field is required.";
     setErrors({
       ...temp,
     });
@@ -56,11 +51,11 @@ export default function StationForm(props) {
       <Grid container>
         <Grid item xs={12}>
           <Controls.Input
-            name="chargerPointID"
+            name="charger_box_id"
             label="Station"
-            value={values.chargerPointID}
+            value={values.charger_box_id}
             onChange={handleInputChange}
-            error={errors.chargerPointID}
+            error={errors.charger_box_id}
           />
           <div>
             <Controls.Button type="submit" text="Submit" />

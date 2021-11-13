@@ -9,11 +9,11 @@ router
   .post(chargePoint.create);
 
 router
-  .route("/ocpp/chargerPoints/:chargerPointId")
+  .route("/ocpp/chargerPoints/:charger_box_id")
   .get( chargePoint.read)
   .put(chargePoint.update)
   .delete(chargePoint.remove);
 
-router.param("chargerPointId", chargePoint.chargerPointByID);
+router.param("charger_box_id", chargePoint.chargerPointByID);
 
 export default router;

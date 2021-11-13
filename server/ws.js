@@ -11,6 +11,7 @@ wss.on("connection", async (socket, req) => {
   CLIENTS[chargerSerial] = socket
   socket.on("message", async (message) => {
     const msgParsed = JSON.parse(message);
+    console.log(msgParsed)
     messageController(wss, socket, message, req.url);
  
     // if(server || socket == CLIENTS[socket.id]){

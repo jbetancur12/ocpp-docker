@@ -1,20 +1,46 @@
-import actions from "../actions/chargePoint.action";
+import actions, { HEARTBEAT } from "../actions/chargePoint.action";
 import ChargerPoint from "../models/chargerPoint.model";
 import extend from "lodash/extend";
 import errorHandler from "../helpers/dbErrorHandler";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+const getCPData = (payload) => {
+  return {
+    charge_point_vendor: payload.chargePointVendor || "",
+    charge_point_model: payload.chargePointModel || "",
+    charge_point_serial_number: payload.chargePointSerialNumber || "",
+    charge_box_serial_number: payload.chargeBoxSerialNumber || "",
+    fw_version: payload.firmwareVersion || "",
+    iccid: payload.iccid || "",
+    imsi: payload.imsi || "",
+    meter_type: payload.meterType || "",
+    meter_serial_number: payload.meterSerialNumber || "",
+    registration_status: "Accepted",
+  };
+};
 
 async function messageController(ws, socket, message, url) {
   const body = JSON.parse(message);
+
   if (body[0] === 2) {
     switch (body[2]) {
+
+      case actions.HEARTBEAT: {
+        const HBDate = new Date().toISOString();
+        await ChargerPoint.findOneAndUpdate(
+          { charger_box_id: url.substring(1) },
+          { last_heartbeat_timestamp: HBDate }
+        );
+
+        return socket.send([3, body[1], { currentTime: HBDate }]);
+      }
+
       case actions.AUTHORIZE:
         break;
 
       case actions.BOOT_NOTIFICATION:
         try {
           let chargerPoint = await ChargerPoint.findOne({
-            chargerPointID: url.substring(1),
+            charger_box_id: url.substring(1),
           });
           if (!chargerPoint) {
             console.log("ChargerPoint does not exist in DB");
@@ -30,6 +56,11 @@ async function messageController(ws, socket, message, url) {
               ])
             );
           }
+
+          await ChargerPoint.findByIdAndUpdate(
+            chargerPoint._id,
+            getCPData(body[3])
+          );
 
           return socket.send(
             JSON.stringify([
@@ -68,8 +99,8 @@ async function messageController(ws, socket, message, url) {
       default:
         break;
     }
-  }else if(body[0]==3){
-    console.log("3=> ",body)
+  } else if (body[0] == 3) {
+    console.log("3=> ", body);
   }
 }
 

@@ -27,7 +27,7 @@ const create = async (station) => {
   };
 
   const update = async (params) => {
-    const {chargerPointID, _id} = params
+    const {charger_box_id, _id} = params
     try {
       let response = await fetch('/ocpp/chargerPoints/' + _id, {
         method: 'PUT',
@@ -35,7 +35,7 @@ const create = async (station) => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           },
-        body: JSON.stringify({chargerPointID: chargerPointID}),
+        body: JSON.stringify({charger_box_id: charger_box_id}),
       });
       return await response.json();
     } catch (err) {

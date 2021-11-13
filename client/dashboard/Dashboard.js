@@ -18,6 +18,7 @@ import Notification from "../components/Notification";
 import ConfirmDialog from "../components/ConfirmDialog";
 import Popup from "../components/Popup";
 import StationForm from "./StationForm";
+import StationFormInfo from "./StationInfoForm";
 import {
   Search,
   Close as CloseIcon,
@@ -26,6 +27,7 @@ import {
 } from "@material-ui/icons";
 
 import Controls from "../components/controls/Controls";
+import {convertdate} from '../utils/helpers'
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -86,13 +88,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const headCells = [{ id: "station", label: "Estación" },{ id: 'actions', label: 'Actions', disableSorting: true }];
+const headCells = [
+  { id: "station", label: "Estación" },
+  { id: "last_hearbeat", label: "Last HeartBeat", disableSorting: true },
+  { id: "actions", label: "Actions", disableSorting: true },
+];
 
 export default function Dashboard() {
   const classes = useStyles();
   const [records, setRecords] = useState([]);
-  const [recordForEdit, setRecordForEdit] = useState(null)
+  const [recordForEdit, setRecordForEdit] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
+  const [openPopupInfo, setOpenPopupInfo] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -110,12 +117,8 @@ export default function Dashboard() {
     subTitle: "",
   });
 
- 
-
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-    useTable(records, headCells, filterFn );
-
-  
+    useTable(records, headCells, filterFn);
 
   const handleSearch = (e) => {
     let target = e.target;
@@ -124,7 +127,7 @@ export default function Dashboard() {
         if (target.value == "") return items;
         else
           return items.filter((x) =>
-            x.chargerPointID.toLowerCase().includes(target.value)
+            x.charger_box_id.toLowerCase().includes(target.value)
           );
       },
     });
@@ -146,16 +149,16 @@ export default function Dashboard() {
           });
         }
       });
-    }else {
+    } else {
       update(station).then((data) => {
         if (data.error) {
-          console.log(data.error)
+          console.log(data.error);
         } else {
           resetForm();
           setRecordForEdit(null);
           setOpenPopup(false);
           setUpdateTable(true);
-            setNotify({
+          setNotify({
             isOpen: true,
             message: "Submitted Successfully",
             type: "success",
@@ -163,12 +166,10 @@ export default function Dashboard() {
         }
       });
     }
-
   };
 
   const openInPopup = (item) => {
-     setRecordForEdit(item);
-    setOpenPopup(true);
+    setRecordForEdit(item);
   };
 
   useEffect(async () => {
@@ -176,7 +177,7 @@ export default function Dashboard() {
       if (data.error) {
       } else {
         setRecords(data);
-        setUpdateTable(false)
+        setUpdateTable(false);
       }
     });
   }, [updateTable]);
@@ -243,12 +244,23 @@ export default function Dashboard() {
           <TableBody>
             {recordsAfterPagingAndSorting().map((item) => (
               <TableRow key={item._id}>
-                <TableCell>{item.chargerPointID}</TableCell>
+                <TableCell
+                  onClick={() => {
+                    setOpenPopupInfo(true);
+                    openInPopup(item)
+                  }}
+                >
+                  {item.charger_box_id}
+                </TableCell>
+                <TableCell>
+                  {convertdate(item.last_heartbeat_timestamp)}
+                </TableCell>
                 <TableCell>
                   <Controls.ActionButton
                     color="primary"
                     onClick={() => {
                       openInPopup(item);
+                      setOpenPopup(true)
                     }}
                   >
                     <EditOutlinedIcon fontSize="small" />
@@ -281,6 +293,13 @@ export default function Dashboard() {
         setOpenPopup={setOpenPopup}
       >
         <StationForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+      </Popup>
+      <Popup
+        title="Station Form"
+        openPopup={openPopupInfo}
+        setOpenPopup={setOpenPopupInfo}
+      >
+        <StationFormInfo recordForEdit={recordForEdit}/>
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
       <ConfirmDialog

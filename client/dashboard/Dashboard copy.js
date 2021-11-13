@@ -153,7 +153,7 @@ export default function Dashboard() {
     subTitle: "",
   });
   const [values, setValues] = useState({
-    chargerPointID: "",
+    charger_box_id: "",
   });
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
@@ -196,7 +196,7 @@ export default function Dashboard() {
 
   const clickSubmit = () => {
     const station = {
-      chargerPointID: values.chargerPointID || undefined,
+      charger_box_id: values.charger_box_id || undefined,
     };
     create(station).then((data) => {
       if (data.error) {
@@ -223,10 +223,10 @@ export default function Dashboard() {
     <div style={modalStyle} className={classes.paper}>
       <TextField
         // error
-        id="chargerPointID"
+        id="charger_box_id"
         label="Estacion ID"
-        value={values.chargerPointID}
-        onChange={handleChange("chargerPointID")}
+        value={values.charger_box_id}
+        onChange={handleChange("charger_box_id")}
         variant="filled"
       />
       <Button
@@ -372,7 +372,7 @@ export default function Dashboard() {
               cp.map((row) => (
                 <StyledTableRow key={row._id}>
                   <StyledTableCell component="th" scope="row">
-                    {row.chargerPointID}
+                    {row.charger_box_id}
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     <Controls.ActionButton
@@ -408,7 +408,7 @@ export default function Dashboard() {
                         <Button onClick={handleClose} color="primary">
                           Disagree
                         </Button>
-                        <Button onClick={()=>handleDelete(row.chargerPointID)} color="primary" autoFocus>
+                        <Button onClick={()=>handleDelete(row.charger_box_id)} color="primary" autoFocus>
                           Agree
                         </Button>
                       </DialogActions>
