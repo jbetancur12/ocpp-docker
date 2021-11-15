@@ -9,6 +9,7 @@ import EditProfile from './user/EditProfile';
 import PrivateRoute from './auth/PrivateRoute';
 import Menu from './core/Menu';
 import Dashboard from "./dashboard/Dashboard";
+import Operations from "./components/Operations";
 
 const MainRouter = () => {
   return (
@@ -18,6 +19,7 @@ const MainRouter = () => {
         <Route exact path='/' component={Home} />
         <Route path='/users' component={Users} />
         <PrivateRoute path='/dashboard' component={Dashboard} />
+        <PrivateRoute path='/operations' component={Operations} />
         <Route path='/signup' component={Signup} />
         <Route path='/signin' component={Signin} />
         <PrivateRoute path='/user/edit/:userId' component={EditProfile} />

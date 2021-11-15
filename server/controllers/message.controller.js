@@ -3,6 +3,7 @@ import ChargerPoint from "../models/chargerPoint.model";
 import extend from "lodash/extend";
 import errorHandler from "../helpers/dbErrorHandler";
 import { v4 as uuidv4 } from "uuid";
+
 const getCPData = (payload) => {
   return {
     charge_point_vendor: payload.chargePointVendor || "",
@@ -18,9 +19,11 @@ const getCPData = (payload) => {
   };
 };
 
-async function messageController(ws, socket, message, url) {
-  const body = JSON.parse(message);
+const actionsSended = {id:"",lastAction:"",cp_id: ""}
 
+
+async function messageController(ws, socket, message, url, CLIENTS) {
+  const body = JSON.parse(message);
   if (body[0] === 2) {
     switch (body[2]) {
 
@@ -80,7 +83,6 @@ async function messageController(ws, socket, message, url) {
             })
           );
         }
-        break;
 
       case actions.START_TRANSACTION:
         socket.send(
@@ -96,11 +98,16 @@ async function messageController(ws, socket, message, url) {
           ])
         );
 
+        case actions.RESET:
+          console.log(url)
+
       default:
         break;
     }
   } else if (body[0] == 3) {
-    console.log("3=> ", body);
+    //url.substring(1)
+
+    console.log("3=> ", CLIENTS);
   }
 }
 

@@ -52,7 +52,7 @@ const Menu = withRouter(({ history }) => (
           <Button style={isActive(history, "/dashboard")}>Dashboard</Button>
           </Link>
           <Link to="/operations">
-          <Button style={isActive(history, "/Operations")}>Operations</Button>
+          <Button style={isActive(history, "/operations")}>Operations</Button>
           </Link>
           <Button
             color="inherit"
