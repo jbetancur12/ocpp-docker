@@ -20,7 +20,7 @@ router
 
 router
 .route("/ocpp/chargerPoints/:id/:conector")
-.get(chargerPoint.remoteStart)
+.post(chargerPoint.remoteStart)
 
 router
   .route("/ocpp/chargerPoints")

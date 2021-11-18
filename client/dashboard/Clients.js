@@ -84,7 +84,7 @@ export default function Clients() {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
-    const sse = new EventSource("/ocpp/chargerPoints/clients");
+    const sse = new EventSource("/ocpp/chargerPoints/status");
     function getRealtimeData(data) {
       setStations(JSON.parse(data));
     }
@@ -100,12 +100,8 @@ export default function Clients() {
   }, []);
 
   const toogleConnector = (id, connector) => {
-  // e is the event object that returned
-      console.log(id)
-      console.log(connector)
-    
     fetch("/ocpp/chargerPoints" + id + "/" + connector.connectorId, {
-      method: "GET",
+      method: "POST",
     })
       .then(function (response) {
         return response.json();

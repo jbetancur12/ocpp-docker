@@ -48,7 +48,7 @@ export function createServer(server) {
         });
 
         if (!chargerPoint) {
-          console.log("ChargerPoint does not exist in DB");
+          console.info("ChargerPoint does not exist in DB");
           return {
             status: BootNotificationConst.STATUS_REJECTED,
             currentTime: new Date().toISOString(),
@@ -98,9 +98,10 @@ export function createServer(server) {
         // client.info = client.info || {};
         // client.info.connectors = client.info.connectors || [];
 
-        const connectorIndex = client.info.connectors.findIndex(
-          (item) => command.connectorId === item.connectorId
-        );
+        const connectorIndex = client.info.connectors.findIndex((item) => {
+          return command.connectorId === item.connectorId;
+        });
+
         if (connectorIndex === -1) {
           client.info.connectors.push({
             ...command,
@@ -118,7 +119,6 @@ export function createServer(server) {
   };
 
   cSystem.toggleChargePoint = async (client, connectorId) => {
-    
     const connector = client.info.connectors.find(
       (item) => connectorId.toString() === item.connectorId.toString()
     );
@@ -133,8 +133,6 @@ export function createServer(server) {
       await client.connection.send(command);
       return;
     }
-    console.log("con: ", connector)
-   
 
     let command = new OCPPCommands.RemoteStartTransaction({
       connectorId: connectorId,

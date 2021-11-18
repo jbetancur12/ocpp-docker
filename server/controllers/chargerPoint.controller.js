@@ -2,7 +2,7 @@ import ChargerPoint from "../models/chargerPoint.model";
 import extend from "lodash/extend";
 import errorHandler from "../helpers/dbErrorHandler";
 import { centralSystem } from "../server";
-import _ from 'lodash'
+import _ from "lodash";
 
 const create = async (req, res) => {
   const chargerPoint = new ChargerPoint(req.body);
@@ -66,13 +66,18 @@ const update = async (req, res) => {
 };
 
 const remoteStart = async (req, res) => {
-  console.log(req.params)
-  const idf = _.findIndex(centralSystem.clients, function(o){return o.connection.req.url === `/${req.params.id}`})
-  if(idf !== -1){
-    const result = await centralSystem.toggleChargePoint(centralSystem.clients[idf], req.params.conector);
+  const idf = _.findIndex(centralSystem.clients, function (o) {
+    return o.connection.req.url === `/${req.params.id}`;
+  });
+  if (idf !== -1) {
+    const result = await centralSystem.toggleChargePoint(
+      centralSystem.clients[idf],
+      parseInt(req.params.conector)
+    );
     res.write(JSON.stringify({}));
   }
-  res.json({})
+  res.end();
+  return;
 };
 
 const remove = async (req, res) => {
@@ -89,23 +94,19 @@ const remove = async (req, res) => {
   }
 };
 
-const status = async (req, res) => {
-  res.setHeader("Content-Type", "text/event-stream");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  const intervalId = setInterval(() => {
-    const date = new Date().toLocaleString();
-    res.write(`data: ${date}\n\n`);
-  }, 1000);
-
-  res.on("close", () => {
-    console.log("Client closed connection");
-    clearInterval(intervalId);
-    res.end();
-  });
+const clients = async (req, res) => {
+  try {
+    const getClients = centralSystem.clients.map(client => client.connection.req.url)
+    res.json(getClients)
+    
+  } catch (error) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
 };
 
-const clients = async (req, res) => {
-  console.log("Client Connected");
+const status= async (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Access-Control-Allow-Origin", "*");
   onDigits(req, res);
@@ -115,14 +116,13 @@ const clients = async (req, res) => {
 function onDigits(req, res) {
   const intervalId = setInterval(() => {
     const data = centralSystem.clients.map((client) => {
-      return {id: client.connection.req.url, ...client.info};
-    })
+      return { id: client.connection.req.url, ...client.info };
+    });
 
     res.write(`data: ${JSON.stringify(data)}\n\n`);
   }, 1000);
 
   res.on("close", () => {
-    console.log("Client closed connection");
     clearInterval(intervalId);
     res.end();
   });
@@ -137,5 +137,5 @@ export default {
   update,
   status,
   clients,
-  remoteStart
+  remoteStart,
 };
