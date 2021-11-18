@@ -43,7 +43,6 @@ export function createServer(server) {
           ...command,
         };
 
-
         let chargerPoint = await ChargerPoint.findOne({
           charger_box_id: connection.url.substring(1),
         });
@@ -119,6 +118,7 @@ export function createServer(server) {
   };
 
   cSystem.toggleChargePoint = async (client, connectorId) => {
+    
     const connector = client.info.connectors.find(
       (item) => connectorId.toString() === item.connectorId.toString()
     );
@@ -133,6 +133,8 @@ export function createServer(server) {
       await client.connection.send(command);
       return;
     }
+    console.log("con: ", connector)
+   
 
     let command = new OCPPCommands.RemoteStartTransaction({
       connectorId: connectorId,

@@ -10,6 +10,7 @@ import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import chargerPointsRoutes from './routes/chargerPoint.routes';
 import devBundle from './devBundle';
+import sse from './sse'
 
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -18,6 +19,8 @@ import { StaticRouter } from 'react-router-dom';
 
 import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
 import theme from './../client/theme';
+
+
 
 const CURRENT_WORKING_DIR = process.cwd();
 
@@ -29,14 +32,16 @@ devBundle.compile(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(compress());
+//app.use(compress());
 app.use(helmet());
 app.use(cors());
+app.use(sse)
+
 
 app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')));
+app.use('/', chargerPointsRoutes);
 app.use('/', userRoutes);
 app.use('/', authRoutes);
-app.use('/', chargerPointsRoutes);
 
 app.get('*', (req, res) => {
   const sheets = new ServerStyleSheets();
