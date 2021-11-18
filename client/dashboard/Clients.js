@@ -113,7 +113,7 @@ export default function Clients() {
 
   return (
     <div>
-      {stations.map((item) => (
+      {stations.length > 0 && stations.map((item) => (
         <div className={classes.station} key={item.id}>
           <div className={classes.stationTitle}>
             {item.id.substring(1)}
