@@ -74,6 +74,7 @@ export function createServer(server) {
         };
 
       case command instanceof OCPPCommands.MeterValues:
+        console.log(command)
         return {}
 
       case command instanceof OCPPCommands.StartTransaction:
