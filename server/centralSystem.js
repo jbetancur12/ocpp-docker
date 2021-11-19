@@ -73,6 +73,9 @@ export function createServer(server) {
           },
         };
 
+      case command instanceof OCPPCommands.MeterValues:
+        return {}
+
       case command instanceof OCPPCommands.StartTransaction:
         return {
           transactionId: 1,
