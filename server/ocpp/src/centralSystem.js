@@ -24,7 +24,11 @@ export default class CentralSystem {
       port,
       host,
       handleProtocols: (protocols, req) => {
-        if (protocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
+        let newProtocols;
+        if(typeof protocols === 'object'){
+          newProtocols = Array.from(protocols)
+        }
+        if (newProtocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
           return "";
         }
         return OCPP_PROTOCOL_1_6;

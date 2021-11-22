@@ -147,8 +147,16 @@ export function createServer(server) {
   };
   return cSystem;
 
-  function validateConnection(url) {
-    return true;
+  async function validateConnection(url) {
+    let chargerPoint = await ChargerPoint.findOne({
+      charger_box_id: url.substring(1),
+    });
+
+    if (chargerPoint) {
+      return true;
+      
+    }
+    return false;
   }
 }
 
