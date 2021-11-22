@@ -27,42 +27,48 @@ const Menu = withRouter(({ history }) => (
         <Button style={isActive(history, "/users")}>Users</Button>
       </Link>
       {!auth.isAuthenticated() && (
-        <span>
-          <Link to="/signup">
-            <Button style={isActive(history, "/signup")}>Sign up</Button>
-          </Link>
-          <Link to="/signin">
-            <Button style={isActive(history, "/signin")}>Sign In</Button>
-          </Link>
-        </span>
-      )}
-      {auth.isAuthenticated() && (
-        <span>
-          <Link to={"/user/" + auth.isAuthenticated().user._id}>
+        <>
+          <span>
+            <Link to="/signup">
+              <Button style={isActive(history, "/signup")}>Sign up</Button>
+            </Link>
+            <Link to="/signin">
+              <Button style={isActive(history, "/signin")}>Sign In</Button>
+            </Link>
+          </span>
+
+          <span>
+            <Link to={"/user/" + auth.isAuthenticated().user._id}>
+              <Button
+                style={isActive(
+                  history,
+                  "/user/" + auth.isAuthenticated().user._id
+                )}
+              >
+                My Profile
+              </Button>
+            </Link>
+            <Link to="/dashboard">
+              <Button style={isActive(history, "/dashboard")}>Dashboard</Button>
+            </Link>
+            <Link to="/operations">
+              <Button style={isActive(history, "/operations")}>
+                Operations
+              </Button>
+            </Link>{" "}
+            <Link to="/clients">
+              <Button style={isActive(history, "/clients")}>Clients</Button>
+            </Link>
             <Button
-              style={isActive(
-                history,
-                "/user/" + auth.isAuthenticated().user._id
-              )}
+              color="inherit"
+              onClick={() => {
+                auth.clearJWT(() => history.push("/"));
+              }}
             >
-              My Profile
+              Sign out
             </Button>
-          </Link>
-          <Link to="/dashboard">
-          <Button style={isActive(history, "/dashboard")}>Dashboard</Button>
-          </Link>
-          <Link to="/operations">
-          <Button style={isActive(history, "/operations")}>Operations</Button>
-          </Link>
-          <Button
-            color="inherit"
-            onClick={() => {
-              auth.clearJWT(() => history.push("/"));
-            }}
-          >
-            Sign out
-          </Button>
-        </span>
+          </span>
+        </>
       )}
     </Toolbar>
   </AppBar>
