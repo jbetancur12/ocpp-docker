@@ -27,6 +27,8 @@ export default class CentralSystem {
         let newProtocols;
         if(typeof protocols === 'object'){
           newProtocols = Array.from(protocols)
+        }else{
+          newProtocols = protocols
         }
         if (newProtocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
           return "";
