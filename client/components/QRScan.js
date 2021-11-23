@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import QRScan from "qrscan";
 import { makeStyles, TextField } from "@material-ui/core";
 import Station from "../components/stations";
 
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
 function QRScanModule() {
   const classes = useStyles();
   const [values, setValues] = useState("");
+  const [value, setValue] = useState("");
   const [watching, setWatching] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -26,7 +28,6 @@ function QRScanModule() {
       const getStation = JSON.parse(data);
       getStation.forEach((station) => {
         if (station.id === `/${values}`) {
-
           setStations([station]);
           setValues("");
         }
@@ -67,8 +68,22 @@ function QRScanModule() {
       );
   };
 
+  const onFind = (value) => {
+    setValue(value);
+    setWatching(false);
+  };
+
   return (
     <>
+      <h1>QRScan Demo</h1>
+      {watching ? (
+        <QRScan onFind={onFind} />
+      ) : (
+        <>
+          <button onClick={() => setWatching(true)}>Scan</button>
+          <h4>value: {value}</h4>
+        </>
+      )}
       <form
         onSubmit={handleSubmit}
         className={classes.root}
@@ -82,9 +97,8 @@ function QRScanModule() {
           value={values}
         />
       </form>
-      {stations.length > 0 && <Station stations={stations}/>}
+      {stations.length > 0 && <Station stations={stations} />}
       {}
-      
     </>
   );
 }
