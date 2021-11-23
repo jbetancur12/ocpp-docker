@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, TextField } from "@material-ui/core";
 import Station from "../components/stations";
 
@@ -19,8 +19,6 @@ const useStyles = makeStyles((theme) => ({
 //   return { hasMounted };
 // };
 
-
-
 function QRScanModule() {
   // const { hasMounted } = useMounted()
   const classes = useStyles();
@@ -33,7 +31,6 @@ function QRScanModule() {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
-
     const sse = new EventSource("/ocpp/chargerPoints/status");
     function getRealtimeData(data) {
       const getStation = JSON.parse(data);
@@ -81,25 +78,25 @@ function QRScanModule() {
 
   // const QR = React.lazy(() => import('./QR2'));
 
+  const formQR = (
+    <form
+      onSubmit={handleSubmit}
+      className={classes.root}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField
+        onChange={handleInputChange}
+        id="id"
+        label="Station"
+        value={values}
+      />
+    </form>
+  );
+
   return (
     <>
-      {/* <Suspense fallback={<div>Loading...</div>}>
-        <QR />
-      </Suspense> */}
-      <form
-        onSubmit={handleSubmit}
-        className={classes.root}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          onChange={handleInputChange}
-          id="id"
-          label="Station"
-          value={values}
-        />
-      </form>
-      {stations.length > 0 && <Station stations={stations} />}
+      {stations.length > 0 ? <Station stations={stations}/> : formQR}
       {}
     </>
   );
