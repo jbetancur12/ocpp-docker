@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import QRScan from "qrscan";
 import { makeStyles, TextField } from "@material-ui/core";
 import Station from "../components/stations";
+import QR from "./Qr";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,8 +15,7 @@ const useStyles = makeStyles((theme) => ({
 function QRScanModule() {
   const classes = useStyles();
   const [values, setValues] = useState("");
-  const [value, setValue] = useState("");
-  const [watching, setWatching] = useState(false);
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
@@ -68,22 +67,9 @@ function QRScanModule() {
       );
   };
 
-  const onFind = (value) => {
-    setValue(value);
-    setWatching(false);
-  };
-
   return (
     <>
-      <h1>QRScan Demo</h1>
-      {watching ? (
-        <QRScan onFind={onFind} />
-      ) : (
-        <>
-          <button onClick={() => setWatching(true)}>Scan</button>
-          <h4>value: {value}</h4>
-        </>
-      )}
+      <QR />
       <form
         onSubmit={handleSubmit}
         className={classes.root}
