@@ -92,7 +92,6 @@ const toogleConnector = (id, connector) => {
 
 function Station(props) {
     const classes = useStyles();
- 
     return (
         <div>
           {props.stations.length > 0 && props.stations.map((item) => (
