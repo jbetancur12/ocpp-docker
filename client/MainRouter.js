@@ -11,6 +11,7 @@ import Menu from './core/Menu';
 import Dashboard from "./dashboard/Dashboard";
 import Clients from "./dashboard/Clients";
 import Operations from "./components/Operations";
+import QRScanModule from './components/QRScan';
 
 const MainRouter = () => {
   return (
@@ -26,6 +27,7 @@ const MainRouter = () => {
         <Route path='/signin' component={Signin} />
         <PrivateRoute path='/user/edit/:userId' component={EditProfile} />
         <Route path='/user/:userId' component={Profile} />
+        <Route path='/qr' component={QRScanModule} />
       </Switch>
     </div>
   );

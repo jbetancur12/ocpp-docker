@@ -30,6 +30,7 @@ const list = async (req, res) => {
 };
 
 const chargerPointByID = async (req, res, next, id) => {
+  
   try {
     let chargerPoint = await ChargerPoint.findById(id);
     if (!chargerPoint)
@@ -45,10 +46,22 @@ const chargerPointByID = async (req, res, next, id) => {
   }
 };
 
-const read = (req, res) => {
-  req.profile.hashed_password = undefined;
-  req.profile.salt = undefined;
-  return res.json(req.profile);
+const read = async (req, res) => {
+  // console.log(req)
+  try {
+    let chargerPoint = await ChargerPoint.findOne({
+      charger_box_id: req.params.station,
+    });
+    if (!chargerPoint)
+      return res.status("400").json({
+        error: "ChargerPoint not found",
+      });
+      res.json(chargerPoint);
+  } catch (err) {
+    return res.status("400").json({
+      error: "Could not retrieve chargerPoint",
+    });
+  }
 };
 
 const update = async (req, res) => {

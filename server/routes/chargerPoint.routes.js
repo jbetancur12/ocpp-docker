@@ -13,7 +13,7 @@ router
 .get(chargerPoint.clients)
 
 router
-.route("/ocpp/chargerPoints/:charger_box_id")
+.route("/ocpp/chargerPoints/:station")
 .get(chargerPoint.read)
 .put(chargerPoint.update)
 .delete(chargerPoint.remove);
