@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { makeStyles, TextField } from "@material-ui/core";
 import Station from "../components/stations";
-import QR from "./Qr";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,9 +11,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// const useMounted = () => {
+//   const [ hasMounted, setHasMounted ] = useState(false);
+
+//   useEffect(() => setHasMounted(true), []);
+
+//   return { hasMounted };
+// };
+
+
+
 function QRScanModule() {
+  // const { hasMounted } = useMounted()
   const classes = useStyles();
   const [values, setValues] = useState("");
+  const [isFront, setIsFront] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -22,6 +33,7 @@ function QRScanModule() {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
+
     const sse = new EventSource("/ocpp/chargerPoints/status");
     function getRealtimeData(data) {
       const getStation = JSON.parse(data);
@@ -67,9 +79,13 @@ function QRScanModule() {
       );
   };
 
+  // const QR = React.lazy(() => import('./QR2'));
+
   return (
     <>
-      <QR />
+      {/* <Suspense fallback={<div>Loading...</div>}>
+        <QR />
+      </Suspense> */}
       <form
         onSubmit={handleSubmit}
         className={classes.root}
