@@ -7,6 +7,10 @@ import {
 } from "@material-ui/icons";
 
 const useStyles = makeStyles(() => ({
+  root:{
+    display: "flex",
+    justifyContent: 'center',
+  },
   station: {
     background: "gray",
     borderRadius: "5px",
@@ -88,7 +92,7 @@ const toogleConnector = (id, connector) => {
 function Station(props) {
   const classes = useStyles();
   return (
-    <div>
+    <div className={classes.root}>
       {props.stations.length > 0 &&
         props.stations.map((item) => (
           <div className={classes.station} key={item.id}>
