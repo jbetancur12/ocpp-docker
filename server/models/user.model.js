@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     trim: true,
   },
   photo: { data: Buffer, contentType: String },
+  id_tag:{
+    type: String,
+    required: true,
+  },
   salt: String,
   created: {
     type: Date,

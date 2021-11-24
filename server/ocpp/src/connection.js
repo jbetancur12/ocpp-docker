@@ -49,7 +49,6 @@ class Connection {
   }
 
   async onMessage (message) {
-    console.log(message)
     let messageType, messageId, commandNameOrPayload, commandPayload, errorDetails;
 
     try {

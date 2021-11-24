@@ -27,7 +27,8 @@ const MainRouter = () => {
         <Route path='/signin' component={Signin} />
         <PrivateRoute path='/user/edit/:userId' component={EditProfile} />
         <Route path='/user/:userId' component={Profile} />
-        <Route path='/qr' component={QRScanModule} />
+        <
+          Route path='/qr' component={QRScanModule} />
       </Switch>
     </div>
   );

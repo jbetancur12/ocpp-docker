@@ -6,6 +6,8 @@ import * as BootNotificationConst from "./ocpp/src/commands/BootNotification";
 import * as StatusNotificationConst from "./ocpp/src/commands/StatusNotification";
 import { sleep } from "sleep";
 import ChargerPoint from "./models/chargerPoint.model";
+import Transaction from "./models/transaction.model";
+import authCtrl from "./controllers/user.controller";
 
 const getCPData = (payload) => {
   return {
@@ -20,6 +22,24 @@ const getCPData = (payload) => {
     meter_serial_number: payload.meterSerialNumber || "",
     registration_status: "Accepted",
   };
+};
+
+const concatenate = (command, client) => {
+  const ui = Math.round(Date.now() + Math.random());
+  const connectorIdx = client.info.connectors.findIndex((item) => {
+    return command.connectorId === item.connectorId;
+  });
+
+  const uid = "" + ui + client.info.connectors[connectorIdx].connectorId
+  if (connectorIdx === -1) {
+    client.info.connectors.push({});
+  } else {
+    client.info.connectors[connectorIdx] = {
+      ...client.info.connectors[connectorIdx],
+      ...{ transactionId: uid },
+    };
+    return  uid 
+  }
 };
 
 export function createServer(server) {
@@ -74,10 +94,27 @@ export function createServer(server) {
         };
 
       case command instanceof OCPPCommands.MeterValues:
-        console.log(command.meterValue[0].sampledValue)
-        return {}
+        const connectorIdx = client.info.connectors.findIndex((item) => {
+          return command.connectorId === item.connectorId;
+        });
+        if (connectorIdx === -1) {
+          client.info.connectors.push({});
+        } else {
+          client.info.connectors[connectorIdx] = {
+            ...client.info.connectors[connectorIdx],
+            ...command.meterValue[0].sampledValue[0],
+          };
+        }
+        await cSystem.onStatusUpdate();
+        return {};
 
       case command instanceof OCPPCommands.StartTransaction:
+        
+
+        // const uid = concatenate(command, client);
+
+        //  await cSystem.onStatusUpdate();
+
         return {
           transactionId: 1,
           idTagInfo: {
@@ -86,6 +123,7 @@ export function createServer(server) {
         };
 
       case command instanceof OCPPCommands.StopTransaction:
+
         return {
           transactionId: 1,
           idTagInfo: {
@@ -122,7 +160,8 @@ export function createServer(server) {
     }
   };
 
-  cSystem.toggleChargePoint = async (client, connectorId) => {
+  cSystem.toggleChargePoint = async (client, connectorId, user, transactionId) => {
+
     const connector = client.info.connectors.find(
       (item) => connectorId.toString() === item.connectorId.toString()
     );
@@ -140,7 +179,7 @@ export function createServer(server) {
 
     let command = new OCPPCommands.RemoteStartTransaction({
       connectorId: connectorId,
-      idTag: "" + connectorId,
+      idTag: "" + user,
     });
 
     await client.connection.send(command);
@@ -154,7 +193,6 @@ export function createServer(server) {
 
     if (chargerPoint) {
       return true;
-      
     }
     return false;
   }

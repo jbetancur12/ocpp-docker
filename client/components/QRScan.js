@@ -56,7 +56,6 @@ function QRScanModule() {
   return (
     <>
       {stations.length > 0 ? <Station stations={stations} /> : null}
-      {console.log(stations)}
     </>
   );
 }

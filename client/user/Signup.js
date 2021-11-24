@@ -14,6 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from 'react-router-dom';
+import { nanoid } from 'nanoid'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -60,6 +61,7 @@ export default function Signup() {
       name: values.name || undefined,
       email: values.email || undefined,
       password: values.password || undefined,
+      id_tag: nanoid(20)
     };
     create(user).then((data) => {
       if (data.error) {

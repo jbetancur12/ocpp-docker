@@ -1,4 +1,6 @@
 import express from "express";
+import authCtrl from "../controllers/auth.controller";
+import userCtrl from '../controllers/user.controller';
 import chargerPoint from "../controllers/chargerPoint.controller";
 
 const router = express.Router();
@@ -19,7 +21,7 @@ router
 .delete(chargerPoint.remove);
 
 router
-.route("/ocpp/chargerPoints/:id/:conector")
+.route("/ocpp/chargerPoints/start/:userId")
 .post(chargerPoint.remoteStart)
 
 router
@@ -28,5 +30,6 @@ router
   .post(chargerPoint.create);
   
 router.param("charger_box_id", chargerPoint.chargerPointByID);
+router.param('userId', userCtrl.userByID);
 
 export default router;

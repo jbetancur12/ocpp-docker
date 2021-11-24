@@ -37,7 +37,7 @@ const chargerPointByID = async (req, res, next, id) => {
       return res.status("400").json({
         error: "ChargerPoint not found",
       });
-    req.profile = chargerPoint;
+    req.cp = chargerPoint;
     next();
   } catch (err) {
     return res.status("400").json({
@@ -66,7 +66,7 @@ const read = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    let chargerPoint = req.profile;
+    let chargerPoint = req.cp;
     chargerPoint = extend(chargerPoint, req.body);
     chargerPoint.updated = Date.now();
     await chargerPoint.save();
@@ -79,13 +79,15 @@ const update = async (req, res) => {
 };
 
 const remoteStart = async (req, res) => {
-  const idf = _.findIndex(centralSystem.clients, function (o) {
-    return o.connection.req.url === `/${req.params.id}`;
+     const idf = _.findIndex(centralSystem.clients, function (o) {
+    return o.connection.req.url === `${req.body.id}`;
   });
   if (idf !== -1) {
-    const result = await centralSystem.toggleChargePoint(
+    await centralSystem.toggleChargePoint(
       centralSystem.clients[idf],
-      parseInt(req.params.conector)
+      parseInt(req.body.connector),
+      req.profile.id_tag,
+      //req.body.transactionId
     );
     res.write(JSON.stringify({}));
   }
@@ -95,7 +97,7 @@ const remoteStart = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    let chargerPoint = req.profile;
+    let chargerPoint = req.cp;
     let deleteCP = await chargerPoint.remove();
     deleteCP.hashed_password = undefined;
     deleteCP.salt = undefined;

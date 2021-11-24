@@ -46,7 +46,6 @@ export default function useTable(records, headCells, filterFn) {
 
   const TblHead = (props) => {
     const handleSortRequest = (cellId) => {
-      console.log(cellId, orderBy, order);
       const isAsc = orderBy === cellId && order === "asc";
       setOrder(isAsc ? "desc" : "asc");
       setOrderBy(cellId);
