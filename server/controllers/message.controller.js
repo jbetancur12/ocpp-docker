@@ -19,14 +19,12 @@ const getCPData = (payload) => {
   };
 };
 
-const actionsSended = {id:"",lastAction:"",cp_id: ""}
-
+const actionsSended = { id: "", lastAction: "", cp_id: "" };
 
 async function messageController(ws, socket, message, url, CLIENTS) {
   const body = JSON.parse(message);
   if (body[0] === 2) {
     switch (body[2]) {
-
       case actions.HEARTBEAT: {
         const HBDate = new Date().toISOString();
         await ChargerPoint.findOneAndUpdate(
@@ -98,8 +96,8 @@ async function messageController(ws, socket, message, url, CLIENTS) {
           ])
         );
 
-        case actions.RESET:
-          console.log(url)
+      case actions.RESET:
+        console.log(url);
 
       default:
         break;

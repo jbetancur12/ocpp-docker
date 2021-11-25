@@ -9,14 +9,12 @@ const wss = new WebSocket.Server({ server: server });
 export { wss };
 require("./ws");
 
-
 server.listen(config.port, (err) => {
   if (err) {
     console.log(err);
   }
   console.info("Server started on port %s.", config.port);
 });
-
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.mongoUri, {
@@ -28,4 +26,3 @@ mongoose.connect(config.mongoUri, {
 mongoose.connection.on("error", () => {
   throw new Error(`unable to connect to database: ${config.mongoUri}`);
 });
-

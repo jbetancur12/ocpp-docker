@@ -1,58 +1,73 @@
-import {v4} from 'uuid';
-import Websocket from 'ws';
-import debugFn from 'debug';
-import commands from './commands';
+import { v4 } from "uuid";
+import Websocket from "ws";
+import debugFn from "debug";
+import commands from "./commands";
 import {
   DEBUG_LIBNAME,
   CALL_MESSAGE,
   CALLRESULT_MESSAGE,
   CALLERROR_MESSAGE,
-  SOCKET_TIMEOUT
-} from './constants';
-import { getObjectValues } from './helpers';
+  SOCKET_TIMEOUT,
+} from "./constants";
+import { getObjectValues } from "./helpers";
 import OCPPError, {
   ERROR_FORMATIONVIOLATION,
-  ERROR_INTERNALERROR
-} from './ocppError';
+  ERROR_INTERNALERROR,
+} from "./ocppError";
 
 const debug = debugFn(DEBUG_LIBNAME);
 
-export
-class Connection {
-  constructor (socket, req = null, logger = null) {
+export class Connection {
+  constructor(socket, req = null, logger = null) {
     this.socket = socket;
     this.req = req;
     this.requests = {};
     this.logger = logger;
 
-    
     if (req) {
       this.url = req && req.url;
-      const ip = req && ((req.connection && req.connection.remoteAddress) || req.headers[ 'x-forwarded-for' ]);
-      
+      const ip =
+        req &&
+        ((req.connection && req.connection.remoteAddress) ||
+          req.headers["x-forwarded-for"]);
+
       if (this.logger) {
-        this.logger.debug({ id: this.url, message: `New connection from "${ip}", protocol "${socket.protocol}", url "${this.url}"` });
-        
+        this.logger.debug({
+          id: this.url,
+          message: `New connection from "${ip}", protocol "${socket.protocol}", url "${this.url}"`,
+        });
       } else {
-        debug(`New connection from "${ip}", protocol "${socket.protocol}", url "${this.url}"`);
+        debug(
+          `New connection from "${ip}", protocol "${socket.protocol}", url "${this.url}"`
+        );
       }
     } else {
-      this.url = 'SERVER';
+      this.url = "SERVER";
       debug(`New connection to server`);
     }
 
-    socket.on('message', (msg) => this.onMessage(msg));
+    socket.on("message", (msg) => this.onMessage(msg));
 
-    socket.on('error', (err) => {
+    socket.on("error", (err) => {
       console.info(err);
     });
   }
 
-  async onMessage (message) {
-    let messageType, messageId, commandNameOrPayload, commandPayload, errorDetails;
+  async onMessage(message) {
+    let messageType,
+      messageId,
+      commandNameOrPayload,
+      commandPayload,
+      errorDetails;
 
     try {
-      [messageType, messageId, commandNameOrPayload, commandPayload, errorDetails] = JSON.parse(message);
+      [
+        messageType,
+        messageId,
+        commandNameOrPayload,
+        commandPayload,
+        errorDetails,
+      ] = JSON.parse(message);
     } catch (err) {
       throw new Error(`Failed to parse message: "${message}", ${err.message}`);
     }
@@ -75,7 +90,10 @@ class Connection {
           commandRequest = new CommandModel(commandPayload);
         } catch (err) {
           // send error if payload didn't pass the validation
-          return await this.sendError(messageId, new OCPPError(ERROR_FORMATIONVIOLATION, err.message));
+          return await this.sendError(
+            messageId,
+            new OCPPError(ERROR_FORMATIONVIOLATION, err.message)
+          );
         }
 
         try {
@@ -121,30 +139,35 @@ class Connection {
         const [, rejectCallback] = this.requests[messageId];
         delete this.requests[messageId];
 
-        rejectCallback(new OCPPError(commandNameOrPayload, commandPayload, errorDetails));
+        rejectCallback(
+          new OCPPError(commandNameOrPayload, commandPayload, errorDetails)
+        );
         break;
       default:
         throw new Error(`Wrong message type ${messageType}`);
     }
   }
 
-  send (command, messageType = CALL_MESSAGE) {
+  send(command, messageType = CALL_MESSAGE) {
     return this.sendMessage(v4(), command, messageType);
   }
 
-  sendError (messageId, err) {
+  sendError(messageId, err) {
     if (this.logger) {
       this.logger.debug(`Error: ${err.message}`);
     } else {
       debug(`Error: ${err.message}`);
     }
 
-    const error = err instanceof OCPPError ? err : new OCPPError(ERROR_INTERNALERROR, err.message);
+    const error =
+      err instanceof OCPPError
+        ? err
+        : new OCPPError(ERROR_INTERNALERROR, err.message);
 
     return this.sendMessage(messageId, error, CALLERROR_MESSAGE);
   }
 
-  sendMessage (messageId, command, messageType = CALLRESULT_MESSAGE) {
+  sendMessage(messageId, command, messageType = CALLRESULT_MESSAGE) {
     const socket = this.socket;
     const self = this;
     const commandValues = getObjectValues(command);
@@ -157,14 +180,29 @@ class Connection {
           this.requests[messageId] = [onResponse, onRejectResponse];
           const commandName = command.getCommandName();
 
-          messageToSend = JSON.stringify([messageType, messageId, commandName, commandValues]);
+          messageToSend = JSON.stringify([
+            messageType,
+            messageId,
+            commandName,
+            commandValues,
+          ]);
           break;
         case CALLRESULT_MESSAGE:
-          messageToSend = JSON.stringify([messageType, messageId, commandValues]);
+          messageToSend = JSON.stringify([
+            messageType,
+            messageId,
+            commandValues,
+          ]);
           break;
         case CALLERROR_MESSAGE:
           const { code, message, details } = command;
-          messageToSend = JSON.stringify([messageType, messageId, code, message, details]);
+          messageToSend = JSON.stringify([
+            messageType,
+            messageId,
+            code,
+            message,
+            details,
+          ]);
           break;
       }
 
@@ -182,10 +220,13 @@ class Connection {
       if (messageType !== CALL_MESSAGE) {
         resolve();
       } else {
-        setTimeout(() => onRejectResponse(`Timeout for message ${messageId}`), SOCKET_TIMEOUT);
+        setTimeout(
+          () => onRejectResponse(`Timeout for message ${messageId}`),
+          SOCKET_TIMEOUT
+        );
       }
 
-      function onResponse (payload) {
+      function onResponse(payload) {
         const response = command.createResponse(payload);
 
         return resolve(response);
@@ -198,7 +239,5 @@ class Connection {
     });
   }
 
-  onRequest (request) {
-
-  }
+  onRequest(request) {}
 }

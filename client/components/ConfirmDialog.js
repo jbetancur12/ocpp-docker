@@ -7,7 +7,7 @@ import {
   Typography,
   IconButton,
 } from "@material-ui/core";
-import {  makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Controls from "./controls/Controls";
 import NotListedLocationIcon from "@material-ui/icons/NotListedLocation";
 

@@ -89,36 +89,30 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-
-
 function Station(props) {
-
-
   const classes = useStyles();
-  const [TotalKW, setTotalKW] = useState(0)
-  const [load, setLoad] = useState(false)
-  const {stations} = props
+  const [TotalKW, setTotalKW] = useState(0);
+  const [load, setLoad] = useState(false);
+  const { stations } = props;
 
- const getValue = (value) => {
-   return value
- }
+  const getValue = (value) => {
+    return value;
+  };
 
   const toogleConnector = (id, connector) => {
-    
     const jwt = auth.isAuthenticated();
     const t = jwt.token;
-    const data = { id: id, 
-      connector: connector.connectorId, 
-      //transactionId: connector.transactionId 
+    const data = {
+      id: id,
+      connector: connector.connectorId,
+      //transactionId: connector.transactionId
     };
 
-    
-
-    stations.forEach(station => {
-      if(station.id === id){
-        station.connectors.forEach(conn => {
-          if(conn.connectorId == data.connector ){
-            console.log(conn.value)
+    stations.forEach((station) => {
+      if (station.id === id) {
+        station.connectors.forEach((conn) => {
+          if (conn.connectorId == data.connector) {
+            console.log(conn.value);
           }
         });
       }
@@ -129,7 +123,7 @@ function Station(props) {
       headers: {
         Accept: "application/json",
         Authentication: "Bearer " + t,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
@@ -151,7 +145,9 @@ function Station(props) {
                   <div className={classes.stationTitle}>
                     <div className={classes.measurements}>
                       <b>kwh:</b>{" "}
-                      <span>{connector.value ? getValue(connector.value) : 0}</span>
+                      <span>
+                        {connector.value ? getValue(connector.value) : 0}
+                      </span>
                       {/* {item.id.substring(1)} */}
                       <div className={[classes.status, classes.statusOnline]}>
                         <b> Cost: </b>
@@ -160,7 +156,6 @@ function Station(props) {
                             ? formatter.format(connector.value * 600)
                             : 0}
                         </span>
-            
                       </div>
                     </div>
                   </div>

@@ -12,7 +12,6 @@ export default class CentralSystem {
     this.options = options || {};
     this.clients = [];
     this.logger = new Logger();
-
   }
 
   listen(port = 9220, host = null) {
@@ -25,10 +24,10 @@ export default class CentralSystem {
       host,
       handleProtocols: (protocols, req) => {
         let newProtocols;
-        if(typeof protocols === 'object'){
-          newProtocols = Array.from(protocols)
-        }else{
-          newProtocols = protocols
+        if (typeof protocols === "object") {
+          newProtocols = Array.from(protocols);
+        } else {
+          newProtocols = protocols;
         }
         if (newProtocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
           return "";
@@ -56,7 +55,6 @@ export default class CentralSystem {
       },
       ...(this.options.wsOptions || {}),
     };
-
 
     this.server = new WebSocket.Server(wsOptions);
 

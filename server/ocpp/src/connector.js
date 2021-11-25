@@ -1,8 +1,9 @@
-import { ERRORCODE_NOERROR, STATUS_AVAILABLE } from './commands/StatusNotification';
+import {
+  ERRORCODE_NOERROR,
+  STATUS_AVAILABLE,
+} from "./commands/StatusNotification";
 
-export default
-class Connector
-{
+export default class Connector {
   constructor(connectorId) {
     this.connectorId = connectorId;
     this.status = STATUS_AVAILABLE;

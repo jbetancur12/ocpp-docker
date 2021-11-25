@@ -118,10 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const headCells = [
-  { id: 'station', label: 'Estación' },
-]
-
+const headCells = [{ id: "station", label: "Estación" }];
 
 export default function Dashboard() {
   const classes = useStyles();

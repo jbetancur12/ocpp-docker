@@ -1,12 +1,9 @@
-import WebSocket from 'ws';
-import debugFn from 'debug';
-import Commands from './commands';
-import { Connection } from './connection';
+import WebSocket from "ws";
+import debugFn from "debug";
+import Commands from "./commands";
+import { Connection } from "./connection";
 
-import {
-  OCPP_PROTOCOL_1_6,
-  DEBUG_LIBNAME
-} from './constants';
+import { OCPP_PROTOCOL_1_6, DEBUG_LIBNAME } from "./constants";
 
 const debug = debugFn(DEBUG_LIBNAME);
 
@@ -19,13 +16,13 @@ export default class ChargePoint {
    * @param {String} options.reconnectInterval The number of milliseconds to delay before attempting to reconnect (default: 5 minutes)
    * @param {String} options.connectors Array of virtual connectors
    */
-  constructor (options) {
+  constructor(options) {
     options.connectors = options.connectors || [];
 
     this.options = options;
   }
 
-  connect () {
+  connect() {
     debug(`Try connect to ${this.options.centralSystemUrl}`);
 
     let reconnectTimer;
@@ -33,24 +30,30 @@ export default class ChargePoint {
     const self = this;
 
     return new Promise((resolve, reject) => {
-      const ws = new WebSocket(this.options.centralSystemUrl, [OCPP_PROTOCOL_1_6], {
-        perMessageDeflate: false,
-        protocolVersion: 13
-      });
+      const ws = new WebSocket(
+        this.options.centralSystemUrl,
+        [OCPP_PROTOCOL_1_6],
+        {
+          perMessageDeflate: false,
+          protocolVersion: 13,
+        }
+      );
 
-      ws.on('upgrade', (res) => {
-        if (!res.headers['sec-websocket-protocol']) {
-          return reject(new Error(`Server doesn't support protocol ${OCPP_PROTOCOL_1_6}`));
+      ws.on("upgrade", (res) => {
+        if (!res.headers["sec-websocket-protocol"]) {
+          return reject(
+            new Error(`Server doesn't support protocol ${OCPP_PROTOCOL_1_6}`)
+          );
         }
       });
 
-      ws.on('close', () => {
+      ws.on("close", () => {
         debug(`Connection is closed`);
         this.connection = null;
         nextReconnectAttempt();
       });
-      ws.on('open', () => {
-        ws.removeAllListeners('error');
+      ws.on("open", () => {
+        ws.removeAllListeners("error");
 
         this.connection = new Connection(ws);
         this.connection.onRequest = (command) => this.onRequest(command);
@@ -58,10 +61,10 @@ export default class ChargePoint {
         resolve(this.connection);
       });
 
-      ws.on('error', reject);
+      ws.on("error", reject);
     });
 
-    function nextReconnectAttempt () {
+    function nextReconnectAttempt() {
       if (reconnectTimer) {
         clearInterval(reconnectTimer);
         reconnectTimer = null;
@@ -70,23 +73,21 @@ export default class ChargePoint {
       reconnectTimer = setTimeout(async () => {
         try {
           await self.connect();
-        } catch (err) {
-        }
+        } catch (err) {}
       }, reconnectInterval);
     }
   }
 
-  send (command) {
+  send(command) {
     if (!this.connection) {
       return false;
     }
     return this.connection.send(command);
   }
 
-  onRequest (command) {
-  }
+  onRequest(command) {}
 
-  getConnectors () {
+  getConnectors() {
     return this.options.connectors;
   }
 
@@ -94,11 +95,11 @@ export default class ChargePoint {
     const promises = this.getConnectors().map(async (connector) => {
       const status = {
         timestamp: new Date().toISOString(),
-        ...connector
+        ...connector,
       };
       const statusCommand = new Commands.StatusNotification(status);
 
-      await this.send(statusCommand)
+      await this.send(statusCommand);
     });
 
     return await Promise.all(promises);

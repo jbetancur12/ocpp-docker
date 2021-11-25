@@ -30,7 +30,6 @@ const list = async (req, res) => {
 };
 
 const chargerPointByID = async (req, res, next, id) => {
-  
   try {
     let chargerPoint = await ChargerPoint.findById(id);
     if (!chargerPoint)
@@ -56,7 +55,7 @@ const read = async (req, res) => {
       return res.status("400").json({
         error: "ChargerPoint not found",
       });
-      res.json(chargerPoint);
+    res.json(chargerPoint);
   } catch (err) {
     return res.status("400").json({
       error: "Could not retrieve chargerPoint",
@@ -79,14 +78,14 @@ const update = async (req, res) => {
 };
 
 const remoteStart = async (req, res) => {
-     const idf = _.findIndex(centralSystem.clients, function (o) {
+  const idf = _.findIndex(centralSystem.clients, function (o) {
     return o.connection.req.url === `${req.body.id}`;
   });
   if (idf !== -1) {
     await centralSystem.toggleChargePoint(
       centralSystem.clients[idf],
       parseInt(req.body.connector),
-      req.profile.id_tag,
+      req.profile.id_tag
       //req.body.transactionId
     );
     res.write(JSON.stringify({}));
@@ -111,9 +110,10 @@ const remove = async (req, res) => {
 
 const clients = async (req, res) => {
   try {
-    const getClients = centralSystem.clients.map(client => client.connection.req.url)
-    res.json(getClients)
-    
+    const getClients = centralSystem.clients.map(
+      (client) => client.connection.req.url
+    );
+    res.json(getClients);
   } catch (error) {
     return res.status(400).json({
       error: errorHandler.getErrorMessage(err),
@@ -121,7 +121,7 @@ const clients = async (req, res) => {
   }
 };
 
-const status= async (req, res) => {
+const status = async (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Access-Control-Allow-Origin", "*");
   onDigits(req, res);

@@ -27,7 +27,7 @@ import {
 } from "@material-ui/icons";
 
 import Controls from "../components/controls/Controls";
-import {convertdate} from '../utils/helpers'
+import { convertdate } from "../utils/helpers";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -247,7 +247,7 @@ export default function Dashboard() {
                 <TableCell
                   onClick={() => {
                     setOpenPopupInfo(true);
-                    openInPopup(item)
+                    openInPopup(item);
                   }}
                 >
                   {item.charger_box_id}
@@ -260,7 +260,7 @@ export default function Dashboard() {
                     color="primary"
                     onClick={() => {
                       openInPopup(item);
-                      setOpenPopup(true)
+                      setOpenPopup(true);
                     }}
                   >
                     <EditOutlinedIcon fontSize="small" />
@@ -299,7 +299,7 @@ export default function Dashboard() {
         openPopup={openPopupInfo}
         setOpenPopup={setOpenPopupInfo}
       >
-        <StationFormInfo recordForEdit={recordForEdit}/>
+        <StationFormInfo recordForEdit={recordForEdit} />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
       <ConfirmDialog

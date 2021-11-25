@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import compress from "compression";
 import cors from "cors";
 import helmet from "helmet";
-import ssrPrepass from 'react-ssr-prepass'
+import ssrPrepass from "react-ssr-prepass";
 
 import Template from "./../template";
 import userRoutes from "./routes/user.routes";
@@ -43,7 +43,6 @@ app.use("/", authRoutes);
 app.use("/", chargerPointsRoutes);
 
 app.get("*", async (req, res) => {
-  
   const sheets = new ServerStyleSheets();
   const context = {};
 
@@ -54,7 +53,9 @@ app.get("*", async (req, res) => {
         <ThemeProvider theme={theme}>
           <MainRouter />
         </ThemeProvider>
-      </StaticRouter>));
+      </StaticRouter>
+    )
+  );
 
   if (context.url) {
     return res.redirect(303, context.url);

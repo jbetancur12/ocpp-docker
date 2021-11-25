@@ -1,10 +1,8 @@
-const LOGIN = 'login'
-const SIGNIN = 'signin'
-const LOGOUT = 'logout'
+const LOGIN = "login";
+const SIGNIN = "signin";
+const LOGOUT = "logout";
 
 module.exports = {
-    LOGIN,
-    SIGNIN
-}
-
-
+  LOGIN,
+  SIGNIN,
+};

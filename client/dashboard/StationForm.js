@@ -4,7 +4,6 @@ import Controls from "../components/controls/Controls";
 import { useForm, Form } from "../components/useForm";
 //import * as employeeService from "../../services/employeeService";
 
-
 const initialFValues = {
   id: 0,
   charger_box_id: "",
@@ -13,12 +12,12 @@ const initialFValues = {
 export default function StationForm(props) {
   const { addOrEdit, recordForEdit } = props;
 
-
-
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("charger_box_id" in fieldValues)
-    temp.charger_box_id = fieldValues.charger_box_id ? "" : "This field is required.";
+      temp.charger_box_id = fieldValues.charger_box_id
+        ? ""
+        : "This field is required.";
     setErrors({
       ...temp,
     });
@@ -31,10 +30,8 @@ export default function StationForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    
-    if (validate()) {
 
+    if (validate()) {
       addOrEdit(values, resetForm);
     }
   };

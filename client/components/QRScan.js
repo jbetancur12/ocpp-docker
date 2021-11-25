@@ -53,11 +53,7 @@ function QRScanModule() {
     };
   }, [values]);
 
-  return (
-    <>
-      {stations.length > 0 ? <Station stations={stations} /> : null}
-    </>
-  );
+  return <>{stations.length > 0 ? <Station stations={stations} /> : null}</>;
 }
 
 export default QRScanModule;

@@ -1,31 +1,31 @@
-import { Authorize } from './Authorize';
-import { BootNotification } from './BootNotification';
-import { CancelReservation } from './CancelReservation';
-import { ChangeAvailability } from './ChangeAvailability';
-import { ChangeConfiguration } from './ChangeConfiguration';
-import { ClearCache } from './ClearCache';
-import { ClearChargingProfile } from './ClearChargingProfile';
-import { DataTransfer } from './DataTransfer';
-import { DiagnosticsStatusNotification } from './DiagnosticsStatusNotification';
-import { FirmwareStatusNotification } from './FirmwareStatusNotification';
-import { GetCompositeSchedule } from './GetCompositeSchedule';
-import { GetConfiguration } from './GetConfiguration';
-import { GetDiagnostics } from './GetDiagnostics';
-import { GetLocalListVersion } from './GetLocalListVersion';
-import { Heartbeat } from './Heartbeat';
-import { MeterValues } from './MeterValues';
-import { RemoteStartTransaction } from './RemoteStartTransaction';
-import { RemoteStopTransaction } from './RemoteStopTransaction';
-import { ReserveNow } from './ReserveNow';
-import { Reset } from './Reset';
-import { SendLocalList } from './SendLocalList';
-import { SetChargingProfile } from './SetChargingProfile';
-import { StartTransaction } from './StartTransaction';
-import { StatusNotification } from './StatusNotification';
-import { StopTransaction } from './StopTransaction';
-import { TriggerMessage } from './TriggerMessage';
-import { UnlockConnector } from './UnlockConnector';
-import { UpdateFirmware } from './UpdateFirmware';
+import { Authorize } from "./Authorize";
+import { BootNotification } from "./BootNotification";
+import { CancelReservation } from "./CancelReservation";
+import { ChangeAvailability } from "./ChangeAvailability";
+import { ChangeConfiguration } from "./ChangeConfiguration";
+import { ClearCache } from "./ClearCache";
+import { ClearChargingProfile } from "./ClearChargingProfile";
+import { DataTransfer } from "./DataTransfer";
+import { DiagnosticsStatusNotification } from "./DiagnosticsStatusNotification";
+import { FirmwareStatusNotification } from "./FirmwareStatusNotification";
+import { GetCompositeSchedule } from "./GetCompositeSchedule";
+import { GetConfiguration } from "./GetConfiguration";
+import { GetDiagnostics } from "./GetDiagnostics";
+import { GetLocalListVersion } from "./GetLocalListVersion";
+import { Heartbeat } from "./Heartbeat";
+import { MeterValues } from "./MeterValues";
+import { RemoteStartTransaction } from "./RemoteStartTransaction";
+import { RemoteStopTransaction } from "./RemoteStopTransaction";
+import { ReserveNow } from "./ReserveNow";
+import { Reset } from "./Reset";
+import { SendLocalList } from "./SendLocalList";
+import { SetChargingProfile } from "./SetChargingProfile";
+import { StartTransaction } from "./StartTransaction";
+import { StatusNotification } from "./StatusNotification";
+import { StopTransaction } from "./StopTransaction";
+import { TriggerMessage } from "./TriggerMessage";
+import { UnlockConnector } from "./UnlockConnector";
+import { UpdateFirmware } from "./UpdateFirmware";
 
 export default {
   Authorize,
@@ -55,11 +55,10 @@ export default {
   StopTransaction,
   TriggerMessage,
   UnlockConnector,
-  UpdateFirmware
+  UpdateFirmware,
 };
 
-export
-const CHARGE_POINT_COMMANDS = {
+export const CHARGE_POINT_COMMANDS = {
   Authorize,
   BootNotification,
   DataTransfer,
@@ -69,11 +68,10 @@ const CHARGE_POINT_COMMANDS = {
   MeterValues,
   StartTransaction,
   StatusNotification,
-  StopTransaction
+  StopTransaction,
 };
 
-export
-const CENTRAL_SYSTEM_COMMANDS = {
+export const CENTRAL_SYSTEM_COMMANDS = {
   CancelReservation,
   ChangeAvailability,
   ChangeConfiguration,
@@ -92,5 +90,5 @@ const CENTRAL_SYSTEM_COMMANDS = {
   SetChargingProfile,
   TriggerMessage,
   UnlockConnector,
-  UpdateFirmware
+  UpdateFirmware,
 };

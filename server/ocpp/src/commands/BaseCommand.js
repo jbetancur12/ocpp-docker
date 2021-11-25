@@ -1,21 +1,20 @@
-import { applyPropertiesValidators } from '../helpers';
+import { applyPropertiesValidators } from "../helpers";
 
-const RESPONSE_SCHEMA_SYMBOL = Symbol('responseSchema');
+const RESPONSE_SCHEMA_SYMBOL = Symbol("responseSchema");
 
-export default
-class BaseCommand {
-  constructor (requestSchema, responseSchema, values) {
+export default class BaseCommand {
+  constructor(requestSchema, responseSchema, values) {
     this[RESPONSE_SCHEMA_SYMBOL] = responseSchema;
 
     applyPropertiesValidators(this, requestSchema, values);
   }
 
-  getCommandName () {
+  getCommandName() {
     return this.constructor.name;
   }
 
-  createResponse (payload) {
-    const response = new function () {}();
+  createResponse(payload) {
+    const response = new (function () {})();
 
     applyPropertiesValidators(response, this[RESPONSE_SCHEMA_SYMBOL], payload);
 

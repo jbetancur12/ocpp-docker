@@ -30,7 +30,7 @@ const concatenate = (command, client) => {
     return command.connectorId === item.connectorId;
   });
 
-  const uid = "" + ui + client.info.connectors[connectorIdx].connectorId
+  const uid = "" + ui + client.info.connectors[connectorIdx].connectorId;
   if (connectorIdx === -1) {
     client.info.connectors.push({});
   } else {
@@ -38,7 +38,7 @@ const concatenate = (command, client) => {
       ...client.info.connectors[connectorIdx],
       ...{ transactionId: uid },
     };
-    return  uid 
+    return uid;
   }
 };
 
@@ -109,8 +109,6 @@ export function createServer(server) {
         return {};
 
       case command instanceof OCPPCommands.StartTransaction:
-        
-
         // const uid = concatenate(command, client);
 
         //  await cSystem.onStatusUpdate();
@@ -123,7 +121,6 @@ export function createServer(server) {
         };
 
       case command instanceof OCPPCommands.StopTransaction:
-
         return {
           transactionId: 1,
           idTagInfo: {
@@ -160,8 +157,12 @@ export function createServer(server) {
     }
   };
 
-  cSystem.toggleChargePoint = async (client, connectorId, user, transactionId) => {
-
+  cSystem.toggleChargePoint = async (
+    client,
+    connectorId,
+    user,
+    transactionId
+  ) => {
     const connector = client.info.connectors.find(
       (item) => connectorId.toString() === item.connectorId.toString()
     );
