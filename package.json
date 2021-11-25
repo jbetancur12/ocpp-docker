@@ -73,7 +73,6 @@
   "lint-staged": {
     "client/**/*.{js,jsx}": [
       "prettier --write",
-      "eslint --fix",
       "git add"
     ],
     "*.{html,css,less,ejs}": [
