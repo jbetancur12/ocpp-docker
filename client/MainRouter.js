@@ -20,6 +20,7 @@ const MainRouter = () => {
       <Switch>
         <Route exact path='/' component={Home} />
         <Route path='/users' component={Users} />
+        <PrivateRoute path='/qr' component={QRScanModule} />
         <PrivateRoute path='/dashboard' component={Dashboard} />
         <PrivateRoute path='/operations' component={Operations} />
         <PrivateRoute path='/clients' component={Clients} />
@@ -27,8 +28,6 @@ const MainRouter = () => {
         <Route path='/signin' component={Signin} />
         <PrivateRoute path='/user/edit/:userId' component={EditProfile} />
         <Route path='/user/:userId' component={Profile} />
-        <
-          Route path='/qr' component={QRScanModule} />
       </Switch>
     </div>
   );

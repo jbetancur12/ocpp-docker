@@ -29,7 +29,7 @@ router
   .get(chargerPoint.list)
   .post(chargerPoint.create);
   
-router.param("charger_box_id", chargerPoint.chargerPointByID);
+router.param("station", chargerPoint.chargerPointByID);
 router.param('userId', userCtrl.userByID);
 
 export default router;
