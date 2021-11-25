@@ -37,23 +37,24 @@ app.use(cors());
 app.use(sse);
 
 app.use("/dist", express.static(path.join(CURRENT_WORKING_DIR, "dist")));
-app.use("/", chargerPointsRoutes);
+
 app.use("/", userRoutes);
 app.use("/", authRoutes);
+app.use("/", chargerPointsRoutes);
 
 app.get("*", async (req, res) => {
   
   const sheets = new ServerStyleSheets();
   const context = {};
-  const element = (
-    <StaticRouter location={req.url} context={context}>
-      <ThemeProvider theme={theme}>
-        <MainRouter />
-      </ThemeProvider>
-    </StaticRouter>
-  );
+
   // await ssrPrepass(element)
-  const markup = ReactDOMServer.renderToString(sheets.collect(element));
+  const markup = ReactDOMServer.renderToString(
+    sheets.collect(
+      <StaticRouter location={req.url} context={context}>
+        <ThemeProvider theme={theme}>
+          <MainRouter />
+        </ThemeProvider>
+      </StaticRouter>));
 
   if (context.url) {
     return res.redirect(303, context.url);

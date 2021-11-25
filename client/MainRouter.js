@@ -19,15 +19,15 @@ const MainRouter = () => {
       <Menu />
       <Switch>
         <Route exact path='/' component={Home} />
-        <Route path='/users' component={Users} />
+        {/* <Route path='/users' component={Users} /> */}
         <PrivateRoute path='/qr' component={QRScanModule} />
         <PrivateRoute path='/dashboard' component={Dashboard} />
-        <PrivateRoute path='/operations' component={Operations} />
-        <PrivateRoute path='/clients' component={Clients} />
+        {/* <PrivateRoute path='/operations' component={Operations} /> */}
+        {/* <PrivateRoute path='/clients' component={Clients} /> */}
         <Route path='/signup' component={Signup} />
         <Route path='/signin' component={Signin} />
-        <PrivateRoute path='/user/edit/:userId' component={EditProfile} />
-        <Route path='/user/:userId' component={Profile} />
+        {/* <PrivateRoute path='/user/edit/:userId' component={EditProfile} /> */}
+        {/* <Route path='/user/:userId' component={Profile} /> */}
       </Switch>
     </div>
   );
