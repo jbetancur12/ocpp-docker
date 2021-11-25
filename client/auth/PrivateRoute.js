@@ -1,8 +1,8 @@
-import React, { Component, useEffect, useState } from "react";
-import { Route, Redirect } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import auth from "./auth-helper";
+import React, { Component, useEffect, useState } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import auth from './auth-helper';
 
 function useIsServer() {
   const [isServer, setIsServer] = useState(true);
@@ -14,12 +14,12 @@ function useIsServer() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    "& > * + *": {
+    display: 'flex',
+    '& > * + *': {
       marginLeft: theme.spacing(2),
     },
-    justifyContent: "center",
-    marginTop: "150px",
+    justifyContent: 'center',
+    marginTop: '150px',
   },
 }));
 
@@ -30,7 +30,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   if (isServer) {
     return (
       <div className={classes.root}>
-                       <CircularProgress />
+        <CircularProgress />
       </div>
     );
   }
@@ -44,7 +44,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         ) : (
           <Redirect
             to={{
-              pathname: "/signin",
+              pathname: '/signin',
               state: { from: props.location },
             }}
           />

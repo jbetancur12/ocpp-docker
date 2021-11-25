@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -86,4 +86,4 @@ const ChargerPointSchema = new Schema({
   updated: Date,
 });
 
-export default mongoose.model("ChargerPoint", ChargerPointSchema);
+export default mongoose.model('ChargerPoint', ChargerPointSchema);

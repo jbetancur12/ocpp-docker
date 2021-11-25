@@ -1,7 +1,7 @@
-import BaseCommand from "./BaseCommand";
+import BaseCommand from './BaseCommand';
 
-import requestSchema from "../../ocpp-1.6-schemas/UpdateFirmware";
-import responseSchema from "../../ocpp-1.6-schemas/UpdateFirmwareResponse";
+import requestSchema from '../../ocpp-1.6-schemas/UpdateFirmware';
+import responseSchema from '../../ocpp-1.6-schemas/UpdateFirmwareResponse';
 
 export class UpdateFirmware extends BaseCommand {
   constructor(values) {

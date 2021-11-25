@@ -1,7 +1,7 @@
-import Joi from "joi";
-import Enjoi from "enjoi";
+import Joi from 'joi';
+import Enjoi from 'enjoi';
 
-const MODEL_VALUES_SYMBOL = Symbol("modelValues");
+const MODEL_VALUES_SYMBOL = Symbol('modelValues');
 
 export function applyPropertiesValidators(object, schema, values = {}) {
   const joiSchema = new Enjoi(schema);

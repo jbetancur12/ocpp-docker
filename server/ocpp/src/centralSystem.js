@@ -1,9 +1,9 @@
-import WebSocket from "ws";
-import debugFn from "debug";
-import Logger, { LOGGER_URL } from "./logger";
-import { Connection } from "./connection";
-import { DEBUG_LIBNAME, OCPP_PROTOCOL_1_6 } from "./constants";
-import CentralSystemClient from "./centralSystemClient";
+import WebSocket from 'ws';
+import debugFn from 'debug';
+import Logger, { LOGGER_URL } from './logger';
+import { Connection } from './connection';
+import { DEBUG_LIBNAME, OCPP_PROTOCOL_1_6 } from './constants';
+import CentralSystemClient from './centralSystemClient';
 
 const debug = debugFn(DEBUG_LIBNAME);
 
@@ -24,33 +24,33 @@ export default class CentralSystem {
       host,
       handleProtocols: (protocols, req) => {
         let newProtocols;
-        if (typeof protocols === "object") {
+        if (typeof protocols === 'object') {
           newProtocols = Array.from(protocols);
         } else {
           newProtocols = protocols;
         }
         if (newProtocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
-          return "";
+          return '';
         }
         return OCPP_PROTOCOL_1_6;
       },
       verifyClient: async (info, cb) => {
         if (info.req.url === LOGGER_URL) {
-          debug("Logger connected");
+          debug('Logger connected');
           return cb(true);
         }
         const isAccept = await validateConnection(info.req.url);
 
         this.logger.debug(
           `Request for connect "${info.req.url}" (${
-            info.req.headers["sec-websocket-protocol"]
-          }) - ${isAccept ? "Valid identifier" : "Invalid identifier"}`
+            info.req.headers['sec-websocket-protocol']
+          }) - ${isAccept ? 'Valid identifier' : 'Invalid identifier'}`,
         );
 
         cb(
           isAccept,
           404,
-          "Central System does not recognize the charge point identifier in the URL path"
+          'Central System does not recognize the charge point identifier in the URL path',
         );
       },
       ...(this.options.wsOptions || {}),
@@ -58,20 +58,20 @@ export default class CentralSystem {
 
     this.server = new WebSocket.Server(wsOptions);
 
-    this.server.on("error", (ws, req) => {
+    this.server.on('error', (ws, req) => {
       console.info(ws, req);
     });
 
-    this.server.on("upgrade", (ws, req) => {
+    this.server.on('upgrade', (ws, req) => {
       console.info(req);
     });
-    this.server.on("connection", (ws, req) => this.onNewConnection(ws, req));
+    this.server.on('connection', (ws, req) => this.onNewConnection(ws, req));
 
-    debug(`Listen on ${host || "default host"}:${port}`);
+    debug(`Listen on ${host || 'default host'}:${port}`);
   }
 
   onNewConnection(socket, req) {
-    socket.on("error", (err) => {
+    socket.on('error', (err) => {
       console.info(err, socket.readyState);
     });
 
@@ -94,7 +94,7 @@ export default class CentralSystem {
 
     connection.onRequest = (command) => this.onRequest(client, command);
 
-    socket.on("close", (err) => {
+    socket.on('close', (err) => {
       const index = this.clients.indexOf(client);
       this.clients.splice(index, 1);
     });

@@ -1,7 +1,7 @@
-import BaseCommand from "./BaseCommand";
+import BaseCommand from './BaseCommand';
 
-import requestSchema from "../../ocpp-1.6-schemas/GetLocalListVersion";
-import responseSchema from "../../ocpp-1.6-schemas/GetLocalListVersionResponse";
+import requestSchema from '../../ocpp-1.6-schemas/GetLocalListVersion';
+import responseSchema from '../../ocpp-1.6-schemas/GetLocalListVersionResponse';
 
 export class GetLocalListVersion extends BaseCommand {
   constructor(values) {

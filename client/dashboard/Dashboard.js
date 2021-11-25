@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 import {
   Card,
@@ -10,28 +10,28 @@ import {
   Toolbar,
   CardContent,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import useTable from "../components/useTable";
+import useTable from '../components/useTable';
 
-import Notification from "../components/Notification";
-import ConfirmDialog from "../components/ConfirmDialog";
-import Popup from "../components/Popup";
-import StationForm from "./StationForm";
-import StationFormInfo from "./StationInfoForm";
+import Notification from '../components/Notification';
+import ConfirmDialog from '../components/ConfirmDialog';
+import Popup from '../components/Popup';
+import StationForm from './StationForm';
+import StationFormInfo from './StationInfoForm';
 import {
   Search,
   Close as CloseIcon,
   EditOutlined as EditOutlinedIcon,
   Add as AddIcon,
-} from "@material-ui/icons";
+} from '@material-ui/icons';
 
-import Controls from "../components/controls/Controls";
-import { convertdate } from "../utils/helpers";
+import Controls from '../components/controls/Controls';
+import { convertdate } from '../utils/helpers';
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
-import { create, list, remove, update } from "./api-station";
+import { create, list, remove, update } from './api-station';
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -39,14 +39,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   searchInput: {
-    width: "75%",
+    width: '75%',
   },
   newButton: {
-    position: "absolute",
-    right: "10px",
+    position: 'absolute',
+    right: '10px',
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
     //border: '2px solid #000',
@@ -56,22 +56,22 @@ const useStyles = makeStyles((theme) => ({
   table: {
     maxWidth: 650,
     marginBottom: theme.spacing(2),
-    margin: "auto",
+    margin: 'auto',
   },
   button: {
-    margin: "auto",
-    textAlign: "center",
+    margin: 'auto',
+    textAlign: 'center',
     marginTop: theme.spacing(2),
   },
   card: {
     maxWidth: 300,
-    margin: "auto",
-    textAlign: "center",
+    margin: 'auto',
+    textAlign: 'center',
     marginTop: theme.spacing(5),
     paddingBottom: theme.spacing(2),
   },
   error: {
-    verticalAlign: "middle",
+    verticalAlign: 'middle',
   },
   title: {
     marginTop: theme.spacing(2),
@@ -83,15 +83,15 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
   },
   submit: {
-    margin: "auto",
+    margin: 'auto',
     marginBottom: theme.spacing(2),
   },
 }));
 
 const headCells = [
-  { id: "station", label: "Estación" },
-  { id: "last_hearbeat", label: "Last HeartBeat", disableSorting: true },
-  { id: "actions", label: "Actions", disableSorting: true },
+  { id: 'station', label: 'Estación' },
+  { id: 'last_hearbeat', label: 'Last HeartBeat', disableSorting: true },
+  { id: 'actions', label: 'Actions', disableSorting: true },
 ];
 
 export default function Dashboard() {
@@ -108,13 +108,13 @@ export default function Dashboard() {
   });
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: "",
-    type: "",
+    message: '',
+    type: '',
   });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
-    title: "",
-    subTitle: "",
+    title: '',
+    subTitle: '',
   });
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
@@ -124,10 +124,10 @@ export default function Dashboard() {
     let target = e.target;
     setFilterFn({
       fn: (items) => {
-        if (target.value == "") return items;
+        if (target.value == '') return items;
         else
           return items.filter((x) =>
-            x.charger_box_id.toLowerCase().includes(target.value)
+            x.charger_box_id.toLowerCase().includes(target.value),
           );
       },
     });
@@ -144,8 +144,8 @@ export default function Dashboard() {
           setUpdateTable(true);
           setNotify({
             isOpen: true,
-            message: "Submitted Successfully",
-            type: "success",
+            message: 'Submitted Successfully',
+            type: 'success',
           });
         }
       });
@@ -160,8 +160,8 @@ export default function Dashboard() {
           setUpdateTable(true);
           setNotify({
             isOpen: true,
-            message: "Submitted Successfully",
-            type: "success",
+            message: 'Submitted Successfully',
+            type: 'success',
           });
         }
       });
@@ -193,8 +193,8 @@ export default function Dashboard() {
       } else {
         setNotify({
           isOpen: true,
-          message: "Deleted Successfully",
-          type: "error",
+          message: 'Deleted Successfully',
+          type: 'error',
         });
         setUpdateTable(true);
       }
@@ -205,10 +205,10 @@ export default function Dashboard() {
     <div>
       <Card className={classes.card}>
         <CardContent>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant='h6' className={classes.title}>
             Estaciones de carga
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5 }} color='text.secondary'>
             {records.length}
           </Typography>
         </CardContent>
@@ -217,11 +217,11 @@ export default function Dashboard() {
       <Paper className={classes.pageContent}>
         <Toolbar>
           <Controls.Input
-            label="Search Stations"
+            label='Search Stations'
             className={classes.searchInput}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position='start'>
                   <Search />
                 </InputAdornment>
               ),
@@ -229,8 +229,8 @@ export default function Dashboard() {
             onChange={handleSearch}
           />
           <Controls.Button
-            text="Add New"
-            variant="outlined"
+            text='Add New'
+            variant='outlined'
             startIcon={<AddIcon />}
             className={classes.newButton}
             onClick={() => {
@@ -257,20 +257,20 @@ export default function Dashboard() {
                 </TableCell>
                 <TableCell>
                   <Controls.ActionButton
-                    color="primary"
+                    color='primary'
                     onClick={() => {
                       openInPopup(item);
                       setOpenPopup(true);
                     }}
                   >
-                    <EditOutlinedIcon fontSize="small" />
+                    <EditOutlinedIcon fontSize='small' />
                   </Controls.ActionButton>
                   <Controls.ActionButton
-                    color="secondary"
+                    color='secondary'
                     onClick={() => {
                       setConfirmDialog({
                         isOpen: true,
-                        title: "Are you sure to delete this record?",
+                        title: 'Are you sure to delete this record?',
                         subTitle: "You can't undo this operation",
                         onConfirm: () => {
                           onDelete(item._id);
@@ -278,7 +278,7 @@ export default function Dashboard() {
                       });
                     }}
                   >
-                    <CloseIcon fontSize="small" />
+                    <CloseIcon fontSize='small' />
                   </Controls.ActionButton>
                 </TableCell>
               </TableRow>
@@ -288,14 +288,14 @@ export default function Dashboard() {
         <TblPagination />
       </Paper>
       <Popup
-        title="Station Form"
+        title='Station Form'
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
         <StationForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Popup
-        title="Station Form"
+        title='Station Form'
         openPopup={openPopupInfo}
         setOpenPopup={setOpenPopupInfo}
       >

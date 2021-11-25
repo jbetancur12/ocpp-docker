@@ -1,26 +1,26 @@
-import { CentralSystem, OCPPCommands } from "./ocpp/src";
-import * as AuthorizeConst from "./ocpp/src/commands/Authorize";
-import * as StartTransactionConst from "./ocpp/src/commands/StartTransaction";
-import OCPPError, { ERROR_NOTIMPLEMENTED } from "./ocpp/src/ocppError";
-import * as BootNotificationConst from "./ocpp/src/commands/BootNotification";
-import * as StatusNotificationConst from "./ocpp/src/commands/StatusNotification";
-import { sleep } from "sleep";
-import ChargerPoint from "./models/chargerPoint.model";
-import Transaction from "./models/transaction.model";
-import authCtrl from "./controllers/user.controller";
+import { CentralSystem, OCPPCommands } from './ocpp/src';
+import * as AuthorizeConst from './ocpp/src/commands/Authorize';
+import * as StartTransactionConst from './ocpp/src/commands/StartTransaction';
+import OCPPError, { ERROR_NOTIMPLEMENTED } from './ocpp/src/ocppError';
+import * as BootNotificationConst from './ocpp/src/commands/BootNotification';
+import * as StatusNotificationConst from './ocpp/src/commands/StatusNotification';
+import { sleep } from 'sleep';
+import ChargerPoint from './models/chargerPoint.model';
+import Transaction from './models/transaction.model';
+import authCtrl from './controllers/user.controller';
 
 const getCPData = (payload) => {
   return {
-    charge_point_vendor: payload.chargePointVendor || "",
-    charge_point_model: payload.chargePointModel || "",
-    charge_point_serial_number: payload.chargePointSerialNumber || "",
-    charge_box_serial_number: payload.chargeBoxSerialNumber || "",
-    fw_version: payload.firmwareVersion || "",
-    iccid: payload.iccid || "",
-    imsi: payload.imsi || "",
-    meter_type: payload.meterType || "",
-    meter_serial_number: payload.meterSerialNumber || "",
-    registration_status: "Accepted",
+    charge_point_vendor: payload.chargePointVendor || '',
+    charge_point_model: payload.chargePointModel || '',
+    charge_point_serial_number: payload.chargePointSerialNumber || '',
+    charge_box_serial_number: payload.chargeBoxSerialNumber || '',
+    fw_version: payload.firmwareVersion || '',
+    iccid: payload.iccid || '',
+    imsi: payload.imsi || '',
+    meter_type: payload.meterType || '',
+    meter_serial_number: payload.meterSerialNumber || '',
+    registration_status: 'Accepted',
   };
 };
 
@@ -30,7 +30,7 @@ const concatenate = (command, client) => {
     return command.connectorId === item.connectorId;
   });
 
-  const uid = "" + ui + client.info.connectors[connectorIdx].connectorId;
+  const uid = '' + ui + client.info.connectors[connectorIdx].connectorId;
   if (connectorIdx === -1) {
     client.info.connectors.push({});
   } else {
@@ -68,7 +68,7 @@ export function createServer(server) {
         });
 
         if (!chargerPoint) {
-          console.info("ChargerPoint does not exist in DB");
+          console.info('ChargerPoint does not exist in DB');
           return {
             status: BootNotificationConst.STATUS_REJECTED,
             currentTime: new Date().toISOString(),
@@ -78,7 +78,7 @@ export function createServer(server) {
 
         await ChargerPoint.findByIdAndUpdate(
           chargerPoint._id,
-          getCPData(command)
+          getCPData(command),
         );
         return {
           status: BootNotificationConst.STATUS_ACCEPTED,
@@ -153,7 +153,7 @@ export function createServer(server) {
         await cSystem.onStatusUpdate();
         return {};
       default:
-        throw new OCPPError(ERROR_NOTIMPLEMENTED, "Unknown command");
+        throw new OCPPError(ERROR_NOTIMPLEMENTED, 'Unknown command');
     }
   };
 
@@ -161,10 +161,10 @@ export function createServer(server) {
     client,
     connectorId,
     user,
-    transactionId
+    transactionId,
   ) => {
     const connector = client.info.connectors.find(
-      (item) => connectorId.toString() === item.connectorId.toString()
+      (item) => connectorId.toString() === item.connectorId.toString(),
     );
     if (!connector) {
       return null;
@@ -180,7 +180,7 @@ export function createServer(server) {
 
     let command = new OCPPCommands.RemoteStartTransaction({
       connectorId: connectorId,
-      idTag: "" + user,
+      idTag: '' + user,
     });
 
     await client.connection.send(command);

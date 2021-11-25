@@ -1,9 +1,9 @@
-import WebSocket from "ws";
-import debugFn from "debug";
-import Commands from "./commands";
-import { Connection } from "./connection";
+import WebSocket from 'ws';
+import debugFn from 'debug';
+import Commands from './commands';
+import { Connection } from './connection';
 
-import { OCPP_PROTOCOL_1_6, DEBUG_LIBNAME } from "./constants";
+import { OCPP_PROTOCOL_1_6, DEBUG_LIBNAME } from './constants';
 
 const debug = debugFn(DEBUG_LIBNAME);
 
@@ -36,24 +36,24 @@ export default class ChargePoint {
         {
           perMessageDeflate: false,
           protocolVersion: 13,
-        }
+        },
       );
 
-      ws.on("upgrade", (res) => {
-        if (!res.headers["sec-websocket-protocol"]) {
+      ws.on('upgrade', (res) => {
+        if (!res.headers['sec-websocket-protocol']) {
           return reject(
-            new Error(`Server doesn't support protocol ${OCPP_PROTOCOL_1_6}`)
+            new Error(`Server doesn't support protocol ${OCPP_PROTOCOL_1_6}`),
           );
         }
       });
 
-      ws.on("close", () => {
+      ws.on('close', () => {
         debug(`Connection is closed`);
         this.connection = null;
         nextReconnectAttempt();
       });
-      ws.on("open", () => {
-        ws.removeAllListeners("error");
+      ws.on('open', () => {
+        ws.removeAllListeners('error');
 
         this.connection = new Connection(ws);
         this.connection.onRequest = (command) => this.onRequest(command);
@@ -61,7 +61,7 @@ export default class ChargePoint {
         resolve(this.connection);
       });
 
-      ws.on("error", reject);
+      ws.on('error', reject);
     });
 
     function nextReconnectAttempt() {

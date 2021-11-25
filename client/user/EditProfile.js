@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Icon from "@material-ui/core/Icon";
-import { makeStyles } from "@material-ui/core/styles";
-import auth from "./../auth/auth-helper";
-import { read, update } from "./api-user.js";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Icon from '@material-ui/core/Icon';
+import { makeStyles } from '@material-ui/core/styles';
+import auth from './../auth/auth-helper';
+import { read, update } from './api-user.js';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: 600,
-    margin: "auto",
-    textAlign: "center",
+    margin: 'auto',
+    textAlign: 'center',
     marginTop: theme.spacing(5),
     paddingBottom: theme.spacing(2),
   },
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.protectedTitle,
   },
   error: {
-    verticalAlign: "middle",
+    verticalAlign: 'middle',
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -37,10 +37,10 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
   },
   input: {
-    display: "none",
+    display: 'none',
   },
   submit: {
-    margin: "auto",
+    margin: 'auto',
     marginBottom: theme.spacing(2),
   },
 }));
@@ -48,11 +48,11 @@ const useStyles = makeStyles((theme) => ({
 export default function EditProfile({ match }) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    name: "",
-    password: "",
-    email: "",
+    name: '',
+    password: '',
+    email: '',
     open: false,
-    error: "",
+    error: '',
     redirectToProfile: false,
   });
   const jwt = auth.isAuthenticated();
@@ -66,7 +66,7 @@ export default function EditProfile({ match }) {
         userId: match.params.userId,
       },
       { t: jwt.token },
-      signal
+      signal,
     ).then((data) => {
       if (data && data.error) {
         setValues({ ...values, error: data.error });
@@ -92,7 +92,7 @@ export default function EditProfile({ match }) {
       {
         t: jwt.token,
       },
-      user
+      user,
     ).then((data) => {
       if (data && data.error) {
         setValues({ ...values, error: data.error });
@@ -106,65 +106,65 @@ export default function EditProfile({ match }) {
   };
 
   if (values.redirectToProfile) {
-    return <Redirect to={"/user/" + values.userId} />;
+    return <Redirect to={'/user/' + values.userId} />;
   }
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant='h6' className={classes.title}>
           Edit Profile
         </Typography>
         <TextField
-          id="name"
-          label="Name"
+          id='name'
+          label='Name'
           className={classes.textField}
           value={values.name}
-          onChange={handleChange("name")}
-          margin="normal"
+          onChange={handleChange('name')}
+          margin='normal'
         />
         <br />
         <input
-          accept="image/*"
-          type="file"
-          onChange={handleChange("photo")}
-          style={{ display: "none" }}
-          id="icon-button-file"
+          accept='image/*'
+          type='file'
+          onChange={handleChange('photo')}
+          style={{ display: 'none' }}
+          id='icon-button-file'
           className={classes.input}
         />
         <br />
         <TextField
-          id="multiline-flexible"
-          label="About"
+          id='multiline-flexible'
+          label='About'
           multiline
-          rows="2"
+          rows='2'
           value={values.about}
-          onChange={handleChange("about")}
+          onChange={handleChange('about')}
           className={classes.textField}
         />
         <br />
         <TextField
-          id="email"
-          type="email"
-          label="Email"
+          id='email'
+          type='email'
+          label='Email'
           className={classes.textField}
           value={values.email}
-          onChange={handleChange("email")}
-          margin="normal"
+          onChange={handleChange('email')}
+          margin='normal'
         />
         <br />
         <TextField
-          id="password"
-          type="password"
-          label="Password"
+          id='password'
+          type='password'
+          label='Password'
           className={classes.textField}
           value={values.password}
-          onChange={handleChange("password")}
-          margin="normal"
+          onChange={handleChange('password')}
+          margin='normal'
         />
-        <br />{" "}
+        <br />{' '}
         {values.error && (
-          <Typography component="p" color="error">
-            <Icon color="error" className={classes.error}>
+          <Typography component='p' color='error'>
+            <Icon color='error' className={classes.error}>
               error
             </Icon>
             {values.error}
@@ -173,8 +173,8 @@ export default function EditProfile({ match }) {
       </CardContent>
       <CardActions>
         <Button
-          color="primary"
-          variant="contained"
+          color='primary'
+          variant='contained'
           onClick={clickSubmit}
           className={classes.submit}
         >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableHead,
@@ -6,26 +6,26 @@ import {
   TableCell,
   TablePagination,
   TableSortLabel,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    maxWidth: "600px",
-    marginLeft: "auto",
-    marginRight: "auto",
+    maxWidth: '600px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginTop: theme.spacing(3),
-    "& thead th": {
-      fontWeight: "600",
+    '& thead th': {
+      fontWeight: '600',
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.primary.light,
     },
-    "& tbody td": {
-      fontWeight: "300",
+    '& tbody td': {
+      fontWeight: '300',
     },
-    "& tbody tr:hover": {
-      backgroundColor: "#fffbf2",
-      cursor: "pointer",
+    '& tbody tr:hover': {
+      backgroundColor: '#fffbf2',
+      cursor: 'pointer',
     },
   },
 }));
@@ -46,8 +46,8 @@ export default function useTable(records, headCells, filterFn) {
 
   const TblHead = (props) => {
     const handleSortRequest = (cellId) => {
-      const isAsc = orderBy === cellId && order === "asc";
-      setOrder(isAsc ? "desc" : "asc");
+      const isAsc = orderBy === cellId && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(cellId);
     };
 
@@ -64,7 +64,7 @@ export default function useTable(records, headCells, filterFn) {
               ) : (
                 <TableSortLabel
                   active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : "asc"}
+                  direction={orderBy === headCell.id ? order : 'asc'}
                   onClick={() => {
                     handleSortRequest(headCell.id);
                   }}
@@ -90,7 +90,7 @@ export default function useTable(records, headCells, filterFn) {
 
   const TblPagination = () => (
     <TablePagination
-      component="div"
+      component='div'
       page={page}
       rowsPerPageOptions={pages}
       rowsPerPage={rowsPerPage}
@@ -111,7 +111,7 @@ export default function useTable(records, headCells, filterFn) {
   }
 
   function getComparator(order, orderBy) {
-    return order === "desc"
+    return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
@@ -129,7 +129,7 @@ export default function useTable(records, headCells, filterFn) {
   const recordsAfterPagingAndSorting = () => {
     return stableSort(
       filterFn.fn(records),
-      getComparator(order, orderBy)
+      getComparator(order, orderBy),
     ).slice(page * rowsPerPage, (page + 1) * rowsPerPage);
   };
 

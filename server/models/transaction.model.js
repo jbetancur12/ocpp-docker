@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -33,7 +33,7 @@ const TransactionSchema = new Schema({
   },
   postedBy: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
+    ref: 'User',
   },
   created: {
     type: Date,
@@ -42,4 +42,4 @@ const TransactionSchema = new Schema({
   updated: Date,
 });
 
-export default mongoose.model("Transaction", TransactionSchema);
+export default mongoose.model('Transaction', TransactionSchema);

@@ -1,7 +1,7 @@
 import {
   ERRORCODE_NOERROR,
   STATUS_AVAILABLE,
-} from "./commands/StatusNotification";
+} from './commands/StatusNotification';
 
 export default class Connector {
   constructor(connectorId) {

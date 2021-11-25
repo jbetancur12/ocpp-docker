@@ -1,10 +1,10 @@
 const create = async (station) => {
   try {
-    let response = await fetch("/ocpp/chargerPoints", {
-      method: "POST",
+    let response = await fetch('/ocpp/chargerPoints', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(station),
     });
@@ -16,8 +16,8 @@ const create = async (station) => {
 
 const list = async () => {
   try {
-    let response = await fetch("/ocpp/chargerPoints", {
-      method: "GET",
+    let response = await fetch('/ocpp/chargerPoints', {
+      method: 'GET',
     });
     return await response.json();
   } catch (err) {
@@ -28,11 +28,11 @@ const list = async () => {
 const update = async (params) => {
   const { charger_box_id, _id } = params;
   try {
-    let response = await fetch("/ocpp/chargerPoints/" + _id, {
-      method: "PUT",
+    let response = await fetch('/ocpp/chargerPoints/' + _id, {
+      method: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ charger_box_id: charger_box_id }),
     });
@@ -44,8 +44,8 @@ const update = async (params) => {
 
 const remove = async (id) => {
   try {
-    let response = await fetch("/ocpp/chargerPoints/" + id, {
-      method: "DELETE",
+    let response = await fetch('/ocpp/chargerPoints/' + id, {
+      method: 'DELETE',
     });
     return await response.json();
   } catch (err) {

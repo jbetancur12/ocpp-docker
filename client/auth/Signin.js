@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Icon from "@material-ui/core/Icon";
+import React, { useState } from 'react';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Icon from '@material-ui/core/Icon';
 
-import { makeStyles } from "@material-ui/core/styles";
-import { Redirect } from "react-router-dom";
-import { signin } from "./api-auth";
-import auth from "./auth-helper";
+import { makeStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
+import { signin } from './api-auth';
+import auth from './auth-helper';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: 600,
-    margin: "auto",
-    textAlign: "center",
+    margin: 'auto',
+    textAlign: 'center',
     marginTop: theme.spacing(5),
     paddingBottom: theme.spacing(2),
   },
   error: {
-    verticalAlign: "middle",
+    verticalAlign: 'middle',
   },
   title: {
     marginTop: theme.spacing(2),
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
   },
   submit: {
-    margin: "auto",
+    margin: 'auto',
     marginBottom: theme.spacing(2),
   },
 }));
@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
 export default function Signin(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    email: "",
-    password: "",
-    error: "",
+    email: '',
+    password: '',
+    error: '',
     redirectToReferrer: false,
   });
 
@@ -58,7 +58,7 @@ export default function Signin(props) {
         setValues({ ...values, error: data.error });
       } else {
         auth.authenticate(data, () => {
-          setValues({ ...values, error: "", redirectToReferrer: true });
+          setValues({ ...values, error: '', redirectToReferrer: true });
         });
       }
     });
@@ -70,7 +70,7 @@ export default function Signin(props) {
 
   const { from } = props.location.state || {
     from: {
-      pathname: "/",
+      pathname: '/',
     },
   };
   const { redirectToReferrer } = values;
@@ -81,32 +81,32 @@ export default function Signin(props) {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant='h6' className={classes.title}>
           Sign In
         </Typography>
         <TextField
-          id="email"
-          type="email"
-          label="Email"
+          id='email'
+          type='email'
+          label='Email'
           className={classes.textField}
           value={values.email}
-          onChange={handleChange("email")}
-          margin="normal"
+          onChange={handleChange('email')}
+          margin='normal'
         />
         <br />
         <TextField
-          id="password"
-          type="password"
-          label="Password"
+          id='password'
+          type='password'
+          label='Password'
           className={classes.textField}
           value={values.password}
-          onChange={handleChange("password")}
-          margin="normal"
+          onChange={handleChange('password')}
+          margin='normal'
         />
-        <br />{" "}
+        <br />{' '}
         {values.error && (
-          <Typography component="p" color="error">
-            <Icon color="error" className={classes.error}>
+          <Typography component='p' color='error'>
+            <Icon color='error' className={classes.error}>
               error
             </Icon>
             {values.error}
@@ -115,8 +115,8 @@ export default function Signin(props) {
       </CardContent>
       <CardActions>
         <Button
-          color="primary"
-          variant="contained"
+          color='primary'
+          variant='contained'
           onClick={clickSubmit}
           className={classes.submit}
         >

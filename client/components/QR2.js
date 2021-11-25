@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import QrReader from "react-qr-reader";
+import React, { useState } from 'react';
+import QrReader from 'react-qr-reader';
 
 export default function QR() {
-  const [result, SetResult] = useState("No result");
+  const [result, SetResult] = useState('No result');
   const handleScan = (data) => {
     if (data) {
       SetResult(data);
@@ -18,7 +18,7 @@ export default function QR() {
         delay={300}
         onError={handleError}
         onScan={handleScan}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       />
       <p>{result}</p>
     </div>

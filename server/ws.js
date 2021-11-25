@@ -1,14 +1,14 @@
-import { wss } from "./server";
-import { messageController } from "./controllers/message.controller";
+import { wss } from './server';
+import { messageController } from './controllers/message.controller';
 
 const CLIENTS = {};
 
-wss.on("connection", async (socket, req) => {
+wss.on('connection', async (socket, req) => {
   let temp_var = req.url;
-  let originArray = temp_var.split("/");
+  let originArray = temp_var.split('/');
   let cp_id = originArray[originArray.length - 1];
   CLIENTS[cp_id] = socket;
-  socket.on("message", async (message) => {
+  socket.on('message', async (message) => {
     const msgParsed = JSON.parse(message);
     messageController(wss, socket, message, req.url, CLIENTS);
   });

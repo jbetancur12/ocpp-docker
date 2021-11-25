@@ -1,7 +1,7 @@
-import BaseCommand from "./BaseCommand";
+import BaseCommand from './BaseCommand';
 
-import requestSchema from "../../ocpp-1.6-schemas/Heartbeat";
-import responseSchema from "../../ocpp-1.6-schemas/HeartbeatResponse";
+import requestSchema from '../../ocpp-1.6-schemas/Heartbeat';
+import responseSchema from '../../ocpp-1.6-schemas/HeartbeatResponse';
 
 export class Heartbeat extends BaseCommand {
   constructor(values) {

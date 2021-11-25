@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 import {
   TextField,
@@ -14,21 +14,21 @@ import {
   Paper,
   InputAdornment,
   Toolbar,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import Notification from "../components/Notification";
-import ConfirmDialog from "../components/ConfirmDialog";
-import { Search, Close as CloseIcon } from "@material-ui/icons";
+import Notification from '../components/Notification';
+import ConfirmDialog from '../components/ConfirmDialog';
+import { Search, Close as CloseIcon } from '@material-ui/icons';
 
-import Controls from "../components/controls/Controls";
+import Controls from '../components/controls/Controls';
 
-import CardContent from "@material-ui/core/CardContent";
+import CardContent from '@material-ui/core/CardContent';
 
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
-import { create, list, remove } from "./api-station";
+import { create, list, remove } from './api-station';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -57,7 +57,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    "&:nth-of-type(odd)": {
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
@@ -69,14 +69,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   searchInput: {
-    width: "75%",
+    width: '75%',
   },
   newButton: {
-    position: "absolute",
-    right: "10px",
+    position: 'absolute',
+    right: '10px',
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
     //border: '2px solid #000',
@@ -86,22 +86,22 @@ const useStyles = makeStyles((theme) => ({
   table: {
     maxWidth: 650,
     marginBottom: theme.spacing(2),
-    margin: "auto",
+    margin: 'auto',
   },
   button: {
-    margin: "auto",
-    textAlign: "center",
+    margin: 'auto',
+    textAlign: 'center',
     marginTop: theme.spacing(2),
   },
   card: {
     maxWidth: 300,
-    margin: "auto",
-    textAlign: "center",
+    margin: 'auto',
+    textAlign: 'center',
     marginTop: theme.spacing(5),
     paddingBottom: theme.spacing(2),
   },
   error: {
-    verticalAlign: "middle",
+    verticalAlign: 'middle',
   },
   title: {
     marginTop: theme.spacing(2),
@@ -113,12 +113,12 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
   },
   submit: {
-    margin: "auto",
+    margin: 'auto',
     marginBottom: theme.spacing(2),
   },
 }));
 
-const headCells = [{ id: "station", label: "Estación" }];
+const headCells = [{ id: 'station', label: 'Estación' }];
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -129,7 +129,7 @@ export default function Dashboard() {
       if (!data.error) {
         return data;
       }
-    })
+    }),
   );
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
@@ -141,16 +141,16 @@ export default function Dashboard() {
   });
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: "",
-    type: "",
+    message: '',
+    type: '',
   });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
-    title: "",
-    subTitle: "",
+    title: '',
+    subTitle: '',
   });
   const [values, setValues] = useState({
-    charger_box_id: "",
+    charger_box_id: '',
   });
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
@@ -160,10 +160,10 @@ export default function Dashboard() {
     let target = e.target;
     setFilterFn({
       fn: (items) => {
-        if (target.value == "") return items;
+        if (target.value == '') return items;
         else
           return items.filter((x) =>
-            x.fullName.toLowerCase().includes(target.value)
+            x.fullName.toLowerCase().includes(target.value),
           );
       },
     });
@@ -199,7 +199,7 @@ export default function Dashboard() {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        setValues({ ...values, error: "" });
+        setValues({ ...values, error: '' });
         setUpdate(true);
       }
     });
@@ -220,15 +220,15 @@ export default function Dashboard() {
     <div style={modalStyle} className={classes.paper}>
       <TextField
         // error
-        id="charger_box_id"
-        label="Estacion ID"
+        id='charger_box_id'
+        label='Estacion ID'
         value={values.charger_box_id}
-        onChange={handleChange("charger_box_id")}
-        variant="filled"
+        onChange={handleChange('charger_box_id')}
+        variant='filled'
       />
       <Button
-        color="primary"
-        variant="contained"
+        color='primary'
+        variant='contained'
         onClick={clickSubmit}
         className={classes.submit}
       >
@@ -251,8 +251,8 @@ export default function Dashboard() {
         // setValues({ ...values, error: '' });
         setNotify({
           isOpen: true,
-          message: "Deleted Successfully",
-          type: "error",
+          message: 'Deleted Successfully',
+          type: 'error',
         });
         setUpdate(true);
       }
@@ -264,10 +264,10 @@ export default function Dashboard() {
     <div>
       <Card className={classes.card}>
         <CardContent>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant='h6' className={classes.title}>
             Estaciones de carga
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5 }} color='text.secondary'>
             {cp.length}
           </Typography>
         </CardContent>
@@ -275,7 +275,7 @@ export default function Dashboard() {
       <div className={classes.button}>
         <Button
           className={classes.submit}
-          variant="contained"
+          variant='contained'
           onClick={handleOpen}
         >
           Agregar Estación
@@ -284,8 +284,8 @@ export default function Dashboard() {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby='simple-modal-title'
+        aria-describedby='simple-modal-description'
       >
         {body}
       </Modal>
@@ -293,11 +293,11 @@ export default function Dashboard() {
       <Paper className={classes.pageContent}>
         <Toolbar>
           <Controls.Input
-            label="Search Employees"
+            label='Search Employees'
             className={classes.searchInput}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position='start'>
                   <Search />
                 </InputAdornment>
               ),
@@ -305,8 +305,8 @@ export default function Dashboard() {
             onChange={handleSearch}
           />
           <Controls.Button
-            text="Add New"
-            variant="outlined"
+            text='Add New'
+            variant='outlined'
             startIcon={<AddIcon />}
             className={classes.newButton}
             onClick={() => {
@@ -326,19 +326,19 @@ export default function Dashboard() {
                 <TableCell>{item.department}</TableCell>
                 <TableCell>
                   <Controls.ActionButton
-                    color="primary"
+                    color='primary'
                     onClick={() => {
                       openInPopup(item);
                     }}
                   >
-                    <EditOutlinedIcon fontSize="small" />
+                    <EditOutlinedIcon fontSize='small' />
                   </Controls.ActionButton>
                   <Controls.ActionButton
-                    color="secondary"
+                    color='secondary'
                     onClick={() => {
                       setConfirmDialog({
                         isOpen: true,
-                        title: "Are you sure to delete this record?",
+                        title: 'Are you sure to delete this record?',
                         subTitle: "You can't undo this operation",
                         onConfirm: () => {
                           onDelete(item.id);
@@ -346,7 +346,7 @@ export default function Dashboard() {
                       });
                     }}
                   >
-                    <CloseIcon fontSize="small" />
+                    <CloseIcon fontSize='small' />
                   </Controls.ActionButton>
                 </TableCell>
               </TableRow>
@@ -357,27 +357,27 @@ export default function Dashboard() {
       </Paper>
 
       <TableContainer className={classes.table} component={Paper}>
-        <Table aria-label="customized table">
+        <Table aria-label='customized table'>
           <TableHead>
             <TableRow>
-              <StyledTableCell align="left">Estación de Carga</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align='left'>Estación de Carga</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {cp.length > 0 &&
               cp.map((row) => (
                 <StyledTableRow key={row._id}>
-                  <StyledTableCell component="th" scope="row">
+                  <StyledTableCell component='th' scope='row'>
                     {row.charger_box_id}
                   </StyledTableCell>
-                  <StyledTableCell align="right">
+                  <StyledTableCell align='right'>
                     <Controls.ActionButton
-                      color="secondary"
+                      color='secondary'
                       onClick={() => {
                         setConfirmDialog({
                           isOpen: true,
-                          title: "Are you sure to delete this record?",
+                          title: 'Are you sure to delete this record?',
                           subTitle: "You can't undo this operation",
                           onConfirm: () => {
                             onDelete(row._id);
@@ -385,7 +385,7 @@ export default function Dashboard() {
                         });
                       }}
                     >
-                      <CloseIcon fontSize="small" />
+                      <CloseIcon fontSize='small' />
                     </Controls.ActionButton>
                     {/* <Tooltip title="Borrar" placement="right" arrow>
                       <IconButton id="222" aria-label="delete" onClick={handleOpenDialog}>

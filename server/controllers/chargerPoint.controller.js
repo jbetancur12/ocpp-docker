@@ -1,15 +1,15 @@
-import ChargerPoint from "../models/chargerPoint.model";
-import extend from "lodash/extend";
-import errorHandler from "../helpers/dbErrorHandler";
-import { centralSystem } from "../server";
-import _ from "lodash";
+import ChargerPoint from '../models/chargerPoint.model';
+import extend from 'lodash/extend';
+import errorHandler from '../helpers/dbErrorHandler';
+import { centralSystem } from '../server';
+import _ from 'lodash';
 
 const create = async (req, res) => {
   const chargerPoint = new ChargerPoint(req.body);
   try {
     await chargerPoint.save();
     return res.status(200).json({
-      message: "Charger Point Successfully created!",
+      message: 'Charger Point Successfully created!',
     });
   } catch (err) {
     return res.status(400).json({
@@ -33,14 +33,14 @@ const chargerPointByID = async (req, res, next, id) => {
   try {
     let chargerPoint = await ChargerPoint.findById(id);
     if (!chargerPoint)
-      return res.status("400").json({
-        error: "ChargerPoint not found",
+      return res.status('400').json({
+        error: 'ChargerPoint not found',
       });
     req.cp = chargerPoint;
     next();
   } catch (err) {
-    return res.status("400").json({
-      error: "Could not retrieve chargerPoint",
+    return res.status('400').json({
+      error: 'Could not retrieve chargerPoint',
     });
   }
 };
@@ -52,13 +52,13 @@ const read = async (req, res) => {
       charger_box_id: req.params.station,
     });
     if (!chargerPoint)
-      return res.status("400").json({
-        error: "ChargerPoint not found",
+      return res.status('400').json({
+        error: 'ChargerPoint not found',
       });
     res.json(chargerPoint);
   } catch (err) {
-    return res.status("400").json({
-      error: "Could not retrieve chargerPoint",
+    return res.status('400').json({
+      error: 'Could not retrieve chargerPoint',
     });
   }
 };
@@ -85,7 +85,7 @@ const remoteStart = async (req, res) => {
     await centralSystem.toggleChargePoint(
       centralSystem.clients[idf],
       parseInt(req.body.connector),
-      req.profile.id_tag
+      req.profile.id_tag,
       //req.body.transactionId
     );
     res.write(JSON.stringify({}));
@@ -111,7 +111,7 @@ const remove = async (req, res) => {
 const clients = async (req, res) => {
   try {
     const getClients = centralSystem.clients.map(
-      (client) => client.connection.req.url
+      (client) => client.connection.req.url,
     );
     res.json(getClients);
   } catch (error) {
@@ -122,8 +122,8 @@ const clients = async (req, res) => {
 };
 
 const status = async (req, res) => {
-  res.setHeader("Content-Type", "text/event-stream");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   onDigits(req, res);
   centralSystem.onStatusUpdate = () => onDigits(req, res);
 };
@@ -137,7 +137,7 @@ function onDigits(req, res) {
     res.write(`data: ${JSON.stringify(data)}\n\n`);
   }, 1000);
 
-  res.on("close", () => {
+  res.on('close', () => {
     clearInterval(intervalId);
     res.end();
   });

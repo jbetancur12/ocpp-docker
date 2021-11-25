@@ -1,6 +1,6 @@
-import { applyPropertiesValidators } from "../helpers";
+import { applyPropertiesValidators } from '../helpers';
 
-const RESPONSE_SCHEMA_SYMBOL = Symbol("responseSchema");
+const RESPONSE_SCHEMA_SYMBOL = Symbol('responseSchema');
 
 export default class BaseCommand {
   constructor(requestSchema, responseSchema, values) {

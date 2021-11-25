@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
 import {
   Power as PowerIcon,
   EvStation as EvStationIcon,
-} from "@material-ui/icons";
-import auth from "../auth/auth-helper";
+} from '@material-ui/icons';
+import auth from '../auth/auth-helper';
 
 // Create our number formatter.
-var formatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
+var formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
 
   // These options are needed to round to whole numbers if that's what you want.
   //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
@@ -19,73 +19,73 @@ var formatter = new Intl.NumberFormat("en-US", {
 
 const useStyles = makeStyles(() => ({
   root: {
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
   },
   station: {
-    background: "gray",
-    borderRadius: "5px",
-    width: "200px",
-    height: "400px",
-    position: "relative",
-    display: "inline-block",
-    marginRight: "60px",
-    marginTop: "50px",
-    marginLeft: "30px",
-    "&:after": {
-      background: "gray",
-      borderRadius: "5px",
-      height: "40px",
-      left: "-20px",
-      right: "-20px",
-      top: "-20px",
-      position: "absolute",
-      zIndex: "2",
+    background: 'gray',
+    borderRadius: '5px',
+    width: '200px',
+    height: '400px',
+    position: 'relative',
+    display: 'inline-block',
+    marginRight: '60px',
+    marginTop: '50px',
+    marginLeft: '30px',
+    '&:after': {
+      background: 'gray',
+      borderRadius: '5px',
+      height: '40px',
+      left: '-20px',
+      right: '-20px',
+      top: '-20px',
+      position: 'absolute',
+      zIndex: '2',
       content: '" "',
     },
   },
   stationTitle: {
-    top: "30px",
-    left: "30px",
-    right: "30px",
-    height: "60px",
-    zIndex: "5",
-    lineHeight: "30px",
-    background: "#fff",
-    width: "100%",
-    borderRadius: "5px",
-    marginBottom: "20px",
+    top: '30px',
+    left: '30px',
+    right: '30px',
+    height: '60px',
+    zIndex: '5',
+    lineHeight: '30px',
+    background: '#fff',
+    width: '100%',
+    borderRadius: '5px',
+    marginBottom: '20px',
   },
   measurements: {
-    paddingLeft: "20px",
-    textAlign: "center",
+    paddingLeft: '20px',
+    textAlign: 'center',
   },
   status: {
-    fontWeight: "bold",
-    color: "#feba19",
+    fontWeight: 'bold',
+    color: '#feba19',
   },
   statusOnline: {
-    color: "#7ab342",
+    color: '#7ab342',
   },
   statusOffline: {
-    color: "#f04d3a",
+    color: '#f04d3a',
   },
 
   conector: {
-    padding: "19px",
-    margin: "20px auto",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
+    padding: '19px',
+    margin: '20px auto',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   button: {
-    backgroundColor: "transparent",
-    backgroundRepeat: "no-repeat",
-    border: "none",
-    cursor: "pointer",
-    overflow: "hidden",
-    outline: "none",
+    backgroundColor: 'transparent',
+    backgroundRepeat: 'no-repeat',
+    border: 'none',
+    cursor: 'pointer',
+    overflow: 'hidden',
+    outline: 'none',
   },
 }));
 
@@ -118,12 +118,12 @@ function Station(props) {
       }
     });
 
-    fetch("/ocpp/chargerPoints/start/" + jwt.user._id, {
-      method: "POST",
+    fetch('/ocpp/chargerPoints/start/' + jwt.user._id, {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        Authentication: "Bearer " + t,
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        Authentication: 'Bearer ' + t,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
@@ -144,7 +144,7 @@ function Station(props) {
                 <div key={connector.connectorId} className={classes.conector}>
                   <div className={classes.stationTitle}>
                     <div className={classes.measurements}>
-                      <b>kwh:</b>{" "}
+                      <b>kwh:</b>{' '}
                       <span>
                         {connector.value ? getValue(connector.value) : 0}
                       </span>
@@ -161,20 +161,20 @@ function Station(props) {
                   </div>
                   <Button
                     onClick={() => toogleConnector(item.id, connector)}
-                    variant="contained"
+                    variant='contained'
                     startIcon={
                       <EvStationIcon
                         style={{
                           color: `${
-                            connector.status !== "Available"
-                              ? "#7ab342"
-                              : "#f04d3a"
+                            connector.status !== 'Available'
+                              ? '#7ab342'
+                              : '#f04d3a'
                           }`,
                         }}
                       />
                     }
                   >
-                    {connector.status !== "Available" ? "Stop" : "Start"}
+                    {connector.status !== 'Available' ? 'Stop' : 'Start'}
                   </Button>
                 </div>
               ))}

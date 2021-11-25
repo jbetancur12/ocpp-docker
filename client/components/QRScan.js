@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import Station from "../components/stations";
+import React, { useEffect, useState } from 'react';
+import Station from '../components/stations';
 
 function QRScanModule() {
   // const { hasMounted } = useMounted()
-  const [values, setValues] = useState("");
+  const [values, setValues] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const stationParam = urlParams.get("station");
+    const stationParam = urlParams.get('station');
 
-    const sse = new EventSource("/ocpp/chargerPoints/status");
+    const sse = new EventSource('/ocpp/chargerPoints/status');
 
     !isLoaded &&
-      fetch("/ocpp/chargerPoints/" + stationParam)
+      fetch('/ocpp/chargerPoints/' + stationParam)
         .then((res) => res.json())
         .then(
           (result) => {
@@ -28,7 +28,7 @@ function QRScanModule() {
           (error) => {
             setIsLoaded(true);
             setError(error);
-          }
+          },
         );
 
     function getRealtimeData(data) {
@@ -44,7 +44,7 @@ function QRScanModule() {
     }
     sse.onmessage = (e) => getRealtimeData(e.data);
     sse.onerror = () => {
-      console.log("Error");
+      console.log('Error');
 
       sse.close();
     };

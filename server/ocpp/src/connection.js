@@ -1,19 +1,19 @@
-import { v4 } from "uuid";
-import Websocket from "ws";
-import debugFn from "debug";
-import commands from "./commands";
+import { v4 } from 'uuid';
+import Websocket from 'ws';
+import debugFn from 'debug';
+import commands from './commands';
 import {
   DEBUG_LIBNAME,
   CALL_MESSAGE,
   CALLRESULT_MESSAGE,
   CALLERROR_MESSAGE,
   SOCKET_TIMEOUT,
-} from "./constants";
-import { getObjectValues } from "./helpers";
+} from './constants';
+import { getObjectValues } from './helpers';
 import OCPPError, {
   ERROR_FORMATIONVIOLATION,
   ERROR_INTERNALERROR,
-} from "./ocppError";
+} from './ocppError';
 
 const debug = debugFn(DEBUG_LIBNAME);
 
@@ -29,7 +29,7 @@ export class Connection {
       const ip =
         req &&
         ((req.connection && req.connection.remoteAddress) ||
-          req.headers["x-forwarded-for"]);
+          req.headers['x-forwarded-for']);
 
       if (this.logger) {
         this.logger.debug({
@@ -38,17 +38,17 @@ export class Connection {
         });
       } else {
         debug(
-          `New connection from "${ip}", protocol "${socket.protocol}", url "${this.url}"`
+          `New connection from "${ip}", protocol "${socket.protocol}", url "${this.url}"`,
         );
       }
     } else {
-      this.url = "SERVER";
+      this.url = 'SERVER';
       debug(`New connection to server`);
     }
 
-    socket.on("message", (msg) => this.onMessage(msg));
+    socket.on('message', (msg) => this.onMessage(msg));
 
-    socket.on("error", (err) => {
+    socket.on('error', (err) => {
       console.info(err);
     });
   }
@@ -92,7 +92,7 @@ export class Connection {
           // send error if payload didn't pass the validation
           return await this.sendError(
             messageId,
-            new OCPPError(ERROR_FORMATIONVIOLATION, err.message)
+            new OCPPError(ERROR_FORMATIONVIOLATION, err.message),
           );
         }
 
@@ -140,7 +140,7 @@ export class Connection {
         delete this.requests[messageId];
 
         rejectCallback(
-          new OCPPError(commandNameOrPayload, commandPayload, errorDetails)
+          new OCPPError(commandNameOrPayload, commandPayload, errorDetails),
         );
         break;
       default:
@@ -222,7 +222,7 @@ export class Connection {
       } else {
         setTimeout(
           () => onRejectResponse(`Timeout for message ${messageId}`),
-          SOCKET_TIMEOUT
+          SOCKET_TIMEOUT,
         );
       }
 

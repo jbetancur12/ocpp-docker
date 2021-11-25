@@ -1,22 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import ocppImg from "./../assets/images/ocpp.jpg";
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import ocppImg from './../assets/images/ocpp.jpg';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: 600,
-    margin: "auto",
+    margin: 'auto',
     marginTop: theme.spacing(5),
   },
   title: {
     padding: `${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(
-      2
+      2,
     )}px`,
     color: theme.palette.openTitle,
   },
@@ -29,12 +29,12 @@ export default function Home() {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
-      <Typography variant="h6" className={classes.title}>
+      <Typography variant='h6' className={classes.title}>
         Home Page
       </Typography>
-      <CardMedia className={classes.media} image={ocppImg} title="Ocpp Logo" />
+      <CardMedia className={classes.media} image={ocppImg} title='Ocpp Logo' />
       <CardContent>
-        <Typography variant="body2" component="p">
+        <Typography variant='body2' component='p'>
           Welcome to OCPP home page.
         </Typography>
       </CardContent>
