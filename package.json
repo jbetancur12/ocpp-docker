@@ -71,13 +71,12 @@
     }
   },
   "lint-staged": {
-    "client/**/*.{js,jsx}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.{html,css,less,ejs}": [
-      "prettier --write",
-      "git add"
-    ]
+    "linters":{
+      "client/**/*.{js,jsx}": [
+        "prettier --write",
+        "git add"
+      ]
+    }
+    
   }
 }
