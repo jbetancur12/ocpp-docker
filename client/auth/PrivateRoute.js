@@ -30,7 +30,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   if (isServer) {
     return (
       <div className={classes.root}>
-        <CircularProgress />
+                       <CircularProgress />
       </div>
     );
   }
