@@ -72,11 +72,12 @@
   },
   "lint-staged": {
     "linters":{
-      "client/**/*.{js,jsx}": [
+      "/**/*.{js,jsx}": [
         "prettier --write",
         "git add"
       ]
-    }
+    },
+    "ignore": ["node_modules", "dist", "package-lock.json"]
     
   }
 }
