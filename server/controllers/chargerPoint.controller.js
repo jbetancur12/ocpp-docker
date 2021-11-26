@@ -32,6 +32,7 @@ const list = async (req, res) => {
 const chargerPointByID = async (req, res, next, id) => {
   try {
     let chargerPoint = await ChargerPoint.findById(id);
+    console.log(chargerPoint);
     if (!chargerPoint)
       return res.status('400').json({
         error: 'ChargerPoint not found',
