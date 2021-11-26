@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
+import Chip from '@material-ui/core/Chip';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -181,15 +182,16 @@ export default function ScrollableTabsButtonForce(props) {
                   }}
                 />
                 {station.status !== 'Available' ? <LinearProgress className={classes.progress}/> : <div className={classes.progress}/>}
-                <span className={classes.kwh}>
-                  {station.value ? `${getValue(station.value)} kwh` : 0}
+                <span className={classes.kwh}>                  
+                  <Chip variant="outlined" style = {{width: '100px ' }}size="small" label={station.value ? `${getValue(station.value)} kwh` : 0} />
                 </span>
                 <span className={classes.cost}>
-                  {station.value ? formatter.format(station.value * 600) : 0}
+                  <Chip variant="outlined" style = {{width: '100px ' }}size="small" label={station.value ? formatter.format(station.value * 600) : 0} />
                 </span>
                 <Button
                   onClick={() => toogleConnector(props.stations[0].id, station)}
                   variant='contained'
+                  text={station.status == 'Available' ? "Start" : "Stop"}
                   style={{
                     backgroundColor: `${
                       station.status == 'Available' ? '#7ab342' : '#f04d3a'
@@ -197,7 +199,7 @@ export default function ScrollableTabsButtonForce(props) {
                   }}
                 >
                   Start
-                </Button>
+                </Button >
               </div>
             </TabPanel>
           );
