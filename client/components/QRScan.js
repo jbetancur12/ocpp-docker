@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Station from '../components/stations';
+import Station from '../components/stationsv2';
 import NotStation from './NotStation';
 
 function QRScanModule() {

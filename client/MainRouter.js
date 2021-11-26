@@ -13,6 +13,7 @@ import Clients from './dashboard/Clients';
 import Operations from './components/Operations';
 import QRScanModule from './components/QRScan';
 import NotFoundPage from './components/NotFound';
+import Tabs from './components/stationsv2';
 
 const MainRouter = () => {
   return (
@@ -26,6 +27,7 @@ const MainRouter = () => {
         {/* <PrivateRoute path='/operations' component={Operations} /> */}
         {/* <PrivateRoute path='/clients' component={Clients} /> */}
         <Route path='/signup' component={Signup} />
+        <Route path='/tabs' component={Tabs} />
         <Route path='/signin' component={Signin} />
         {/* <PrivateRoute path='/user/edit/:userId' component={EditProfile} /> */}
         {/* <Route path='/user/:userId' component={Profile} /> */}
