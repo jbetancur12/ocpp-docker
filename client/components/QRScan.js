@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Station from '../components/stations';
+import NotStation from './NotStation';
 
 function QRScanModule() {
   // const { hasMounted } = useMounted()
@@ -55,11 +56,7 @@ function QRScanModule() {
 
   return (
     <>
-      {stations.length > 0 ? (
-        <Station stations={stations} />
-      ) : (
-        <div>Station Not Avalailable</div>
-      )}
+      {stations.length > 0 ? <Station stations={stations} /> : <NotStation />}
     </>
   );
 }
