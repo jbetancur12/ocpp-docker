@@ -6,6 +6,7 @@ export default ({ markup, css }) => {
             <title>OCPP</title>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400">
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximun-scale=1.0, user-scalable=0">
             <style>
               a{
                 text-decoration: none;
