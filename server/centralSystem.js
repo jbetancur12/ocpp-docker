@@ -4,7 +4,6 @@ import * as StartTransactionConst from './ocpp/src/commands/StartTransaction';
 import OCPPError, { ERROR_NOTIMPLEMENTED } from './ocpp/src/ocppError';
 import * as BootNotificationConst from './ocpp/src/commands/BootNotification';
 import * as StatusNotificationConst from './ocpp/src/commands/StatusNotification';
-import { sleep } from 'sleep';
 import ChargerPoint from './models/chargerPoint.model';
 import Transaction from './models/transaction.model';
 import authCtrl from './controllers/user.controller';
