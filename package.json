@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "development": "nodemon",
-    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config  webpack.config.server.js",
+    "build": "webpack --mode=production --config  webpack.config.server.js",
     "start": "NODE_ENV=production node ./dist/server.generated.js",
-    "format": "prettier --write 'client/**/*.js' 'server/**/*.js'"
+    "format": "prettier --write  'server/**/*.js'"
   },
   "author": "Jorge Betancur",
   "license": "ISC",
