@@ -78,22 +78,119 @@ const update = async (req, res) => {
   }
 };
 
+const reset =async (req, res) => {
+
+     const idf = _.findIndex(centralSystem.clients, function (o) {
+    return o.connection.req.url === `${req.body.id}`;
+  });
+
+ 
+  if (idf !== -1) {
+   const result =  await centralSystem.reset(
+      centralSystem.clients[idf]
+    );
+
+    console.log(result)
+    res.write(JSON.stringify(result));
+  }
+  res.end();
+  return;
+}
+
+const getConf =async (req, res) => {
+
+    const idf = _.findIndex(centralSystem.clients, function (o) {
+   return o.connection.req.url === `${req.body.id}`;
+ });
+
+ 
+
+
+ if (idf !== -1) {
+   const result = await centralSystem.getConf(
+     centralSystem.clients[idf]
+   );
+   res.write(JSON.stringify(result));
+ }
+ res.end();
+ return;
+}
+
+const unlock = async (req, res) => {
+    
+    const idf = _.findIndex(centralSystem.clients, function (o) {
+        return o.connection.req.url === `${req.body.id}`;
+      });
+     
+      
+     
+     
+      if (idf !== -1) {
+        const result = await centralSystem.unlock(
+          centralSystem.clients[idf]
+        );
+        res.write(JSON.stringify(result));
+      }
+      res.end();
+      return;
+}
+
+const clearCache =async (req, res) => {
+
+    const idf = _.findIndex(centralSystem.clients, function (o) {
+   return o.connection.req.url === `${req.body.id}`;
+ });
+
+ 
+
+
+ if (idf !== -1) {
+   const result = await centralSystem.clearCache(
+     centralSystem.clients[idf]
+   );
+   res.write(JSON.stringify(result));
+ }
+ res.end();
+ return;
+}
+
 const remoteStart = async (req, res) => {
   const idf = _.findIndex(centralSystem.clients, function (o) {
     return o.connection.req.url === `${req.body.id}`;
   });
+
+  console.log(centralSystem.clients[idf])
   if (idf !== -1) {
-    await centralSystem.toggleChargePoint(
+    const ms = await centralSystem.toggleChargePoint(
       centralSystem.clients[idf],
       parseInt(req.body.connector),
       req.profile.id_tag,
       //req.body.transactionId
     );
-    res.write(JSON.stringify({}));
+    res.write(JSON.stringify(ms));
   }
   res.end();
   return;
 };
+
+const stop = async (req, res) => {
+    const idf = _.findIndex(centralSystem.clients, function (o) {
+      return o.connection.req.url === `${req.body.id}`;
+    });
+  
+    
+    if (idf !== -1) {
+      const ms = await centralSystem.stop(
+        centralSystem.clients[idf],
+        //req.body.transactionId
+      );
+      res.write(JSON.stringify(ms));
+    }
+    res.end();
+    return;
+  };
+
+
 
 const remove = async (req, res) => {
   try {
@@ -154,4 +251,9 @@ export default {
   status,
   clients,
   remoteStart,
+  reset,
+  getConf,
+  clearCache,
+  unlock,
+  stop
 };

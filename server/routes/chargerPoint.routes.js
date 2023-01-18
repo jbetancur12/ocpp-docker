@@ -20,6 +20,27 @@ router
   .post(chargerPoint.remoteStart);
 
 router
+  .route('/ocpp/chargerPoints/unlock/')
+  .post(chargerPoint.unlock);
+
+  router
+  .route('/ocpp/chargerPoints/stop/')
+  .post(chargerPoint.stop);
+  
+  
+router
+  .route('/ocpp/chargerPoints/reset')
+  .post(chargerPoint.reset)
+
+router
+  .route('/ocpp/chargerPoints/get_conf')
+  .post(chargerPoint.getConf)
+
+  router
+  .route('/ocpp/chargerPoints/clear_cache')
+  .post(chargerPoint.clearCache)
+
+router
   .route('/ocpp/chargerPoints')
   .get(chargerPoint.list)
   .post(chargerPoint.create);

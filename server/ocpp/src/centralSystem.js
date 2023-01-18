@@ -15,6 +15,8 @@ export default class CentralSystem {
   }
 
   listen(port = 9220, host = null) {
+
+    
     this.port = port;
 
     const validateConnection = this.options.validateConnection || (() => true);
@@ -56,11 +58,17 @@ export default class CentralSystem {
       ...(this.options.wsOptions || {}),
     };
 
+    
+
     this.server = new WebSocket.Server(wsOptions);
 
     this.server.on('error', (ws, req) => {
       console.info(ws, req);
     });
+
+    this.server.on('message', (data)=>{
+        console.info(data)
+    })
 
     this.server.on('upgrade', (ws, req) => {
       console.info(req);
