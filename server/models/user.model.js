@@ -28,6 +28,7 @@ const UserSchema = new Schema({
   id_tag: {
     type: String,
     required: true,
+    unique: true
   },
   salt: String,
   created: {

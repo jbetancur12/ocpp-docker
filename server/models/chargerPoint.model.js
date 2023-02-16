@@ -7,6 +7,10 @@ const ChargerPointSchema = new Schema({
     type: String,
     required: true,
   },
+  connectors: {
+    type: String,
+    required: true,
+  },
   ocpp_protocol: {
     type: String,
     required: false,

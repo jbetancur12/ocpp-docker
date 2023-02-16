@@ -54,24 +54,26 @@ export class Connection {
   }
 
   async onMessage(message) {
-    let messageType,
+
+      let messageType,
       messageId,
       commandNameOrPayload,
       commandPayload,
       errorDetails;
-
-    try {
-      [
-        messageType,
-        messageId,
-        commandNameOrPayload,
-        commandPayload,
-        errorDetails,
-      ] = JSON.parse(message);
-    } catch (err) {
-      throw new Error(`Failed to parse message: "${message}", ${err.message}`);
-    }
-
+      
+      try {
+          [
+              messageType,
+              messageId,
+              commandNameOrPayload,
+              commandPayload,
+              errorDetails,
+            ] = JSON.parse(message);
+        } catch (err) {
+            throw new Error(`Failed to parse message: "${message}", ${err.message}`);
+        }
+        
+        console.log(messageType)
     switch (messageType) {
       case CALL_MESSAGE:
         // request

@@ -37,6 +37,10 @@ router
   .post(chargerPoint.getConf)
 
   router
+  .route('/ocpp/chargerPoints/set_conf')
+  .post(chargerPoint.setConfig)
+
+  router
   .route('/ocpp/chargerPoints/clear_cache')
   .post(chargerPoint.clearCache)
 

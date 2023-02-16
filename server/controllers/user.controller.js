@@ -1,9 +1,12 @@
 import User from '../models/user.model';
 import extend from 'lodash/extend';
 import errorHandler from '../helpers/dbErrorHandler';
+import { v4 as uuidv4 } from 'uuid';
 
 const create = async (req, res) => {
-  const user = new User(req.body);
+    const idTag = uuidv4().slice(-12).toLocaleUpperCase()
+    const user = new User({...req.body, id_tag: idTag});
+  
   try {
     await user.save();
     return res.status(200).json({

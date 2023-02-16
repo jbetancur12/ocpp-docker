@@ -23,6 +23,7 @@ const centralSystem = createServer(server);
 // export { wss };
 // require("./ws");
 
+console.info("==>",centralSystem.clients)
 server.listen(config.port, (err) => {
   if (err) {
     console.log(err);
