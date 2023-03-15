@@ -108,11 +108,10 @@ const getConf = async (req, res) => {
     });
 
 
-    console.log("triggerMessage",centralSystem.clients)
     // Cambiar
 
     // if (idf !== -1) {
-    if (idf !== -1) {
+    if (true) {
         const result = await centralSystem.getConf(
             // Cambiar
             // centralSystem.clients[idf]
