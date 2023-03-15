@@ -131,7 +131,7 @@ const triggerMessage = async (req, res) => {
 
     if (true) {
         const result = await centralSystem.triggerMessage(
-            centralSystem.clients[idf],
+            centralSystem.clients[0],
             "MeterValues"
         );
         res.write(JSON.stringify(result));
