@@ -227,7 +227,7 @@ const stop = async (req, res) => {
 };
 
 const setConfig = async (req, res) => {
-    console.log("🚀 ~ file: chargerPoint.controller.js:230 ~ req:", req.body.data)
+    console.log("🚀 ~ file: chargerPoint.controller.js:230 ~ req:", req.body.data.data)
     const idf = _.findIndex(centralSystem.clients, function (o) {
         return o.connection.req.url === `${req.body.id}`;
     });
