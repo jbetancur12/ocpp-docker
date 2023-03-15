@@ -233,7 +233,7 @@ const setConfig = async (req, res) => {
     
     const {data} = req.body
     
-    console.log("🚀 ~ file: chargerPoint.controller.js:230 ~ req:",data)
+ 
    // Cambiar
    // if (idf !== -1) {
     if (true) {
@@ -241,7 +241,7 @@ const setConfig = async (req, res) => {
             // Cambiar
             // centralSystem.clients[idf],
             centralSystem.clients[0],
-            req.body.data
+           data
         );
         res.write(JSON.stringify(ms));
     }
