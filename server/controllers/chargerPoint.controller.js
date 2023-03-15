@@ -107,7 +107,7 @@ const getConf = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
-
+console.log(centralSystem.clients)
     // Cambiar
 
     // if (idf !== -1) {
