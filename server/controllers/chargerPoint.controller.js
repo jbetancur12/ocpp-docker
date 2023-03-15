@@ -233,7 +233,7 @@ const setConfig = async (req, res) => {
 
    // Cambiar
    // if (idf !== -1) {
-    if (idf !== -1) {
+    if (true) {
         const ms = await centralSystem.setConfig(
             // Cambiar
             // centralSystem.clients[idf],

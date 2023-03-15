@@ -261,10 +261,12 @@ export function createServer(server) {
 
         console.log('%ccentralSystem.js line:192 data', 'color: #007acc;', data);
 
-        // let command = new OCPPCommands.ChangeConfiguration(data)
+        
+
+        let command = new OCPPCommands.ChangeConfiguration(data)
 
 
-        // return await client.connection.send(command);
+        return await client.connection.send(command);
 
     }
 
