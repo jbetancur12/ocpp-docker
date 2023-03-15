@@ -115,7 +115,7 @@ const getConf = async (req, res) => {
         const result = await centralSystem.getConf(
             // Cambiar
             // centralSystem.clients[idf]
-            centralSystem.clients[idf]
+            centralSystem.clients[0]
         );
         res.write(JSON.stringify(result));
     }
