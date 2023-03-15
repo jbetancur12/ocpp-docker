@@ -102,6 +102,7 @@ export function createServer(server) {
                 };
 
             case command instanceof OCPPCommands.MeterValues:
+                console.log("===>", command)
                 client.payload = {
                     command: "MeterValues",
                     data: { ...command },
@@ -244,9 +245,8 @@ export function createServer(server) {
 
         let command = new OCPPCommands.TriggerMessage({
             requestedMessage: requestedMessage,
-            connectorId:1
         })
-        console.log("🚀 ~ file: centralSystem.js:247 ~ cSystem.triggerMessage= ~ command:", command)
+
 
 
         return await client.connection.send(command);
