@@ -232,6 +232,8 @@ export function createServer(server) {
     }
 
     cSystem.getConf = async (client) => {
+    console.log("🚀 ~ file: centralSystem.js:235 ~ cSystem.getConf= ~ client:", client)
+
 
         let command = new OCPPCommands.GetConfiguration()
 
