@@ -229,10 +229,13 @@ const setConfig = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
-
+   // Cambiar
+   // if (idf !== -1) {
     if (idf !== -1) {
         const ms = await centralSystem.setConfig(
-            centralSystem.clients[idf],
+            // Cambiar
+            // centralSystem.clients[idf],
+            centralSystem.clients[0],
             req.body.data
         );
         res.write(JSON.stringify(ms));
