@@ -129,7 +129,7 @@ const triggerMessage = async (req, res) => {
 
    console.log("triggerMessage",centralSystem.clients)
 
-    if (idf !== -1) {
+    if (true) {
         const result = await centralSystem.triggerMessage(
             centralSystem.clients[idf],
             "MeterValues"
