@@ -227,7 +227,7 @@ const stop = async (req, res) => {
 };
 
 const setConfig = async (req, res) => {
-    console.log("🚀 ~ file: chargerPoint.controller.js:230 ~ req:", req.body)
+    console.log("🚀 ~ file: chargerPoint.controller.js:230 ~ req:", req.body.data)
     const idf = _.findIndex(centralSystem.clients, function (o) {
         return o.connection.req.url === `${req.body.id}`;
     });
@@ -239,7 +239,7 @@ const setConfig = async (req, res) => {
             // Cambiar
             // centralSystem.clients[idf],
             centralSystem.clients[0],
-            req.body
+            req.body.data
         );
         res.write(JSON.stringify(ms));
     }
