@@ -120,6 +120,26 @@ const getConf = async (req, res) => {
     return;
 }
 
+const triggerMessage = async (req, res) => {
+
+    const idf = _.findIndex(centralSystem.clients, function (o) {
+        return o.connection.req.url === `${req.body.id}`;
+    });
+
+
+
+
+    if (idf !== -1) {
+        const result = await centralSystem.triggerMessage(
+            centralSystem.clients[idf],
+            "MeterValues"
+        );
+        res.write(JSON.stringify(result));
+    }
+    res.end();
+    return;
+}
+
 const unlock = async (req, res) => {
 
     const idf = _.findIndex(centralSystem.clients, function (o) {
@@ -302,6 +322,7 @@ export default {
     remoteStart,
     reset,
     getConf,
+    triggerMessage,
     clearCache,
     unlock,
     stop,

@@ -239,6 +239,20 @@ export function createServer(server) {
 
     }
 
+    cSystem.triggerMessage = async (client, requestedMessage) => {
+
+        let command = new OCPPCommands.TriggerMessage({
+            requestedMessage: requestedMessage
+        })
+        console.log("🚀 ~ file: centralSystem.js:247 ~ cSystem.triggerMessage= ~ command:", command)
+
+
+        return await client.connection.send(command);
+
+    }
+
+
+
     cSystem.setConf = async (client, data) => {
 
         console.log('%ccentralSystem.js line:192 data', 'color: #007acc;', data);

@@ -44,6 +44,10 @@ router
   .route('/ocpp/chargerPoints/clear_cache')
   .post(chargerPoint.clearCache)
 
+  router
+  .route('/ocpp/chargerPoints/trigger-message')
+  .post(chargerPoint.triggerMessage)
+
 router
   .route('/ocpp/chargerPoints')
   .get(chargerPoint.list)
