@@ -239,7 +239,7 @@ const setConfig = async (req, res) => {
             // Cambiar
             // centralSystem.clients[idf],
             centralSystem.clients[0],
-            req.body.data
+            req.body
         );
         res.write(JSON.stringify(ms));
     }
