@@ -257,11 +257,11 @@ export function createServer(server) {
 
 
 
-    cSystem.setConf = async (client, data) => {
+    cSystem.setConfig = async (client, data) => {
 
         console.log('%ccentralSystem.js line:192 data', 'color: #007acc;', data);
 
-        
+
 
         let command = new OCPPCommands.ChangeConfiguration(data)
 
