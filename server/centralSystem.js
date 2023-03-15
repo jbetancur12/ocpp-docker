@@ -240,6 +240,7 @@ export function createServer(server) {
     }
 
     cSystem.triggerMessage = async (client, requestedMessage) => {
+    console.log("🚀 ~ file: centralSystem.js:243 ~ cSystem.triggerMessage= ~ client:", client)
 
         let command = new OCPPCommands.TriggerMessage({
             requestedMessage: requestedMessage

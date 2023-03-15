@@ -127,7 +127,7 @@ const triggerMessage = async (req, res) => {
     });
 
 
-
+   console.log("triggerMessage")
 
     if (idf !== -1) {
         const result = await centralSystem.triggerMessage(
