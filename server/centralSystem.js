@@ -102,7 +102,7 @@ export function createServer(server) {
                 };
 
             case command instanceof OCPPCommands.MeterValues:
-                console.log("===>", command.meterValue)
+                console.log("🚀 ~ file: centralSystem.js:105 ~ command:", command)
                 client.payload = {
                     command: "MeterValues",
                     data: { ...command },
