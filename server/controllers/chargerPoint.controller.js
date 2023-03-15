@@ -108,6 +108,7 @@ const getConf = async (req, res) => {
     });
 
 
+    console.log("triggerMessage",centralSystem.clients)
     // Cambiar
 
     // if (idf !== -1) {
@@ -130,7 +131,6 @@ const triggerMessage = async (req, res) => {
     });
 
 
-   console.log("triggerMessage",centralSystem.clients)
 
     if (true) {
         const result = await centralSystem.triggerMessage(
