@@ -108,10 +108,13 @@ const getConf = async (req, res) => {
     });
 
 
+    // Cambiar
 
-
+    // if (idf !== -1) {
     if (idf !== -1) {
         const result = await centralSystem.getConf(
+            // Cambiar
+            // centralSystem.clients[idf]
             centralSystem.clients[idf]
         );
         res.write(JSON.stringify(result));
