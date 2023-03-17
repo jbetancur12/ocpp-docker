@@ -215,7 +215,7 @@ const stop = async (req, res) => {
         const CP = await ChargerPoint.findOne({ charger_box_id: client })
         console.log("🚀 ~ file: chargerPoint.controller.js:216 ~ stop ~ CP:", CP)
         const transactionId = await Transaction.find({ user: CP._id }).sort({ createdAt: -1 }).limit(1)
-        console.log("🚀 ~ file: chargerPoint.controller.js:188 ~ stop ~ transactionId", transactionId[0].transactionId)
+        console.log("🚀 ~ file: chargerPoint.controller.js:188 ~ stop ~ transactionId", transactionId)
 
         const ms = await centralSystem.stop(
             centralSystem.clients[idf],
