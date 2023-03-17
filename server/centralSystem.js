@@ -135,7 +135,7 @@ export function createServer(server) {
                         } else {
                             seqId = cd.transactionId
                         }
-                        console.log("======>",seqId)
+                        console.log("======>",CP[0])
                         const dataTransaction = new Transaction({
                             chargerPointId: CP[0]._id,
                             transactionId: seqId,
