@@ -185,12 +185,11 @@ const remoteStart = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
     
-    console.log("🚀 ~ file: chargerPoint.controller.js:161 ~ idf ~ idf", idf)
+
 
     if (idf !== -1) {
         
-        console.log("🚀 ~ file: chargerPoint.controller.js:167 ~ remoteStart ~ req.profile", req.profile)
-        const ms = await centralSystem.toggleChargePoint(
+           const ms = await centralSystem.toggleChargePoint(
             centralSystem.clients[idf],
             parseInt(req.body.connector),
             "83FA81A40292",

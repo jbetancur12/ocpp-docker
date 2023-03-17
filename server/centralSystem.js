@@ -146,8 +146,8 @@ export function createServer(server) {
                             stop_timestamp: command.timestamp,
                             stop_value: command.meterStart
                         })
-                        console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", dataTransaction)
                         
+                        console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", dataTransaction)
                         dataTransaction.save()
 
                     }
