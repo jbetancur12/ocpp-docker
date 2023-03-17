@@ -122,16 +122,13 @@ export function createServer(server) {
                 const url = client.connection.url
                 const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
                 const userId = await User.find({id_tag: command.idTag},'id_tag')
-                let _userId = 
+                const _userId = []
 
                 if (userId.length == 0){
-                    _userId = "6414f16aca152004ab6afc4d"
+                    _userId.push("6414f16aca152004ab6afc4d")
                 }else{
-                    _userId = userId[0]._id
+                    _userId.push(userId[0]._id)
                 }
-
-                console.log(_userId)
-
 
                 await TransactionId.findOneAndUpdate(
                     { id: "transactionIDCount" },
@@ -148,7 +145,7 @@ export function createServer(server) {
                         const dataTransaction = new Transaction({
                             chargerPointId: CP[0]._id,
                             transactionId: seqId,
-                            user: _userId,
+                            user: _userId[0],
                             connectorId: command.connectorId,
                             start_timestamp: command.timestamp,
                             start_value: command.meterStart,
