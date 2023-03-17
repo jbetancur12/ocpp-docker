@@ -122,6 +122,13 @@ export function createServer(server) {
                 const url = client.connection.url
                 const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
                 const userId = await User.find({id_tag: command.idTag},'id_tag')
+                let _userId = 
+
+                if (userId.length == 0){
+                    _userId = "6414f16aca152004ab6afc4d"
+                }else{
+                    _userId = userId[0]._id
+                }
 
 
                 await TransactionId.findOneAndUpdate(
