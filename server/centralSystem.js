@@ -122,6 +122,7 @@ export function createServer(server) {
                 const url = client.connection.url
                 const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
                 const userId = await User.find({id_tag: command.idTag},'id_tag')
+                console.log("🚀 ~ file: centralSystem.js:125 ~ command.idTag:", command.idTag)
                 console.log("======>",userId)
 
                 await TransactionId.findOneAndUpdate(
