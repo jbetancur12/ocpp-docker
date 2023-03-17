@@ -130,6 +130,8 @@ export function createServer(server) {
                     _userId = userId[0]._id
                 }
 
+                console.log(_userId)
+
 
                 await TransactionId.findOneAndUpdate(
                     { id: "transactionIDCount" },
@@ -146,7 +148,7 @@ export function createServer(server) {
                         const dataTransaction = new Transaction({
                             chargerPointId: CP[0]._id,
                             transactionId: seqId,
-                            user: userId[0]._id,
+                            user: _userId,
                             connectorId: command.connectorId,
                             start_timestamp: command.timestamp,
                             start_value: command.meterStart,
