@@ -150,16 +150,29 @@ export function createServer(server) {
                         console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", dataTransaction)
                         dataTransaction.save()
 
+                        const d = {
+                            transactionId: seqId,
+                            idTagInfo: {
+                                status: StartTransactionConst.STATUS_ACCEPTED,
+                            }
+                            }
+        
+                        console.log("TTT=>>>", d)
+
+                        return {
+                            transactionId: seqId,
+                            idTagInfo: {
+                                status: StartTransactionConst.STATUS_ACCEPTED,
+                            },
+                        };
+        
+
                     }
                 )
 
-                return {
-                    transactionId: seqId,
-                    idTagInfo: {
-                        status: StartTransactionConst.STATUS_ACCEPTED,
-                    },
-                };
+              
 
+            
 
 
 
