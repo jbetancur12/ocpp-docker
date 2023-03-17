@@ -122,6 +122,7 @@ export function createServer(server) {
                 const url = client.connection.url
                 const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
                 const userId = await User.find({id_tag: command.idTag},'_id')
+                console.log("======>",command.idTag)
 
                 await TransactionId.findOneAndUpdate(
                     { id: "transactionIDCount" },
@@ -135,7 +136,6 @@ export function createServer(server) {
                         } else {
                             seqId = cd.transactionId
                         }
-                        console.log("======>",userId[0])
                         const dataTransaction = new Transaction({
                             chargerPointId: CP[0]._id,
                             transactionId: seqId,
