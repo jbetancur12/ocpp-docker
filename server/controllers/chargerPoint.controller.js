@@ -212,6 +212,8 @@ const stop = async (req, res) => {
     if (idf !== -1) {
         const client = centralSystem.clients[idf].connection.req.url.slice(1)
         console.log("🚀 ~ file: chargerPoint.controller.js:187 ~ stop ~ client", client)
+        const CP = await ChargerPoint.findOne({ charger_box_id: client })
+        console.log("🚀 ~ file: chargerPoint.controller.js:216 ~ stop ~ CP:", CP)
         const transactionId = await Transaction.find({ charger_box_id: client }).sort({ createdAt: -1 }).limit(1)
         console.log("🚀 ~ file: chargerPoint.controller.js:188 ~ stop ~ transactionId", transactionId[0].transactionId)
 
