@@ -122,8 +122,7 @@ export function createServer(server) {
                 const url = client.connection.url
                 const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
                 const userId = await User.find({id_tag: command.idTag},'id_tag')
-                console.log("🚀 ~ file: centralSystem.js:125 ~ command.idTag:", command.idTag)
-                console.log("======>",userId)
+
 
                 await TransactionId.findOneAndUpdate(
                     { id: "transactionIDCount" },
@@ -246,7 +245,7 @@ export function createServer(server) {
     }
 
     cSystem.triggerMessage = async (client, requestedMessage) => {
-    console.log("🚀 ~ file: centralSystem.js:243 ~ cSystem.triggerMessage= ~ client:", client)
+
 
         let command = new OCPPCommands.TriggerMessage({
             requestedMessage: requestedMessage,
@@ -262,7 +261,7 @@ export function createServer(server) {
 
     cSystem.setConfig = async (client, data) => {
 
-        console.log('%ccentralSystem.js line:192 data', 'color: #007acc;', data);
+
 
 
 
@@ -304,7 +303,7 @@ export function createServer(server) {
         connectorId,
         idTag
     ) => {
-        console.log("🚀 ~ file: centralSystem.js:279 ~ createServer ~ idTag", idTag)
+  
 
 
         // const connector = client.info.connectors.find(
