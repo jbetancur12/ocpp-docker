@@ -56,7 +56,7 @@ export function createServer(server) {
     cSystem.onRequest = async function (client, command) {
         const connection = client.connection;
 
-        console.info(`New command from ${connection.url}`);
+       // console.info(`New command from ${connection.url}`);
 
 
         switch (true) {
@@ -232,7 +232,7 @@ export function createServer(server) {
     }
 
     cSystem.getConf = async (client) => {
-    console.log("🚀 ~ file: centralSystem.js:235 ~ cSystem.getConf= ~ client:", client)
+    //console.log("🚀 ~ file: centralSystem.js:235 ~ cSystem.getConf= ~ client:", client)
 
 
         let command = new OCPPCommands.GetConfiguration()
