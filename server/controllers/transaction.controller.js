@@ -15,4 +15,15 @@ const create = async (req, res) => {
   }
 };
 
-export default { create };
+const list = async (req, res) => {
+    try {
+        let transactions = await Transaction.find();
+        res.json(transactions);
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err),
+        });
+    }
+  };
+
+export default { create, list };

@@ -6,8 +6,8 @@ import transactionCtrl from '../controllers/transaction.controller';
 const router = express.Router();
 
 router
-  .route('/api/posts/new/:userId')
-  .post(authCtrl.requireSignin, transactionCtrl.create);
+  .route('/ocpp/transactions/')
+  .get(transactionCtrl.list);
 
 router.param('userId', userCtrl.userByID);
 
