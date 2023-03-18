@@ -56,7 +56,7 @@ export function createServer(server) {
     cSystem.onRequest = async function (client, command) {
         const connection = client.connection;
 
-       // console.info(`New command from ${connection.url}`);
+        // console.info(`New command from ${connection.url}`);
 
 
         switch (true) {
@@ -121,14 +121,14 @@ export function createServer(server) {
 
                 const url = client.connection.url
                 const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
-                const userId = await User.find({id_tag: command.idTag},'id_tag')
+                const userId = await User.find({ id_tag: command.idTag }, 'id_tag')
                 console.log("🚀 ~ file: centralSystem.js:125 ~ userId:", userId)
                 const _userId = []
-                
 
-                if (userId.length == 0){
+
+                if (userId.length == 0) {
                     _userId.push("6414f16aca152004ab6afc4d")
-                }else{
+                } else {
                     _userId.push(userId[0]._id)
                 }
 
@@ -154,34 +154,21 @@ export function createServer(server) {
                             stop_timestamp: command.timestamp,
                             stop_value: command.meterStart
                         })
-                        
+
                         console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", dataTransaction)
                         dataTransaction.save()
 
-                        const d = {
-                            transactionId: seqId,
-                            idTagInfo: {
-                                status: StartTransactionConst.STATUS_ACCEPTED,
-                            }
-                            }
-        
-                        console.log("TTT=>>>", d)
 
                         return {
-                            transactionId: seqId,
+                            transactionId: 98,
                             idTagInfo: {
                                 status: StartTransactionConst.STATUS_ACCEPTED,
                             },
                         };
-        
+
 
                     }
                 )
-
-              
-
-            
-
 
 
             case command instanceof OCPPCommands.StopTransaction:
@@ -255,7 +242,7 @@ export function createServer(server) {
     }
 
     cSystem.getConf = async (client) => {
-    //console.log("🚀 ~ file: centralSystem.js:235 ~ cSystem.getConf= ~ client:", client)
+        //console.log("🚀 ~ file: centralSystem.js:235 ~ cSystem.getConf= ~ client:", client)
 
 
         let command = new OCPPCommands.GetConfiguration()
@@ -324,7 +311,7 @@ export function createServer(server) {
         connectorId,
         idTag
     ) => {
-  
+
 
 
         // const connector = client.info.connectors.find(
