@@ -35,6 +35,9 @@ const TransactionSchema = new Schema({
         type: Number,
         required: true,
     },
+    cost: {
+        type: String,
+    }
 },
     { timestamps: true }
 );

@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import chargerPointsRoutes from './routes/chargerPoint.routes';
+import costRoutes from './routes/cost.routes';
 
 import sse from './sse';
 
@@ -26,6 +27,7 @@ app.use(sse);
 app.use('/', userRoutes);
 app.use('/', authRoutes);
 app.use('/', chargerPointsRoutes);
+app.use('/', costRoutes);
 
 
 app.use((err, req, res, next) => {

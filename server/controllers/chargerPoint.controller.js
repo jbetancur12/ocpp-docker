@@ -110,8 +110,8 @@ const getConf = async (req, res) => {
 console.log(centralSystem.clients)
     // Cambiar
 
-    // if (idf !== -1) {
-    if (true) {
+    if (idf !== -1) {
+    //f (true) {
         const result = await centralSystem.getConf(
             // Cambiar
             // centralSystem.clients[idf]
@@ -236,8 +236,8 @@ const setConfig = async (req, res) => {
     
  
    // Cambiar
-   // if (idf !== -1) {
-    if (true) {
+   if (idf !== -1) {
+    //if (true) {
         const ms = await centralSystem.setConfig(
             // Cambiar
             // centralSystem.clients[idf],

@@ -9,6 +9,7 @@ import Transaction from './models/transaction.model';
 import authCtrl from './controllers/user.controller';
 import TransactionId from './models/transactionId.model';
 import User from './models/user.model';
+import Cost from './models/cost.model';
 
 const getCPData = (payload) => {
     return {
@@ -126,6 +127,7 @@ export function createServer(server) {
 
         switch (true) {
             case command instanceof OCPPCommands.BootNotification:
+           
                 client.payload = {
                     command: "BootNotification",
                     data: { ...command },
@@ -238,8 +240,9 @@ export function createServer(server) {
                 //         status: StartTransactionConst.STATUS_ACCEPTED,
                 //     },
                 // };
-
+                
                 const data = handleStartTransactionCommand(client, command)
+                console.log("🚀 ~ file: centralSystem.js:244 ~ data:", data)
                 return data
 
 
@@ -251,7 +254,11 @@ export function createServer(server) {
 
                 await cSystem.onStatusUpdate();
 
-                const m = await Transaction.findOneAndUpdate({ transactionId: command.transactionId }, { stop_value: command.meterStop, stop_timestamp: command.timestamp }, { new: true })
+                const price = await Cost.findOne({ name: "Main" })
+                const unitPrice = parseInt(price.cost) * (parseInt(command.meterStop)/1000)
+                
+
+                const m = await Transaction.findOneAndUpdate({ transactionId: command.transactionId }, { stop_value: command.meterStop, stop_timestamp: command.timestamp, cost: unitPrice }, { new: true })
                 return {
                     transactionId: command.transactionId,
                     idTagInfo: {
@@ -400,6 +407,8 @@ export function createServer(server) {
         //     return await client.connection.send(command);
 
         // }
+
+        console.log("===>", connectorId, idTag)
 
         let command = new OCPPCommands.RemoteStartTransaction({
             connectorId: connectorId,
