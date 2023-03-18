@@ -10,6 +10,71 @@ import authCtrl from './controllers/user.controller';
 import TransactionId from './models/transactionId.model';
 import User from './models/user.model';
 
+const getChargerPointId = async (connectionUrl) => {
+    const chargerPoint = await ChargerPoint.findOne({ charger_box_id: connectionUrl.slice(1) }, '_id')
+    return chargerPoint._id
+  }
+  
+  const getUserId = async (idTag) => {
+    const user = await User.findOne({ id_tag: idTag }, 'id_tag')
+    return user && user._id ? user._id : "6414f16aca152004ab6afc4d"
+  }
+  
+  const getNextSequenceId = async () => {
+    let seq
+    const count = await TransactionId.findOneAndUpdate(
+      { id: "transactionIDCount" },
+      { "$inc": { "transactionId": 1 } },
+      { new: true }
+    )
+    if (count == null) {
+      const newVal = new TransactionId({ id: "transactionIDCount", transactionId: 1 })
+      newVal.save()
+      seq = 1
+    } else {
+      seq = count.transactionId
+    }
+    return seq
+  }
+  
+  const createTransaction = async (chargerPointId, userId, command, sequenceId) => {
+    const dataTransaction = new Transaction({
+      chargerPointId,
+      transactionId: sequenceId,
+      user: userId,
+      connectorId: command.connectorId,
+      start_timestamp: command.timestamp,
+      start_value: command.meterStart,
+      stop_timestamp: command.timestamp,
+      stop_value: command.meterStart
+    })
+    return dataTransaction.save()
+  }
+  
+  const handleStartTransactionCommand = async (client, command) => {
+  
+    client.payload = {
+      command: "StartTransaction",
+      data: { ...command },
+    };
+    await cSystem.onStatusUpdate();
+  
+    const chargerPointId = await getChargerPointId(client.connection.url)
+    const userId = await getUserId(command.idTag)
+    const seq = await getNextSequenceId()
+    console.log("🚀 ~ file: centralSystem.js:125 ~ userId:", userId)
+  
+    const transaction = await createTransaction(chargerPointId, userId, command, seq)
+    console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", transaction)
+  
+    return {
+      transactionId: seq,
+      idTagInfo: {
+        status: StartTransactionConst.STATUS_ACCEPTED,
+      },
+    };
+  };
+
 const getCPData = (payload) => {
     return {
         charge_point_vendor: payload.chargePointVendor || '',
@@ -112,63 +177,9 @@ export function createServer(server) {
                 return null;
 
             case command instanceof OCPPCommands.StartTransaction:
-
-                client.payload = {
-                    command: "StartTransaction",
-                    data: { ...command },
-                };
-                await cSystem.onStatusUpdate();
-
-                const url = client.connection.url
-                const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
-                const userId = await User.find({ id_tag: command.idTag }, 'id_tag')
-                console.log("🚀 ~ file: centralSystem.js:125 ~ userId:", userId)
-                const _userId = []
-
-
-                if (userId.length == 0) {
-                    _userId.push("6414f16aca152004ab6afc4d")
-                } else {
-                    _userId.push(userId[0]._id)
-                }
-
-                await TransactionId.findOneAndUpdate(
-                    { id: "transactionIDCount" },
-                    { "$inc": { "transactionId": 1 } },
-                    { new: true }, (err, cd) => {
-                        let seqId;
-                        if (cd == null) {
-                            const newVal = new TransactionId({ id: "transactionIDCount", transactionId: 1 })
-                            newVal.save()
-                            seqId = 1
-                        } else {
-                            seqId = cd.transactionId
-                        }
-                        const dataTransaction = new Transaction({
-                            chargerPointId: CP[0]._id,
-                            transactionId: seqId,
-                            user: _userId[0],
-                            connectorId: command.connectorId,
-                            start_timestamp: command.timestamp,
-                            start_value: command.meterStart,
-                            stop_timestamp: command.timestamp,
-                            stop_value: command.meterStart
-                        })
-
-                        console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", dataTransaction)
-                        dataTransaction.save()
-
-
-                        return {
-                            transactionId: 98,
-                            idTagInfo: {
-                                status: StartTransactionConst.STATUS_ACCEPTED,
-                            },
-                        };
-
-
-                    }
-                )
+               const data = handleStartTransactionCommand(client, command)
+               return data
+      
 
 
             case command instanceof OCPPCommands.StopTransaction:
