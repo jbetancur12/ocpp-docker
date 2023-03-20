@@ -1,4 +1,5 @@
 import Transaction from '../models/transaction.model';
+import ChargerPoint from '../models/chargerPoint.model';
 
 
 function getActualMonthSinceFirstDay(type) {
@@ -152,6 +153,8 @@ const getDashboardStats = async (req, res) => {
                     ]
                 )
 
+                const CPcount = await ChargerPoint.count()
+
 
 
 
@@ -161,7 +164,8 @@ const getDashboardStats = async (req, res) => {
             salesToday,
             salesMonth,
             salesYear,
-            salesByMonth
+            salesByMonth,
+            CPcount
         });
     } catch (error) {
         res.status(404).json({ message: error.message });
