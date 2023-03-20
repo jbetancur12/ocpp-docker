@@ -5,10 +5,13 @@ import transactionCtrl from '../controllers/transaction.controller';
 
 const router = express.Router();
 
+router.route('/ocpp/transactions/:idCP').get(transactionCtrl.read)
+
 router
   .route('/ocpp/transactions/')
   .get(transactionCtrl.list);
 
 router.param('userId', userCtrl.userByID);
+// router.param('idCP', transactionCtrl.transactionByCPID);
 
 export default router;

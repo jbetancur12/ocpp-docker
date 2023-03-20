@@ -26,4 +26,13 @@ const list = async (req, res) => {
     }
   };
 
-export default { create, list };
+  const read = async (req, res) => {    // console.log(req)
+    let transactions = await Transaction.find({chargerPointId: req.params.idCP}).exec();
+    console.log(transactions)
+    res.json(transactions)
+
+};
+
+
+
+export default { create, list, read };
