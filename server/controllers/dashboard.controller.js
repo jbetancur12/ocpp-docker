@@ -33,6 +33,45 @@ function getActualMonthSinceFirstDay(type) {
     }
   }
 
+const getDashboardGrap = async(req, res) => {
+
+    try{
+        const salesGraph = await Transaction.aggregate(
+            [{
+                $match: {
+                    $and: [
+                      {
+                        createdAt: {
+                          $gte: new Date(req.query.startDate),
+                          $lte: new Date(req.query.endDate)
+                        }
+                      }
+                    ]
+                  },
+                },
+                  {
+                    $group: {
+                      _id: {
+                        $dateTrunc: {
+                          date: '$createdAt',
+                          unit: req.query.unit,
+                          binSize:1
+                        }
+                      },
+                      sum: { $sum: {
+                        $toDouble: "$cost"
+                    } },
+                    }
+                  },
+                  { $sort: { _id: 1 } }
+            ]
+        )
+        res.status(200).json(salesGraph);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 const getDashboardStats = async (req, res) => {
     try {
         
@@ -140,7 +179,7 @@ const getDashboardStats = async (req, res) => {
                               _id: {
                                 $dateTrunc: {
                                   date: '$createdAt',
-                                  unit: "month",
+                                  unit: "day",
                                   binSize:1
                                 }
                               },
@@ -172,4 +211,4 @@ const getDashboardStats = async (req, res) => {
     }
 };
 
-export default { getDashboardStats };
+export default { getDashboardStats ,getDashboardGrap};
