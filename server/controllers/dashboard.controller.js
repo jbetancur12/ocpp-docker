@@ -33,6 +33,211 @@ function getActualMonthSinceFirstDay(type) {
     }
   }
 
+// const getCPStats = async(req, res) => {
+//     try {
+
+//         //daily
+//         const salesToday = await Transaction.aggregate(
+//             [{
+//                 $match: {
+//                     $and: [
+//                         {
+//                             createdAt: {
+//                                 $gte: getActualMonthSinceFirstDay("day"),
+        
+//                             }
+//                         },
+//                         {
+//                             chargerPointId: req.query.cp
+//                         }
+//                     ]
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: null,
+//                     SUM: {
+//                         $sum: {
+//                             $toDouble: "$cost"
+//                         }
+//                     },
+//                     COUNT: {
+//                         $sum: 1
+//                     }
+//                 }
+//             }
+//                 ,
+//             { "$unset": ["_id"] }
+//             ])
+
+//             const powerToday = await Transaction.aggregate(
+//                 [{
+//                     $match: {
+//                         $and: [
+//                             {
+//                                 createdAt: {
+//                                     $gte: getActualMonthSinceFirstDay("day"),
+            
+//                                 }
+//                             },
+//                             {
+//                                 chargerPointId: req.query.cp
+//                             }
+//                         ]
+//                     }
+//                 },
+//                 {
+//                     $group: {
+//                         _id: null,
+//                         SUM: {
+//                             $sum: {
+//                                 $toDouble: "$stop_value"
+//                             }
+//                         },
+//                         COUNT: {
+//                             $sum: 1
+//                         }
+//                     }
+//                 }
+//                     ,
+//                 { "$unset": ["_id"] }
+//                 ])
+
+//                 //Montly
+//         const salesMonth = await Transaction.aggregate(
+//             [{
+//                 $match: {
+//                     $and: [
+//                         {
+//                             createdAt: {
+//                                 $gte: getActualMonthSinceFirstDay("month"),
+        
+//                             }
+//                         },
+//                         {
+//                             chargerPointId: req.query.cp
+//                         }
+//                     ]
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: null,
+//                     SUM: {
+//                         $sum: {
+//                             $toDouble: "$cost"
+//                         }
+//                     },
+//                     COUNT: {
+//                         $sum: 1
+//                     }
+//                 }
+//             }
+//                 ,
+//             { "$unset": ["_id"] }
+//             ])
+
+//             const powerMonth = await Transaction.aggregate(
+//                 [{
+//                     $match: {
+//                         $and: [
+//                             {
+//                                 createdAt: {
+//                                     $gte: getActualMonthSinceFirstDay("month"),
+            
+//                                 }
+//                             },
+//                             {
+//                                 chargerPointId: req.query.cp
+//                             }
+//                         ]
+//                     }
+//                 },
+//                 {
+//                     $group: {
+//                         _id: null,
+//                         SUM: {
+//                             $sum: {
+//                                 $toDouble: "$stop_value"
+//                             }
+//                         },
+//                         COUNT: {
+//                             $sum: 1
+//                         }
+//                     }
+//                 }
+//                     ,
+//                 { "$unset": ["_id"] }
+//                 ])
+
+//             res.status(200).json({
+//                salesToday,
+//                powerToday,
+//                salesMonth,
+//                powerMonth
+//             });
+//         } catch (error) {
+//             res.status(404).json({ message: error.message });
+//         }
+// }
+
+const getCPStats = async (req, res) => {
+    try {
+      const { cp } = req.query;
+      const periodTypes = {
+        DAILY: "day",
+        MONTHLY: "month",
+        YEARLY: "year"
+      };
+  
+      const getSalesAndPower = period => {
+        const commonFields = {
+          createdAt: {
+            $gte: getActualMonthSinceFirstDay(periodTypes[period])
+          },
+          chargerPointId: cp
+        };
+        const salesField = {
+          $sum: {
+            $toDouble: "$cost"
+          }
+        };
+        const powerField = {
+          $sum: {
+            $toDouble: "$stop_value"
+          }
+        };
+  
+        const pipeline = [
+          { $match: { $and: [commonFields] } },
+          {
+            $group: {
+              _id: null,
+              sales: salesField,
+              power: powerField,
+              count: { $sum: 1 }
+            }
+          },
+          { $unset: ["_id"] }
+        ];
+  
+        return Transaction.aggregate(pipeline);
+      };
+  
+      const salesToday = await getSalesAndPower("DAILY");
+      const powerToday = await getSalesAndPower("DAILY");
+      const salesMonth= await getSalesAndPower("MONTHLY");
+      const powerMonth= await getSalesAndPower("MONTHLY");      
+      const salesYear= await getSalesAndPower("YEARLY");
+      const powerYear= await getSalesAndPower("YEARLY");
+ 
+  
+      res.status(200).json({ salesToday, powerToday, salesMonth, powerMonth, salesYear, powerYear });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
+
 const getDashboardGrap = async(req, res) => {
 
     try{
@@ -204,11 +409,11 @@ const getDashboardStats = async (req, res) => {
             salesMonth,
             salesYear,
             salesByMonth,
-            CPcount
+            CPcount,
         });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 };
 
-export default { getDashboardStats ,getDashboardGrap};
+export default { getDashboardStats ,getDashboardGrap, getCPStats};
