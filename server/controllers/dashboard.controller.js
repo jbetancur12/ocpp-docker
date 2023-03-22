@@ -238,44 +238,174 @@ const getCPStats = async (req, res) => {
     }
   };
 
-const getDashboardGrap = async(req, res) => {
-
+  const getDashboardGrap = async(req, res) => {
     try{
-        const salesGraph = await Transaction.aggregate(
-            [{
+        const { startDate, endDate, unit } = req.query; //destructure the query parameters
+        const salesGraph = await Transaction.aggregate([
+            {    
                 $match: {
-                    $and: [
-                      {
-                        createdAt: {
-                          $gte: new Date(req.query.startDate),
-                          $lte: new Date(req.query.endDate)
-                        }
-                      }
-                    ]
-                  },
-                },
-                  {
-                    $group: {
-                      _id: {
-                        $dateTrunc: {
-                          date: '$createdAt',
-                          unit: req.query.unit,
-                          binSize:1
-                        }
-                      },
-                      sum: { $sum: {
-                        $toDouble: "$cost"
-                    } },
+                    createdAt: {
+                        $gte: new Date(startDate), //use the destructure variable
+                        $lte: new Date(endDate), //use the destructure variable
                     }
-                  },
-                  { $sort: { _id: 1 } }
-            ]
-        )
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        $dateTrunc: {
+                            date: '$createdAt',
+                            unit: unit, //use the destructure variable
+                            binSize:1,
+                        },
+                    },
+                    sum: { $sum: { $toDouble: "$cost" } },
+                },
+            },
+            { $sort: { _id: 1 } },
+        ]);
+
+       
+
         res.status(200).json(salesGraph);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
-}
+};
+
+const getDashboardGraphs = async(req, res) => {
+    try{
+        const { startDate, endDate, unit, id } = req.query;
+        
+        const costGraph = await Transaction.aggregate([
+            {    
+                $match: {
+                    $and: [
+                        {
+                            createdAt: {
+                                $gte: new Date(startDate),
+                                $lte: new Date(endDate),
+                            }
+                        },
+                        { chargerPointId: id }
+                    ]
+            },
+        },
+            {
+                $group: {
+                    _id: {
+                        $dateTrunc: {
+                            date: '$createdAt',
+                            unit: unit,
+                            binSize:1,
+                        },
+                    },
+                    sum: { $sum: { $toDouble: "$cost" } },
+                },
+            },
+            { $sort: { _id: 1 } },
+        ]);
+
+        const powerGraph = await Transaction.aggregate([
+            {    
+                $match: {
+                    $and: [
+                        {
+                            createdAt: {
+                                $gte: new Date(startDate),
+                                $lte: new Date(endDate),
+                            }
+                        },
+                        { chargerPointId: id }
+                    ]
+            },
+        },
+            {
+                $group: {
+                    _id: {
+                        $dateTrunc: {
+                            date: '$createdAt',
+                            unit: unit,
+                            binSize:1,
+                        },
+                    },
+                    sum: { $sum: { $toDouble: "$stop_value" } },
+                },
+            },
+            { $sort: { _id: 1 } },
+        ]);
+
+        const salesByPeriod = await Transaction.aggregate(
+            [
+                {    
+                    $match: {
+                        $and: [
+                            {
+                                createdAt: {
+                                    $gte: new Date(startDate),
+                                    $lte: new Date(endDate),
+                                }
+                            },
+                            { chargerPointId: id }
+                        ]
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    SUM: {
+                        $sum: {
+                            $toDouble: "$cost"
+                        }
+                    },
+                    COUNT: {
+                        $sum: 1
+                    }
+                }
+            }
+                ,
+            { "$unset": ["_id"] }
+            ])
+
+            
+        const powerByPeriod = await Transaction.aggregate(
+            [
+                {    
+                    $match: {
+                        $and: [
+                            {
+                                createdAt: {
+                                    $gte: new Date(startDate),
+                                    $lte: new Date(endDate),
+                                }
+                            },
+                            { chargerPointId: id }
+                        ]
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    SUM: {
+                        $sum: {
+                            $toDouble: "$stop_value"
+                        }
+                    },
+                    COUNT: {
+                        $sum: 1
+                    }
+                }
+            }
+                ,
+            { "$unset": ["_id"] }
+            ])
+
+        res.status(200).json({costGraph, powerGraph, salesByPeriod, powerByPeriod});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 const getDashboardStats = async (req, res) => {
     try {
@@ -416,4 +546,4 @@ const getDashboardStats = async (req, res) => {
     }
 };
 
-export default { getDashboardStats ,getDashboardGrap, getCPStats};
+export default { getDashboardStats ,getDashboardGrap, getCPStats, getDashboardGraphs};
