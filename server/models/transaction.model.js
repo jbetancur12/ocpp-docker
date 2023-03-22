@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const TransactionSchema = new Schema({
     chargerPointId: {
-        type: String,
+        type:Schema.Types.ObjectId, 
+        ref: "ChargerPoint",
         required: true,
     },
     transactionId: {
@@ -12,8 +13,8 @@ const TransactionSchema = new Schema({
         required: true,
     },
     user:{
-        type: String,
-        required: true
+        type:Schema.Types.ObjectId, 
+        ref: "User",
     },
     connectorId: {
         type: Number,
@@ -37,12 +38,16 @@ const TransactionSchema = new Schema({
     },
     cost: {
         type: Number,
+        default: 0,
     },
     time:{
-        type: Number
+        type: Number,
+        default: 0,
     }
 },
     { timestamps: true }
 );
 
-export default mongoose.model('Transaction', TransactionSchema);
+const Transaction = mongoose.model('Transaction', TransactionSchema);
+
+export default Transaction;

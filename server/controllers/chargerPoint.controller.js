@@ -180,8 +180,6 @@ const clearCache = async (req, res) => {
 const remoteStart = async (req, res) => {
     
     const idf = _.findIndex(centralSystem.clients, function (o) {
-        console.log("🚀 ~ file: chargerPoint.controller.js:161 ~ idf ~ idf", o.connection.req.url)
-        console.log("🚀 ~ file: chargerPoint.controller.js:162 ~ idf ~ idf", req.body.id)
         return o.connection.req.url === `${req.body.id}`;
     });
     

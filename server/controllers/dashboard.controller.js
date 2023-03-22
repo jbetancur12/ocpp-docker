@@ -414,7 +414,10 @@ const getDashboardStats = async (req, res) => {
         /* Recent Transactions */
         const recentTransactions = await Transaction.find()
             .limit(50)
-            .sort({ start_timestamp: -1 });
+            .sort({ start_timestamp: -1 })
+            .populate('user',"name email").populate('chargerPointId',"charger_box_id")
+
+        
 
       
 
