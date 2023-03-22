@@ -254,8 +254,20 @@ export function createServer(server) {
 
                 await cSystem.onStatusUpdate();
 
-                const price = await Cost.findOne({ name: "Main" })
-                const unitPrice = parseInt(price.cost) * (parseInt(command.meterStop)/1000)
+                //REVISAR BIEN ESTA PARTE
+
+                function getCost(rate) {
+                    return rate.type_ === "energy";
+                  }
+
+                const CP = await Transaction.findOne({ transactionId: command.transactionId }).select('chargerPointId')
+                const Costs = await ChargerPoint.findById(CP.chargerPointId).populate("rates")
+                const cost = Costs.rates.priceComponents.find(getCost)
+
+                const rawPrice = parseInt(cost.price) * (parseInt(command.meterStop)/1000)              
+                const tax =  parseInt(rawPrice)*(parseInt(cost.price)/100)          
+                const unitPrice = rawPrice + tax
+    
                 
 
                 const m = await Transaction.findOneAndUpdate({ transactionId: command.transactionId }, { stop_value: command.meterStop, stop_timestamp: command.timestamp, cost: unitPrice }, { new: true })

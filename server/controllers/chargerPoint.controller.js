@@ -107,8 +107,7 @@ const getConf = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
-console.log(centralSystem.clients)
-    // Cambiar
+    console.log(req.body.id)
 
     if (idf !== -1) {
     //f (true) {
@@ -118,6 +117,8 @@ console.log(centralSystem.clients)
             centralSystem.clients[0]
         );
         res.write(JSON.stringify(result));
+    }else {
+        res.write("No se encontro conexcion con el CP")
     }
     res.end();
     return;
@@ -131,12 +132,14 @@ const triggerMessage = async (req, res) => {
 
 
 
-    if (true) {
+    if (idf !== -1)  {
         const result = await centralSystem.triggerMessage(
             centralSystem.clients[0],
             "MeterValues"
         );
         res.write(JSON.stringify(result));
+    }else {
+        res.write("No se encontro conexcion con el CP")
     }
     res.end();
     return;
