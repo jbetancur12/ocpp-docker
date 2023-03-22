@@ -118,6 +118,8 @@ console.log(centralSystem.clients)
            // centralSystem.clients[0]
         );
         res.write(JSON.stringify(result));
+    }else {
+        res.write("No se encontro conexcion con el CP")
     }
     res.end();
     return;
