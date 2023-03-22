@@ -414,7 +414,7 @@ const getDashboardStats = async (req, res) => {
         /* Recent Transactions */
         const recentTransactions = await Transaction.find()
             .limit(50)
-            .sort({ createdOn: -1 });
+            .sort({ start_timestamp: -1 });
 
       
 

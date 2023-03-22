@@ -259,6 +259,8 @@ export function createServer(server) {
                 
 
                 const m = await Transaction.findOneAndUpdate({ transactionId: command.transactionId }, { stop_value: command.meterStop, stop_timestamp: command.timestamp, cost: unitPrice }, { new: true })
+                await Transaction.updateOne({transactionId:command.transactionId },[{$set:{time:{$dateDiff:{
+                    startDate:"$start_timestamp",endDate: new Date(command.timestamp), unit:"hour"}}}}])
                 return {
                     transactionId: command.transactionId,
                     idTagInfo: {
