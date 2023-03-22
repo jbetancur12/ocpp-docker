@@ -114,8 +114,8 @@ console.log(centralSystem.clients)
     //f (true) {
         const result = await centralSystem.getConf(
             // Cambiar
-            // centralSystem.clients[idf]
-            centralSystem.clients[0]
+             centralSystem.clients[idf]
+           // centralSystem.clients[0]
         );
         res.write(JSON.stringify(result));
     }
