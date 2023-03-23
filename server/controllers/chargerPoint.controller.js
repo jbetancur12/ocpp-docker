@@ -232,19 +232,19 @@ const setConfig = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
     
-    const {data} = req.body
-    
+    const {data} = req.body   
  
    // Cambiar
    if (idf !== -1) {
     //if (true) {
         const ms = await centralSystem.setConfig(
-            // Cambiar
-            // centralSystem.clients[idf],
+
             centralSystem.clients[0],
            data
         );
         res.write(JSON.stringify(ms));
+    }else {
+        res.write("No se encontro conexcion con el CP")
     }
     res.end();
     return;
