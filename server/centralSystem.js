@@ -10,6 +10,7 @@ import authCtrl from './controllers/user.controller';
 import TransactionId from './models/transactionId.model';
 import User from './models/user.model';
 import Cost from './models/cost.model';
+import cookieParser from 'cookie-parser';
 
 const getCPData = (payload) => {
     return {
@@ -102,10 +103,10 @@ export function createServer(server) {
         const chargerPointId = await getChargerPointId(client.connection.url)
         const userId = await getUserId(command.idTag)
         const seq = await getNextSequenceId()
-        console.log("🚀 ~ file: centralSystem.js:125 ~ userId:", userId)
+
       
         const transaction = await createTransaction(chargerPointId, userId, command, seq)
-        console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", transaction)
+
       
         return {
           transactionId: seq,
@@ -242,7 +243,6 @@ export function createServer(server) {
                 // };
                 
                 const data = handleStartTransactionCommand(client, command)
-                console.log("🚀 ~ file: centralSystem.js:244 ~ data:", data)
                 return data
 
 
@@ -296,10 +296,55 @@ export function createServer(server) {
 
                 // client.info.payload = command
 
+                // const CP = await ChargerPoint.findOneAndUpdate({'charger_box_id': `/${client.connection.url}`},{'$set':{
+                //     "connectors.$[1].status":command.status
+                // }},{useFindAndModify: false})
+
+                console.log(client.connection.url)
+
+                // const CP = await ChargerPoint.find({'charger_box_id': `${client.connection.url.substring(1)}`})
+
+                const cpFinder = () => {
+                    return ChargerPoint.findOne({"charger_box_id": `${client.connection.url.substring(1)}`})
+                  }
+                  
+                  const cpUpdater = (cp, command) => {
+                    cp.connectors[command.connectorId - 1].status = command.status;   
+                    cp.connectors[command.connectorId - 1].errorCode = command.errorCode; 
+                    cp.connectors[command.connectorId - 1].info = command.info; 
+                    return cp.save();
+                  }
+                  
+                  cpFinder().then(cp => {
+                    cpUpdater(cp, command).then(result => {
+                      console.log(result);
+                    }).catch(err => {
+                      console.error('ERROR!');
+                    });
+                  }).catch(err => {
+                    console.error('ERROR!');
+                  });
+
+                // ChargerPoint.findOne({"charger_box_id": `${client.connection.url.substring(1)}`}, function (err, cp) {
+                //     cp.connectors[command.connectorId - 1].status = command.status;   
+                //     cp.connectors[command.connectorId - 1].errorCode = command.errorCode; 
+                //     cp.connectors[command.connectorId - 1].info = command.info;       
+                    
+                //     cp.save(function (err) {
+                //         if(err) {
+                //             console.error('ERROR!');
+                //         }
+                //     });
+                // });
+                
+                //console.log("🚀 ~ file: centralSystem.js:310 ~ CP ~ CP:", CP)
+                
+
                 client.payload = {
                     command: "StatusNotification",
                     data: { ...command },
                 };
+
                 await cSystem.onStatusUpdate();
 
 

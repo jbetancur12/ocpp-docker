@@ -2,14 +2,47 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
+const ConnectorSchema = new mongoose.Schema({
+  format: {
+    type: String,
+    required: true,
+    default: "Cable"
+  },
+  type: {
+    type: String,
+    required: true
+  },
+  powerType: {
+    type: String,
+    required: true
+  },
+  power: {
+    type: Number,
+    required: true
+  },
+  status:{
+    type: String,
+    required: true,
+    default: "Available"
+  },
+  info:{
+    type: String
+  },
+  errorCode:{
+    type: String,
+    required: true,
+    default: "NoError"
+  }
+});
+
 const ChargerPointSchema = new Schema({
   charger_box_id: {
     type: String,
     required: true,
   },
   connectors: {
-    type: String,
-    required: true,
+    type: [ConnectorSchema],
+    //required: true
   },
   ocpp_protocol: {
     type: String,

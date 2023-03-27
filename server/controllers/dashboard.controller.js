@@ -265,7 +265,7 @@ const getCPStats = async (req, res) => {
             { $sort: { _id: 1 } },
         ]);
 
-       
+
 
         res.status(200).json(salesGraph);
     } catch (error) {
@@ -415,7 +415,7 @@ const getDashboardStats = async (req, res) => {
         const recentTransactions = await Transaction.find()
             .limit(50)
             .sort({ start_timestamp: -1 })
-            .populate('user',"name email").populate('chargerPointId',"charger_box_id")
+            .populate('user',"name email").populate('chargerPointId',"charger_box_id connectors")
 
         
 
