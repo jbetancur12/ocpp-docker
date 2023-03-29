@@ -532,6 +532,89 @@ const getDashboardStats = async (req, res) => {
                     ]
                 )
 
+                const totalSales = await Transaction.aggregate([{$group: {_id:null, sum:{$sum:"$cost"}}}])
+
+                const totalPower = await Transaction.aggregate([{$group: {_id:null, sum:{$sum:"$stop_value"}}}])
+
+                const powerToday = await Transaction.aggregate(
+                    [{
+                        $match: {
+                            createdAt: {
+                                $gte: getActualMonthSinceFirstDay("day"),
+        
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            SUM: {
+                                $sum: {
+                                    $toDouble: "$stop_value"
+                                }
+                            },
+                            COUNT: {
+                                $sum: 1
+                            }
+                        }
+                    }
+                        ,
+                    { "$unset": ["_id"] }
+                    ])
+        
+                const powerMonth = await Transaction.aggregate(
+                    [{
+                        $match: {
+                            createdAt: {
+                                $gte: getActualMonthSinceFirstDay("month"),
+        
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            SUM: {
+                                $sum: {
+                                    $toDouble: "$stop_value"
+                                }
+                            },
+                            COUNT: {
+                                $sum: 1
+                            }
+                        }
+                    }
+                        ,
+                    { "$unset": ["_id"] }
+                    ])
+        
+                    const powerYear = await Transaction.aggregate(
+                        [{
+                            $match: {
+                                createdAt: {
+                                    $gte: getActualMonthSinceFirstDay("year"),
+            
+                                }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                SUM: {
+                                    $sum: {
+                                        $toDouble: "$stop_value"
+                                    }
+                                },
+                                COUNT: {
+                                    $sum: 1
+                                }
+                            }
+                        }
+                            ,
+                        { "$unset": ["_id"] }
+                        ])
+           
+
                 const CPcount = await ChargerPoint.count()
 
 
@@ -545,6 +628,11 @@ const getDashboardStats = async (req, res) => {
             salesYear,
             salesByMonth,
             CPcount,
+            totalSales,
+            totalPower,
+            powerToday,
+            powerMonth,
+            powerYear,
         });
     } catch (error) {
         res.status(404).json({ message: error.message });
