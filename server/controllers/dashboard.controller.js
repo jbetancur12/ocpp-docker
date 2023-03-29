@@ -1,5 +1,6 @@
 import Transaction from '../models/transaction.model';
 import ChargerPoint from '../models/chargerPoint.model';
+import mongoose from 'mongoose';
 
 
 function getActualMonthSinceFirstDay(type) {
@@ -276,6 +277,7 @@ const getCPStats = async (req, res) => {
 const getDashboardGraphs = async(req, res) => {
     try{
         const { startDate, endDate, unit, id } = req.query;
+       
         
         const costGraph = await Transaction.aggregate([
             {    
@@ -287,7 +289,7 @@ const getDashboardGraphs = async(req, res) => {
                                 $lte: new Date(endDate),
                             }
                         },
-                        { chargerPointId: id }
+                        { chargerPointId: mongoose.Types.ObjectId(id) }
                     ]
             },
         },
@@ -316,7 +318,7 @@ const getDashboardGraphs = async(req, res) => {
                                 $lte: new Date(endDate),
                             }
                         },
-                        { chargerPointId: id }
+                        { chargerPointId: mongoose.Types.ObjectId(id) }
                     ]
             },
         },
@@ -346,7 +348,7 @@ const getDashboardGraphs = async(req, res) => {
                                     $lte: new Date(endDate),
                                 }
                             },
-                            { chargerPointId: id }
+                            { chargerPointId: mongoose.Types.ObjectId(id) }
                         ]
                 },
             },
@@ -379,7 +381,7 @@ const getDashboardGraphs = async(req, res) => {
                                     $lte: new Date(endDate),
                                 }
                             },
-                            { chargerPointId: id }
+                            { chargerPointId: mongoose.Types.ObjectId(id) }
                         ]
                 },
             },
