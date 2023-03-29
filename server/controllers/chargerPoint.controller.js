@@ -82,6 +82,27 @@ const update = async (req, res) => {
     }
 };
 
+const addConnector = async (req,res)=>{
+    try {
+        const [chargerPoint] = req.cp;
+
+        for (const connector of req.body) {
+          chargerPoint.connectors.push(connector);
+        }
+        
+        chargerPoint.updated = Date.now();
+        
+        await chargerPoint.save();
+        
+        res.json(chargerPoint);
+        
+    } catch (error) {
+        return res.status(400).json({
+            error: error,
+        });
+    }
+}
+
 const reset = async (req, res) => {
 
     const idf = _.findIndex(centralSystem.clients, function (o) {
@@ -107,8 +128,7 @@ const getConf = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
-console.log(centralSystem.clients)
-    // Cambiar
+    console.log(req.body.id)
 
     if (idf !== -1) {
     //f (true) {
@@ -131,14 +151,16 @@ const triggerMessage = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
+    console.log(idf)
 
-
-    if (true) {
+    if (idf !== -1)  {
         const result = await centralSystem.triggerMessage(
             centralSystem.clients[0],
             "MeterValues"
         );
         res.write(JSON.stringify(result));
+    }else {
+        res.write("No se encontro conexcion con el CP")
     }
     res.end();
     return;
@@ -292,7 +314,7 @@ const status = async (req, res) => {
 function onDigits2(req, res) {
 
     const data = centralSystem.clients.map((client) => {
-        return { ocpp: { id: client.connection.req.url }, payload: client.payload };
+        return { timeStamp: (new Date()).toLocaleString("en-US", {timeZone: "America/Bogota"}), ocpp: { id: client.connection.req.url }, payload: client.payload };
     });
 
     res.write(`data: ${JSON.stringify(data)}\n\n`);
@@ -326,6 +348,7 @@ export default {
     list,
     remove,
     update,
+    addConnector,
     status,
     clients,
     remoteStart,

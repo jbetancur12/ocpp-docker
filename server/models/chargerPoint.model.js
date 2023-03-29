@@ -44,6 +44,11 @@ const ChargerPointSchema = new Schema({
     type: [ConnectorSchema],
     //required: true
   },
+  rates:{
+    type:Schema.Types.ObjectId, 
+    ref: "Cost",
+    required: true,
+},
   ocpp_protocol: {
     type: String,
     required: false,

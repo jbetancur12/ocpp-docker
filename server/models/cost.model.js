@@ -7,10 +7,18 @@ const CostSchema = new Schema({
         type: String,
         required: true,
     },
-    cost: {
-        type: Number,
-        required: true,
+    description:{type: String,
+        required: true,},
+    active: {
+        type: Boolean,
+        default: true
     },
+    priceComponents: [{
+        tax: String,
+        type_: String,
+        price: String,
+        gracePeriod: String
+    }]
 },
     { timestamps: true }
 );

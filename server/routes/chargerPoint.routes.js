@@ -16,6 +16,11 @@ router
   .delete(chargerPoint.remove);
 
 router
+  .route('/ocpp/chargerPoints/addConnector/:station')
+  .put(chargerPoint.addConnector)
+
+
+router
   .route('/ocpp/chargerPoints/start/:userId')
   .post(chargerPoint.remoteStart);
 

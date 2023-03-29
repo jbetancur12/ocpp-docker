@@ -2,6 +2,7 @@ import Cost from '../models/cost.model';
 import errorHandler from '../helpers/dbErrorHandler';
 
 const create = async (req, res) => {
+    console.log("🚀 ~ file: cost.controller.js:6 ~ create ~ cost:", req.body)
     const cost = new Cost(req.body);
     try {
         await cost.save();
