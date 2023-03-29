@@ -73,7 +73,7 @@ export class Connection {
             throw new Error(`Failed to parse message: "${message}", ${err.message}`);
         }
         
-        console.log(messageType)
+        //console.log(messageType)
     switch (messageType) {
       case CALL_MESSAGE:
         // request

@@ -105,12 +105,11 @@ async function messageController(ws, socket, message, url, CLIENTS) {
   } else if (body[0] == 3) {
     //url.substring(1)
 
-    console.log('3=> ', CLIENTS);
   }
 }
 
 async function messageFromServerController(wss, socket, message, url) {
-  console.log(JSON.parse(message));
+ // console.log(JSON.parse(message));
   socket.send(message);
 }
 

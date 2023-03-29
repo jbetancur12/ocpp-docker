@@ -52,9 +52,8 @@ const list =  (req, res) => {
 //     }
 // };
 
-  const read = async (req, res) => {    // console.log(req)
+  const read = async (req, res) => {   
     let transactions = await Transaction.find({chargerPointId: req.params.idCP}).exec();
-    console.log(transactions)
     res.json(transactions)
 
 };

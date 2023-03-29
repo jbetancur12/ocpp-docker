@@ -19,7 +19,8 @@ function getActualMonthSinceFirstDay(type) {
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   
     // create a new Date object with the start of the day
-    const firstDayOfDay = new Date(currentYear, currentMonth, currentDay);
+    const firstHourOfDay = new Date(currentYear, currentMonth, currentDay);
+   
   
     // return the date object based on the type of operation
     switch (type) {
@@ -28,7 +29,7 @@ function getActualMonthSinceFirstDay(type) {
       case "month":
         return firstDayOfMonth;
       case "day":
-        return firstDayOfDay;
+        return firstHourOfDay;
       default:
         return "Invalid type";
     }
@@ -241,7 +242,7 @@ const getCPStats = async (req, res) => {
 
   const getDashboardGrap = async(req, res) => {
     try{
-        const { startDate, endDate, unit } = req.query; //destructure the query parameters
+        const { startDate, endDate, unit, timeZone } = req.query; //destructure the query parameters
         const salesGraph = await Transaction.aggregate([
             {    
                 $match: {
@@ -408,218 +409,24 @@ const getDashboardGraphs = async(req, res) => {
     }
 };
 
-
 const getDashboardStats = async (req, res) => {
     try {
-        
-
-        /* Recent Transactions */
         const recentTransactions = await Transaction.find()
             .limit(50)
             .sort({ start_timestamp: -1 })
-            .populate('user',"name email").populate('chargerPointId',"charger_box_id connectors")
+            .populate('user', 'name email')
+            .populate('chargerPointId', 'charger_box_id connectors');
 
-        
-
-      
-
-        const salesToday = await Transaction.aggregate(
-            [{
-                $match: {
-                    createdAt: {
-                        $gte: getActualMonthSinceFirstDay("day"),
-
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    SUM: {
-                        $sum: {
-                            $toDouble: "$cost"
-                        }
-                    },
-                    COUNT: {
-                        $sum: 1
-                    }
-                }
-            }
-                ,
-            { "$unset": ["_id"] }
-            ])
-
-        const salesMonth = await Transaction.aggregate(
-            [{
-                $match: {
-                    createdAt: {
-                        $gte: getActualMonthSinceFirstDay("month"),
-
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    SUM: {
-                        $sum: {
-                            $toDouble: "$cost"
-                        }
-                    },
-                    COUNT: {
-                        $sum: 1
-                    }
-                }
-            }
-                ,
-            { "$unset": ["_id"] }
-            ])
-
-            const salesYear = await Transaction.aggregate(
-                [{
-                    $match: {
-                        createdAt: {
-                            $gte: getActualMonthSinceFirstDay("year"),
-    
-                        }
-                    }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        SUM: {
-                            $sum: {
-                                $toDouble: "$cost"
-                            }
-                        },
-                        COUNT: {
-                            $sum: 1
-                        }
-                    }
-                }
-                    ,
-                { "$unset": ["_id"] }
-                ])
-
-                const salesByMonth = await Transaction.aggregate(
-                    [{
-                        $match: {
-                            $and: [
-                              {
-                                createdAt: {
-                                  $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-                                  $lte: new Date()
-                                }
-                              }
-                            ]
-                          },
-                        },
-                          {
-                            $group: {
-                              _id: {
-                                $dateTrunc: {
-                                  date: '$createdAt',
-                                  unit: "day",
-                                  binSize:1
-                                }
-                              },
-                              sum: { $sum: {
-                                $toDouble: "$cost"
-                            } },
-                            }
-                          },
-                          { $sort: { _id: 1 } }
-                    ]
-                )
-
-                const totalSales = await Transaction.aggregate([{$group: {_id:null, sum:{$sum:"$cost"}}}])
-
-                const totalPower = await Transaction.aggregate([{$group: {_id:null, sum:{$sum:"$stop_value"}}}])
-
-                const powerToday = await Transaction.aggregate(
-                    [{
-                        $match: {
-                            createdAt: {
-                                $gte: getActualMonthSinceFirstDay("day"),
-        
-                            }
-                        }
-                    },
-                    {
-                        $group: {
-                            _id: null,
-                            SUM: {
-                                $sum: {
-                                    $toDouble: "$stop_value"
-                                }
-                            },
-                            COUNT: {
-                                $sum: 1
-                            }
-                        }
-                    }
-                        ,
-                    { "$unset": ["_id"] }
-                    ])
-        
-                const powerMonth = await Transaction.aggregate(
-                    [{
-                        $match: {
-                            createdAt: {
-                                $gte: getActualMonthSinceFirstDay("month"),
-        
-                            }
-                        }
-                    },
-                    {
-                        $group: {
-                            _id: null,
-                            SUM: {
-                                $sum: {
-                                    $toDouble: "$stop_value"
-                                }
-                            },
-                            COUNT: {
-                                $sum: 1
-                            }
-                        }
-                    }
-                        ,
-                    { "$unset": ["_id"] }
-                    ])
-        
-                    const powerYear = await Transaction.aggregate(
-                        [{
-                            $match: {
-                                createdAt: {
-                                    $gte: getActualMonthSinceFirstDay("year"),
-            
-                                }
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: null,
-                                SUM: {
-                                    $sum: {
-                                        $toDouble: "$stop_value"
-                                    }
-                                },
-                                COUNT: {
-                                    $sum: 1
-                                }
-                            }
-                        }
-                            ,
-                        { "$unset": ["_id"] }
-                        ])
-           
-
-                const CPcount = await ChargerPoint.count()
-
-
-
-
+        const salesToday = await getStats('day', 'cost');
+        const salesMonth = await getStats('month', 'cost');
+        const salesYear = await getStats('year', 'cost');
+        const salesByMonth = await getSalesByMonth();
+        const totalSales = await Transaction.aggregate([{ $group: { _id: null, sum: { $sum: '$cost' } } }]);
+        const totalPower = await Transaction.aggregate([{ $group: { _id: null, sum: { $sum: '$stop_value' } } }]);
+        const powerToday = await getStats('day', 'stop_value');
+        const powerMonth = await getStats('month', 'stop_value');
+        const powerYear = await getStats('year', 'stop_value');
+        const CPcount = await ChargerPoint.countDocuments();
 
         res.status(200).json({
             recentTransactions,
@@ -638,5 +445,278 @@ const getDashboardStats = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
+
+async function getStats(timeInterval, costValue) {
+    return await Transaction.aggregate([
+        {
+            $match: { createdAt: { $gte: getActualMonthSinceFirstDay(timeInterval) } },
+        },
+        {
+            $group: {
+                _id: null,
+                SUM: { $sum: { $toDouble: `$${costValue}` } },
+                COUNT: { $sum: 1 },
+            },
+        },
+        { $unset: ['_id'] },
+    ]);
+}
+
+async function getSalesByMonth() {
+    return await Transaction.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+                    $lte: new Date(),
+                },
+            },
+        },
+        {
+            $group: {
+                _id: {
+                    $dateTrunc: {
+                        date: '$createdAt',
+                        unit: 'day',
+                        binSize: 1,
+                    },
+                },
+                sum: { $sum: { $toDouble: '$cost' } },
+            },
+        },
+        { $sort: { _id: 1 } },
+    ]);
+}
+
+
+// const getDashboardStats = async (req, res) => {
+//     try {
+        
+
+//         /* Recent Transactions */
+//         const recentTransactions = await Transaction.find()
+//             .limit(50)
+//             .sort({ start_timestamp: -1 })
+//             .populate('user',"name email").populate('chargerPointId',"charger_box_id connectors")
+
+        
+
+      
+
+//         const salesToday = await Transaction.aggregate(
+//             [{
+//                 $match: {
+//                     createdAt: {
+//                         $gte: getActualMonthSinceFirstDay("day"),
+
+//                     }
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: null,
+//                     SUM: {
+//                         $sum: {
+//                             $toDouble: "$cost"
+//                         }
+//                     },
+//                     COUNT: {
+//                         $sum: 1
+//                     }
+//                 }
+//             }
+//                 ,
+//             { "$unset": ["_id"] }
+//             ])
+
+//         const salesMonth = await Transaction.aggregate(
+//             [{
+//                 $match: {
+//                     createdAt: {
+//                         $gte: getActualMonthSinceFirstDay("month"),
+
+//                     }
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: null,
+//                     SUM: {
+//                         $sum: {
+//                             $toDouble: "$cost"
+//                         }
+//                     },
+//                     COUNT: {
+//                         $sum: 1
+//                     }
+//                 }
+//             }
+//                 ,
+//             { "$unset": ["_id"] }
+//             ])
+
+//             const salesYear = await Transaction.aggregate(
+//                 [{
+//                     $match: {
+//                         createdAt: {
+//                             $gte: getActualMonthSinceFirstDay("year"),
+    
+//                         }
+//                     }
+//                 },
+//                 {
+//                     $group: {
+//                         _id: null,
+//                         SUM: {
+//                             $sum: {
+//                                 $toDouble: "$cost"
+//                             }
+//                         },
+//                         COUNT: {
+//                             $sum: 1
+//                         }
+//                     }
+//                 }
+//                     ,
+//                 { "$unset": ["_id"] }
+//                 ])
+
+//                 const salesByMonth = await Transaction.aggregate(
+//                     [{
+//                         $match: {
+//                             $and: [
+//                               {
+//                                 createdAt: {
+//                                   $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+//                                   $lte: new Date()
+//                                 }
+//                               }
+//                             ]
+//                           },
+//                         },
+//                           {
+//                             $group: {
+//                               _id: {
+//                                 $dateTrunc: {
+//                                   date: '$createdAt',
+//                                   unit: "day",
+//                                   binSize:1
+//                                 }
+//                               },
+//                               sum: { $sum: {
+//                                 $toDouble: "$cost"
+//                             } },
+//                             }
+//                           },
+//                           { $sort: { _id: 1 } }
+//                     ]
+//                 )
+
+//                 const totalSales = await Transaction.aggregate([{$group: {_id:null, sum:{$sum:"$cost"}}}])
+
+//                 const totalPower = await Transaction.aggregate([{$group: {_id:null, sum:{$sum:"$stop_value"}}}])
+
+//                 const powerToday = await Transaction.aggregate(
+//                     [{
+//                         $match: {
+//                             createdAt: {
+//                                 $gte: getActualMonthSinceFirstDay("day"),
+        
+//                             }
+//                         }
+//                     },
+//                     {
+//                         $group: {
+//                             _id: null,
+//                             SUM: {
+//                                 $sum: {
+//                                     $toDouble: "$stop_value"
+//                                 }
+//                             },
+//                             COUNT: {
+//                                 $sum: 1
+//                             }
+//                         }
+//                     }
+//                         ,
+//                     { "$unset": ["_id"] }
+//                     ])
+        
+//                 const powerMonth = await Transaction.aggregate(
+//                     [{
+//                         $match: {
+//                             createdAt: {
+//                                 $gte: getActualMonthSinceFirstDay("month"),
+        
+//                             }
+//                         }
+//                     },
+//                     {
+//                         $group: {
+//                             _id: null,
+//                             SUM: {
+//                                 $sum: {
+//                                     $toDouble: "$stop_value"
+//                                 }
+//                             },
+//                             COUNT: {
+//                                 $sum: 1
+//                             }
+//                         }
+//                     }
+//                         ,
+//                     { "$unset": ["_id"] }
+//                     ])
+        
+//                     const powerYear = await Transaction.aggregate(
+//                         [{
+//                             $match: {
+//                                 createdAt: {
+//                                     $gte: getActualMonthSinceFirstDay("year"),
+            
+//                                 }
+//                             }
+//                         },
+//                         {
+//                             $group: {
+//                                 _id: null,
+//                                 SUM: {
+//                                     $sum: {
+//                                         $toDouble: "$stop_value"
+//                                     }
+//                                 },
+//                                 COUNT: {
+//                                     $sum: 1
+//                                 }
+//                             }
+//                         }
+//                             ,
+//                         { "$unset": ["_id"] }
+//                         ])
+           
+
+//                 const CPcount = await ChargerPoint.count()
+
+
+
+
+
+//         res.status(200).json({
+//             recentTransactions,
+//             salesToday,
+//             salesMonth,
+//             salesYear,
+//             salesByMonth,
+//             CPcount,
+//             totalSales,
+//             totalPower,
+//             powerToday,
+//             powerMonth,
+//             powerYear,
+//         });
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// };
 
 export default { getDashboardStats ,getDashboardGrap, getCPStats, getDashboardGraphs};

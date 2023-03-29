@@ -170,7 +170,7 @@ export function createServer(server) {
                 };
 
             case command instanceof OCPPCommands.MeterValues:
-                console.log("🚀 ~ file: centralSystem.js:105 ~ command:", command)
+                //console.log("🚀 ~ file: centralSystem.js:105 ~ command:", command)
                 client.payload = {
                     command: "MeterValues",
                     data: { ...command },
@@ -262,7 +262,7 @@ export function createServer(server) {
 
                 const CP = await Transaction.findOne({ transactionId: command.transactionId }).select('chargerPointId')
                 const Costs = await ChargerPoint.findById(CP.chargerPointId).populate("rates")
-                console.log("🚀 ~ file: centralSystem.js:265 ~ Costs:", Costs)
+                //console.log("🚀 ~ file: centralSystem.js:265 ~ Costs:", Costs)
                 const cost = Costs.rates.priceComponents.find(getCost)
 
                 const rawPrice = parseInt(cost.price) * (parseInt(command.meterStop)/1000)              
@@ -468,7 +468,7 @@ export function createServer(server) {
 
         // }
 
-        console.log("===>", connectorId, idTag)
+        //console.log("===>", connectorId, idTag)
 
         let command = new OCPPCommands.RemoteStartTransaction({
             connectorId: connectorId,

@@ -51,8 +51,7 @@ const chargerPointByID = async (req, res, next, id) => {
 
 const read = async (req, res) => {
     // console.log(req)
-    console.log('%cchargerPoint.controller.js line:51 req.params.station', 'color: #007acc;', req.params.station);
-    try {
+     try {
         let chargerPoint = await ChargerPoint.findOne({
             charger_box_id: req.params.station,
         });
@@ -115,7 +114,7 @@ const reset = async (req, res) => {
             centralSystem.clients[idf]
         );
 
-        console.log(result)
+        //console.log(result)
         res.write(JSON.stringify(result));
     }
     res.end();
@@ -128,7 +127,6 @@ const getConf = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
-    console.log(req.body.id)
 
     if (idf !== -1) {
     //f (true) {
@@ -151,7 +149,7 @@ const triggerMessage = async (req, res) => {
         return o.connection.req.url === `${req.body.id}`;
     });
 
-    console.log(idf)
+   // console.log(idf)
 
     if (idf !== -1)  {
         const result = await centralSystem.triggerMessage(
@@ -233,11 +231,11 @@ const stop = async (req, res) => {
 
     if (idf !== -1) {
         const client = centralSystem.clients[idf].connection.req.url.slice(1)
-        console.log("🚀 ~ file: chargerPoint.controller.js:187 ~ stop ~ client", client)
+
         const CP = await ChargerPoint.findOne({ charger_box_id: client })
-        console.log("🚀 ~ file: chargerPoint.controller.js:216 ~ stop ~ CP:", CP)
+
         const transactionId = await Transaction.find({ chargerPointId: CP._id }).sort({ createdAt: -1 }).limit(1)
-        console.log("🚀 ~ file: chargerPoint.controller.js:188 ~ stop ~ transactionId", transactionId)
+   
 
         const ms = await centralSystem.stop(
             centralSystem.clients[idf],
