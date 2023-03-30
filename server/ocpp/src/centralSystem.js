@@ -8,108 +8,141 @@ import CentralSystemClient from './centralSystemClient';
 const debug = debugFn(DEBUG_LIBNAME);
 
 export default class CentralSystem {
-  constructor(options) {
-    this.options = options || {};
-    this.clients = [];
-    this.logger = new Logger();
-  }
-
-  listen(port = 9220, host = null) {
-
+    constructor(options) {
+        this.options = options || {};
+        this.clients = [];
+        this.logger = new Logger();
+    }
     
-    this.port = port;
+    listen(port = 9220, host = null) {
+       
 
-    const validateConnection = this.options.validateConnection || (() => true);
+        this.port = port;
 
-    const wsOptions = {
-      port,
-      host,
-      handleProtocols: (protocols, req) => {
-        let newProtocols;
-        if (typeof protocols === 'object') {
-          newProtocols = Array.from(protocols);
-        } else {
-          newProtocols = protocols;
-        }
-        if (newProtocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
-          return '';
-        }
-        return OCPP_PROTOCOL_1_6;
-      },
-      verifyClient: async (info, cb) => {
-        if (info.req.url === LOGGER_URL) {
-          debug('Logger connected');
-          return cb(true);
-        }
-        const isAccept = await validateConnection(info.req.url);
+        const validateConnection = this.options.validateConnection || (() => true);
 
-        this.logger.debug(
-          `Request for connect "${info.req.url}" (${
-            info.req.headers['sec-websocket-protocol']
-          }) - ${isAccept ? 'Valid identifier' : 'Invalid identifier'}`,
-        );
+        const wsOptions = {
+            port,
+            host,
+            handleProtocols: (protocols, req) => {
+                let newProtocols;
+                if (typeof protocols === 'object') {
+                    newProtocols = Array.from(protocols);
+                } else {
+                    newProtocols = protocols;
+                }
+                if (newProtocols.indexOf(OCPP_PROTOCOL_1_6) === -1) {
+                    return '';
+                }
+                return OCPP_PROTOCOL_1_6;
+            },
+            verifyClient: async (info, cb) => {
+                if (info.req.url === LOGGER_URL) {
+                    debug('Logger connected');
+                    return cb(true);
+                }
+                const isAccept = await validateConnection(info.req.url);
 
-        cb(
-          isAccept,
-          404,
-          'Central System does not recognize the charge point identifier in the URL path',
-        );
-      },
-      ...(this.options.wsOptions || {}),
-    };
+                this.logger.debug(
+                    `Request for connect "${info.req.url}" (${info.req.headers['sec-websocket-protocol']
+                    }) - ${isAccept ? 'Valid identifier' : 'Invalid identifier'}`,
+                );
 
-    
+                cb(
+                    isAccept,
+                    404,
+                    'Central System does not recognize the charge point identifier in the URL path',
+                );
+            },
+            ...(this.options.wsOptions || {}),
+        };
 
-    this.server = new WebSocket.Server(wsOptions);
 
-    this.server.on('error', (ws, req) => {
-      console.info(ws, req);
-    });
 
-    this.server.on('message', (data)=>{
-        console.info(data)
-    })
+        this.server = new WebSocket.Server(wsOptions);
 
-    this.server.on('upgrade', (ws, req) => {
-      console.info(req);
-    });
-    this.server.on('connection', (ws, req) => this.onNewConnection(ws, req));
 
-    debug(`Listen on ${host || 'default host'}:${port}`);
-  }
 
-  onNewConnection(socket, req) {
-    socket.on('error', (err) => {
-      console.info(err, socket.readyState);
-    });
+        this.server.on('error', (ws, req) => {
+            console.info(ws, req);
+        });
 
-    if (req.url === LOGGER_URL) {
-      this.logger.addSocket(socket);
-      return;
+        this.server.on('message', (data) => {
+            console.info("data: ",data)
+        })
+
+        this.server.on('upgrade', (ws, req) => {
+            console.info(req);
+        });
+        this.server.on('connection', (ws, req) => this.onNewConnection(ws, req));
+
+        debug(`Listen on ${host || 'default host'}:${port}`);
+
     }
 
-    if (!socket.protocol) {
-      // From Spec: If the Central System does not agree to using one of the subprotocols offered by the client,
-      // it MUST complete the WebSocket handshake with a response without a Sec-WebSocket-Protocol header and then
-      // immediately close the WebSocket connection.
-      this.logger.debug(`Close connection due to unsupported protocol`);
-      return socket.close();
+
+    onNewConnection(socket, req) {
+
+        socket.on('error', (err) => {
+            console.info(err, socket.readyState);
+        });
+    
+
+        
+
+
+        if (req.url === LOGGER_URL) {
+            this.logger.addSocket(socket);
+            return;
+        }
+
+        if (!socket.protocol) {
+            // From Spec: If the Central System does not agree to using one of the subprotocols offered by the client,
+            // it MUST complete the WebSocket handshake with a response without a Sec-WebSocket-Protocol header and then
+            // immediately close the WebSocket connection.
+            this.logger.debug(`Close connection due to unsupported protocol`);
+            return socket.close();
+        }
+        const connection = new Connection(socket, req, this.logger, this.clients);
+        
+        const client = new CentralSystemClient(connection);
+       
+        // client.isAlive = true;
+
+        // setInterval(() => {
+        //     this.clients.forEach(function (connection, req) {
+                      
+            
+        //         // Request the client to respond with pong. Client does this automatically.
+        //         connection.isAlive = false;
+        //         connection.connection.socket.ping(function () {});
+        //       });
+        // }, 10000);
+
+        // socket.on("pong", function () {
+        //     client.isAlive = true;
+        // })
+
+
+        connection.onRequest = (command) => this.onRequest(client, command);
+        connection.isAliveF = () => this.isAliveF(client)
+
+      
+        socket.on('close', (err) => {
+             const index = this.clients.indexOf(client);
+            this.clients.splice(index, 1);
+            this.connectionClose(client)
+        });
+        this.clients.push(client);
     }
 
-    const connection = new Connection(socket, req, this.logger);
+    async onRequest(client, command) {
+        // implementation
+    }
 
-    const client = new CentralSystemClient(connection);
+    async isAlive(client){
 
-    connection.onRequest = (command) => this.onRequest(client, command);
+    }
 
-    socket.on('close', (err) => {
-      const index = this.clients.indexOf(client);
-      this.clients.splice(index, 1);
-    });
-    this.clients.push(client);
-  }
-
-  async onRequest(client, command) {
-    // implementation
-  }
+    async connectionClose(client){}
 }

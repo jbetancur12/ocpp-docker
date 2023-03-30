@@ -18,12 +18,15 @@ import OCPPError, {
 const debug = debugFn(DEBUG_LIBNAME);
 
 export class Connection {
-  constructor(socket, req = null, logger = null) {
+  constructor(socket, req = null, logger = null, clients = []) {
     this.socket = socket;
     this.req = req;
     this.requests = {};
     this.logger = logger;
+    this.clients = clients
 
+    
+    
     if (req) {
       this.url = req && req.url;
       const ip =
@@ -51,9 +54,27 @@ export class Connection {
     socket.on('error', (err) => {
       console.info(err);
     });
+
+    socket.isAlive = true;
+
+
+    socket.on("pong", () => this.isAliveF(socket))
+
+          setInterval(() => {
+            this.clients.forEach(function (connection, req) {
+                      
+
+                // Request the client to respond with pong. Client does this automatically.
+                connection.connection.socket.isAlive = false;
+                connection.connection.socket.ping(function () {});
+              });
+        }, 30000);
+
+
   }
 
   async onMessage(message) {
+
 
       let messageType,
       messageId,
@@ -151,10 +172,12 @@ export class Connection {
   }
 
   send(command, messageType = CALL_MESSAGE) {
+
     return this.sendMessage(v4(), command, messageType);
   }
 
   sendError(messageId, err) {
+
     if (this.logger) {
       this.logger.debug(`Error: ${err.message}`);
     } else {
@@ -170,6 +193,7 @@ export class Connection {
   }
 
   sendMessage(messageId, command, messageType = CALLRESULT_MESSAGE) {
+
     const socket = this.socket;
     const self = this;
     const commandValues = getObjectValues(command);
@@ -242,4 +266,8 @@ export class Connection {
   }
 
   onRequest(request) {}
+
+  isAliveF(client){}
+
+  async connectionClose(client){}
 }

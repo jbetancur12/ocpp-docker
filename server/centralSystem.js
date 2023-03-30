@@ -24,9 +24,19 @@ const getCPData = (payload) => {
     };
 };
 
+const cpFinder = (cp) => {
+    return ChargerPoint.findOne({"charger_box_id": cp})
+  }
+  
+  const cpUpdater = (cp, command) => {
+    cp.connectors[command.connectorId - 1].status = command.status;   
+    cp.connectors[command.connectorId - 1].errorCode = command.errorCode; 
+    cp.connectors[command.connectorId - 1].info = command.info; 
+    return cp.save();
+  }
+
 
 export function createServer(server) {
-    console.log("1. Create Server /home/jorge/00.projects/epp-ocpp-server/server/centralSystem.js")
     const cSystem = new CentralSystem({
         validateConnection,
         wsOptions: { server },
@@ -101,6 +111,34 @@ export function createServer(server) {
 
     cSystem.onStatusUpdate = async function () { };
 
+    cSystem.isAliveF = async function(client){
+        client.connection.socket.isAlive = true 
+        cpFinder(client.connection.url.substring(1)).then(cp => {
+            cp.status = "online"
+            cp.save()
+          }).catch(err => {
+            console.error('ERROR!');
+          }); 
+
+    }
+
+    cSystem.connectionClose = async function (client) {
+        client.connection.socket.isAlive = false 
+        cpFinder(client.connection.url.substring(1)).then(cp => {
+            cp.status = "offline"
+            cp.save()
+          }).catch(err => {
+            console.error('ERROR!');
+          }); 
+
+        
+    }
+
+
+
+
+    
+
 
     cSystem.onRequest = async function (client, command) {
         const connection = client.connection;
@@ -120,6 +158,14 @@ export function createServer(server) {
                 let chargerPoint = await ChargerPoint.findOne({
                     charger_box_id: connection.url.substring(1),
                 });
+
+                // client.connection.socket.isAlive = online 
+                // cpFinder(client.connection.url.substring(1)).then(cp => {
+                //     cp.status = "online"
+                //     cp.save()
+                //   }).catch(err => {
+                //     console.error('ERROR!');
+                //   });
 
 
                 if (!chargerPoint) {
@@ -212,20 +258,11 @@ export function createServer(server) {
 
             case command instanceof OCPPCommands.StatusNotification:
             
-                const cpFinder = () => {
-                    return ChargerPoint.findOne({"charger_box_id": `${client.connection.url.substring(1)}`})
-                  }
+           
                   
-                  const cpUpdater = (cp, command) => {
-                    cp.connectors[command.connectorId - 1].status = command.status;   
-                    cp.connectors[command.connectorId - 1].errorCode = command.errorCode; 
-                    cp.connectors[command.connectorId - 1].info = command.info; 
-                    return cp.save();
-                  }
-                  
-                  cpFinder().then(cp => {
+                  cpFinder(client.connection.url.substring(1)).then(cp => {
                     cpUpdater(cp, command).then(result => {
-                      console.log(result);
+           
                     }).catch(err => {
                       console.error('ERROR!');
                     });
