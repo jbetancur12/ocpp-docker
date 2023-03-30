@@ -40,6 +40,11 @@ const ChargerPointSchema = new Schema({
     type: String,
     required: true,
   },
+  status:{
+    type: String,
+    required: true,
+    default: "offline"
+  },
   connectors: {
     type: [ConnectorSchema],
     //required: true
