@@ -20,6 +20,7 @@ const list =  (req, res) => {
       Transaction.find()
         .populate('user', 'name email')
         .populate('chargerPointId', 'charger_box_id connectors')
+        .sort({ start_timestamp: -1 })
         .exec((err, transactions)=> res.status(200).json({ transactions }));
       
     } catch (error) {
