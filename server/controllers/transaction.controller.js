@@ -17,7 +17,10 @@ const create = async (req, res) => {
 
 const list =  (req, res) => {
     try {
-      Transaction.find().exec((err, transactions)=> res.status(200).json({ transactions }));
+      Transaction.find()
+        .populate('user', 'name email')
+        .populate('chargerPointId', 'charger_box_id connectors')
+        .exec((err, transactions)=> res.status(200).json({ transactions }));
       
     } catch (error) {
       return res.status(400).json({ error: errorHandler.getErrorMessage(error) });
