@@ -3,14 +3,11 @@ import * as AuthorizeConst from './ocpp/src/commands/Authorize';
 import * as StartTransactionConst from './ocpp/src/commands/StartTransaction';
 import OCPPError, { ERROR_NOTIMPLEMENTED } from './ocpp/src/ocppError';
 import * as BootNotificationConst from './ocpp/src/commands/BootNotification';
-import * as StatusNotificationConst from './ocpp/src/commands/StatusNotification';
 import ChargerPoint from './models/chargerPoint.model';
 import Transaction from './models/transaction.model';
-import authCtrl from './controllers/user.controller';
 import TransactionId from './models/transactionId.model';
 import User from './models/user.model';
-import Cost from './models/cost.model';
-import cookieParser from 'cookie-parser';
+
 
 const getCPData = (payload) => {
     return {
@@ -27,25 +24,9 @@ const getCPData = (payload) => {
     };
 };
 
-const concatenate = (command, client) => {
-    const ui = Math.round(Date.now() + Math.random());
-    const connectorIdx = client.info.connectors.findIndex((item) => {
-        return command.connectorId === item.connectorId;
-    });
-
-    const uid = '' + ui + client.info.connectors[connectorIdx].connectorId;
-    if (connectorIdx === -1) {
-        client.info.connectors.push({});
-    } else {
-        client.info.connectors[connectorIdx] = {
-            ...client.info.connectors[connectorIdx],
-            ...{ transactionId: uid },
-        };
-        return uid;
-    }
-};
 
 export function createServer(server) {
+    console.log("1. Create Server /home/jorge/00.projects/epp-ocpp-server/server/centralSystem.js")
     const cSystem = new CentralSystem({
         validateConnection,
         wsOptions: { server },
@@ -66,7 +47,7 @@ export function createServer(server) {
         const count = await TransactionId.findOneAndUpdate(
           { id: "transactionIDCount" },
           { "$inc": { "transactionId": 1 } },
-          { new: true }
+          { new: true },
         )
         if (count == null) {
           const newVal = new TransactionId({ id: "transactionIDCount", transactionId: 1 })
@@ -119,6 +100,7 @@ export function createServer(server) {
     cSystem.listen(null);
 
     cSystem.onStatusUpdate = async function () { };
+
 
     cSystem.onRequest = async function (client, command) {
         const connection = client.connection;
@@ -181,66 +163,6 @@ export function createServer(server) {
 
             case command instanceof OCPPCommands.StartTransaction:
 
-                // client.payload = {
-                //     command: "StartTransaction",
-                //     data: { ...command },
-                // };
-                // await cSystem.onStatusUpdate();
-
-                // const url = client.connection.url
-                // const CP = await ChargerPoint.find({ charger_box_id: url.slice(1) }, '_id')
-                // const userId = await User.find({ id_tag: command.idTag }, 'id_tag')
-                // console.log("🚀 ~ file: centralSystem.js:125 ~ userId:", userId)
-                // const _userId = []
-                // let seq;
-
-
-                // if (userId.length == 0) {
-                //     _userId.push("6414f16aca152004ab6afc4d")
-                // } else {
-                //     _userId.push(userId[0]._id)
-                // }
-
-                // await TransactionId.findOneAndUpdate(
-                //     { id: "transactionIDCount" },
-                //     { "$inc": { "transactionId": 1 } },
-                //     { new: true }, (err, cd) => {
-                //         let seqId;
-                //         if (cd == null) {
-                //             const newVal = new TransactionId({ id: "transactionIDCount", transactionId: 1 })
-                //             newVal.save()
-                //             seqId = 1
-                //         } else {
-                //             seqId = cd.transactionId
-                //         }
-                //         seq = seqId
-                //         const dataTransaction = new Transaction({
-                //             chargerPointId: CP[0]._id,
-                //             transactionId: seq,
-                //             user: _userId[0],
-                //             connectorId: command.connectorId,
-                //             start_timestamp: command.timestamp,
-                //             start_value: command.meterStart,
-                //             stop_timestamp: command.timestamp,
-                //             stop_value: command.meterStart
-                //         })
-
-                //         console.log("🚀 ~ file: centralSystem.js:149 ~ dataTransaction:", dataTransaction)
-                //         dataTransaction.save()
-
-
-                      
-
-
-                //     }
-                // )
-
-                // return {
-                //     transactionId: 98,
-                //     idTagInfo: {
-                //         status: StartTransactionConst.STATUS_ACCEPTED,
-                //     },
-                // };
                 
                 const data = handleStartTransactionCommand(client, command)
                 return data
@@ -266,7 +188,7 @@ export function createServer(server) {
                 const cost = Costs.rates.priceComponents.find(getCost)
 
                 const rawPrice = parseInt(cost.price) * (parseInt(command.meterStop)/1000)              
-                const tax =  parseInt(rawPrice)*(parseInt(cost.price)/100)          
+                const tax =  parseInt(rawPrice)*(parseInt(cost.tax)/100)          
                 const unitPrice = rawPrice + tax
     
                 
@@ -289,34 +211,7 @@ export function createServer(server) {
 
 
             case command instanceof OCPPCommands.StatusNotification:
-                // client.info = client.info || {};
-                // client.info.connectors = client.info.connectors || [];
-
-                // const connectorIndex = client.info.connectors.findIndex((item) => {
-                //     return command.connectorId === item.connectorId;
-                // });
-
-
-                // if (connectorIndex === -1) {
-                //     client.info.connectors.push({
-                //         ...command,
-                //     });
-                // } else {
-                //     client.info.connectors[connectorIndex] = {
-                //         ...command,
-                //     };
-                // }
-
-                // client.info.payload = command
-
-                // const CP = await ChargerPoint.findOneAndUpdate({'charger_box_id': `/${client.connection.url}`},{'$set':{
-                //     "connectors.$[1].status":command.status
-                // }},{useFindAndModify: false})
-
-                console.log(client.connection.url)
-
-                // const CP = await ChargerPoint.find({'charger_box_id': `${client.connection.url.substring(1)}`})
-
+            
                 const cpFinder = () => {
                     return ChargerPoint.findOne({"charger_box_id": `${client.connection.url.substring(1)}`})
                   }
@@ -336,21 +231,7 @@ export function createServer(server) {
                     });
                   }).catch(err => {
                     console.error('ERROR!');
-                  });
-
-                // ChargerPoint.findOne({"charger_box_id": `${client.connection.url.substring(1)}`}, function (err, cp) {
-                //     cp.connectors[command.connectorId - 1].status = command.status;   
-                //     cp.connectors[command.connectorId - 1].errorCode = command.errorCode; 
-                //     cp.connectors[command.connectorId - 1].info = command.info;       
-                    
-                //     cp.save(function (err) {
-                //         if(err) {
-                //             console.error('ERROR!');
-                //         }
-                //     });
-                // });
-                
-                //console.log("🚀 ~ file: centralSystem.js:310 ~ CP ~ CP:", CP)
+                  });           
                 
 
                 client.payload = {
@@ -381,8 +262,7 @@ export function createServer(server) {
     }
 
     cSystem.getConf = async (client) => {
-        //console.log("🚀 ~ file: centralSystem.js:235 ~ cSystem.getConf= ~ client:", client)
-
+   
 
         let command = new OCPPCommands.GetConfiguration()
 
@@ -452,24 +332,6 @@ export function createServer(server) {
     ) => {
 
 
-
-        // const connector = client.info.connectors.find(
-        //     (item) => connectorId.toString() === item.connectorId.toString(),
-        // );
-        // if (!connector) {
-        //     return null;
-        // }
-
-        // if (connector.status !== StatusNotificationConst.STATUS_AVAILABLE) {
-        //     let command = new OCPPCommands.RemoteStopTransaction({
-        //         transactionId: connectorId,
-        //     });
-        //     return await client.connection.send(command);
-
-        // }
-
-        //console.log("===>", connectorId, idTag)
-
         let command = new OCPPCommands.RemoteStartTransaction({
             connectorId: connectorId,
             idTag,
@@ -491,6 +353,3 @@ export function createServer(server) {
     }
 }
 
-function timeout(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
