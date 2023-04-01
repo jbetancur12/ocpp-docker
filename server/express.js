@@ -10,6 +10,7 @@ import chargerPointsRoutes from './routes/chargerPoint.routes';
 import costRoutes from './routes/cost.routes';
 import transactionsRoutes from './routes/transaction.routes';
 import dashboardRoutes from './routes/dashboard.routes';
+import locationsRoutes from './routes/location.routes';
 
 import sse from './sse';
 
@@ -32,6 +33,7 @@ app.use('/', chargerPointsRoutes);
 app.use('/', costRoutes);
 app.use('/', transactionsRoutes);
 app.use('/',dashboardRoutes)
+app.use('/',locationsRoutes)
 
 
 app.use((err, req, res, next) => {

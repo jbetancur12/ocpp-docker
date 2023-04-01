@@ -54,6 +54,10 @@ const ChargerPointSchema = new Schema({
     ref: "Cost",
     required: true,
 },
+location: {
+    type:Schema.Types.ObjectId, 
+    ref: "Location",
+},
   ocpp_protocol: {
     type: String,
     required: false,

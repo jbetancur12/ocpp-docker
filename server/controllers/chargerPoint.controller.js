@@ -5,20 +5,28 @@ import { centralSystem } from '../server';
 import _ from 'lodash';
 import TransactionId from '../models/transactionId.model';
 import Transaction from '../models/transaction.model';
+import Location from '../models/location.model';
 
 const create = async (req, res) => {
     const chargerPoint = new ChargerPoint(req.body);
+  
     try {
-        await chargerPoint.save();
-        return res.status(200).json({
-            message: 'Charger Point Successfully created!',
-        });
+      const cp = await chargerPoint.save();
+      const CPlocation = cp.location;
+      await Location.findByIdAndUpdate(
+        CPlocation,
+        { $push: { chargerPoints: cp._id } },
+        { new: true, useFindAndModify: false },
+      );
+      return res.status(200).json({
+        message: 'Charger Point Successfully created!',
+      });
     } catch (err) {
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err),
+      });
     }
-};
+  };
 
 const list = async (req, res) => {
     try {
