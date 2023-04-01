@@ -15,19 +15,35 @@ const create = async (req, res) => {
   }
 };
 
-const list =  (req, res) => {
+const list = async (req, res) => {
+    const { pageSize = 50, page = 0, search } = req.query;
+  
     try {
-      Transaction.find()
-        .populate('user', 'name email')
-        .populate('chargerPointId', 'charger_box_id connectors')
+      const transactions = await Transaction.find()
+        .limit(Number(pageSize))
+        .skip(Number(page) * Number(pageSize))
+        .populate({ path: 'user', select: 'name email'})
+        .populate({ path: 'chargerPointId', select: 'charger_box_id connectors'})
         .sort({ start_timestamp: -1 })
-        .exec((err, transactions)=> res.status(200).json({ transactions }));
-      
+        .exec();
+  
+      const total = await Transaction.countDocuments();
+  
+      let filterTransactions = transactions;
+  
+      if (search && search.length > 0) {
+        filterTransactions = transactions.filter((transaction) =>
+          transaction.chargerPointId?.charger_box_id.includes(search) ||
+          transaction.user?.email.includes(search)
+        );
+      }
+  
+      return res.status(200).json({ transactions: filterTransactions, total: total });
     } catch (error) {
-      return res.status(400).json({ error: errorHandler.getErrorMessage(error) });
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
     }
   };
-
 // const list = async (req, res) => {
 //     try {
 //         const page = parseInt(req.query.page) || 1;
