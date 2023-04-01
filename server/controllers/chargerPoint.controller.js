@@ -30,7 +30,7 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
     try {
-        let chargerPoints = await ChargerPoint.find();
+        let chargerPoints = await ChargerPoint.find().populate("location");
         res.json(chargerPoints);
     } catch (err) {
         return res.status(400).json({
@@ -77,17 +77,31 @@ const read = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        let chargerPoint = req.cp;
-        chargerPoint = extend(chargerPoint, req.body);
-        chargerPoint.updated = Date.now();
-        await chargerPoint.save();
-        res.json(chargerPoint);
+      const chargerPointId = req.params.station;
+      const updatedChargerPoint = req.body;
+    
+      const updatedCp = await ChargerPoint.findOneAndUpdate(
+        { _id: chargerPointId },
+        { $set: updatedChargerPoint },
+        { new: true }
+      );
+    
+      console.log("🚀 ~ file: chargerPoint.controller.js:82 ~ update ~ req:", updatedCp)
+    
+      const CPlocation = updatedCp.location;
+      await Location.findByIdAndUpdate(
+        CPlocation,
+        { $push: { chargerPoints: updatedCp._id } },
+        { new: true }
+      );
+        
+      res.json(updatedCp);
     } catch (err) {
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
+      return res.status(400).json({
+        error: err,
+      });
     }
-};
+  };
 
 const addConnector = async (req,res)=>{
     try {
@@ -282,19 +296,11 @@ const setConfig = async (req, res) => {
 
 const remove = async (req, res) => {
     try {
-        let chargerPoint = req.cp;
-        await ChargerPoint.deleteOne({ charger_box_id: chargerPoint.charger_box_id }).then(function (data) {
-            res.json(data);
-            console.log(data); // Success
-        }).catch(function (error) {
-            console.log(error); // Failure
-        });
-    } catch (err) {
-        console.log(err)
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
-    }
+        const deletedObject = await ChargerPoint.findByIdAndRemove(req.params.station);
+        res.status(200).json(deletedObject);
+      } catch (error) {
+        console.error(error);
+      }
 };
 
 const clients = async (req, res) => {
