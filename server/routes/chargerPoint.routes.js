@@ -10,6 +10,9 @@ router.route('/ocpp/chargerPoints/status').get(chargerPoint.status);
 router.route('/ocpp/chargerPoints/clients').get(chargerPoint.clients);
 
 router
+   .route('/ocpp/chargerPoints/online-cps/')
+   .get(chargerPoint.onlineCps)
+router
   .route('/ocpp/chargerPoints/:station')
   .get(chargerPoint.read)
   .put(chargerPoint.update)
@@ -18,8 +21,6 @@ router
 router
   .route('/ocpp/chargerPoints/addConnector/:station')
   .put(chargerPoint.addConnector)
-
-
 router
   .route('/ocpp/chargerPoints/start/:userId')
   .post(chargerPoint.remoteStart);

@@ -40,7 +40,7 @@ const list = async (req, res) => {
 };
 
 const chargerPointByID = async (req, res, next, id) => {
-
+    console.log("JJJJJ")
     try {
         let chargerPoint = await ChargerPoint.find({ _id: id });
 
@@ -102,6 +102,26 @@ const update = async (req, res) => {
       });
     }
   };
+
+const onlineCps = async (req, res) => {
+
+    console.log("Entro")
+    try {
+        let chargerPoints = await ChargerPoint.aggregate([
+            {
+              $group: {
+                _id: '$status',
+                count: { $sum: 1 } // this means that the count will increment by 1
+              }
+            }
+          ]);
+          res.json(chargerPoints);
+        } catch (err) {
+            return res.status(400).json({
+                error: err,
+            });
+        }
+}
 
 const addConnector = async (req,res)=>{
     try {
@@ -370,5 +390,6 @@ export default {
     clearCache,
     unlock,
     stop,
-    setConfig
+    setConfig,
+    onlineCps
 };
