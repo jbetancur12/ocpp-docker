@@ -244,6 +244,13 @@ const getCPStats = async (req, res) => {
     try{
         const { startDate, endDate, unit, timeZone } = req.query; //destructure the query parameters
         const salesGraph = await Transaction.aggregate([
+            // { 
+            //     $project: {
+            //         consumption: { 
+            //             $subtract: [{$toDouble:"$stop_value"}, {$toDouble:"$start_value"}] 
+            //         }
+            //     }
+            // },
             {    
                 $match: {
                     createdAt: {
@@ -261,15 +268,68 @@ const getCPStats = async (req, res) => {
                             binSize:1,
                         },
                     },
-                    sum: { $sum: { $toDouble: "$cost" } },
+                    sumIncome: { $sum: { $toDouble: "$cost" } },
+                    sumPower:  { $sum: { $toDouble: {$subtract: ["$stop_value", "$start_value"]} } },
+                    sumTransactions: {$sum: 1}
                 },
+                // $group: {
+                //     _id: null,
+                //     totalIncome: {
+                //         $sum: {
+                //             $toDouble: "$cost"
+                //         }
+                //     },
+                //     totalPower: {
+                //         $sum: { $toDouble: {$subtract: ["$stop_value", "$start_value"]} }
+                //     },
+                //     totalTransactions: {
+                //         $sum: 1
+                //     }
+                // }
             },
             { $sort: { _id: 1 } },
         ]);
 
+        const salesByPeriod = await Transaction.aggregate(
+            [
+                {    
+                    $match: {
+                        $and: [
+                            {
+                                createdAt: {
+                                    $gte: new Date(startDate),
+                                    $lte: new Date(endDate),
+                                }
+                            },
+                        ]
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalIncome: {
+                        $sum: {
+                            $toDouble: "$cost"
+                        }
+                    },
+                    totalPower: {
+                        $sum: {
+                            $toDouble: "$stop_value"
+                        }
+                    },
+                    totalTransactions: {
+                        $sum: 1
+                    }
+                }
+            }
+                ,
+            { "$unset": ["_id"] }
+            ])
+
+  
 
 
-        res.status(200).json(salesGraph);
+        res.status(200).json({salesGraph, salesByPeriod});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
