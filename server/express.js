@@ -11,6 +11,7 @@ import costRoutes from './routes/cost.routes';
 import transactionsRoutes from './routes/transaction.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import locationsRoutes from './routes/location.routes';
+import companiesRoutes from './routes/company.routes';
 
 import sse from './sse';
 
@@ -34,6 +35,7 @@ app.use('/', costRoutes);
 app.use('/', transactionsRoutes);
 app.use('/',dashboardRoutes)
 app.use('/',locationsRoutes)
+app.use('/',companiesRoutes)
 
 
 app.use((err, req, res, next) => {

@@ -20,11 +20,10 @@ const UserSchema = new Schema({
     type: String,
     required: 'Password is required',
   },
-  about: {
+  role: {
     type: String,
-    trim: true,
+    required: true
   },
-  photo: { data: Buffer, contentType: String },
   id_tag: {
     type: String,
     required: true,
