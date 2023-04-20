@@ -12,7 +12,7 @@ router.route('/test').get((req,res)=> res.send("Holsdaaa"))
 
 
 router
-  .route('/ocpp/transactions/')
+  .route('/ocpp/transactionss/')
   .get(transactionCtrl.list);
 
 router.param('userId', userCtrl.userByID);
