@@ -2,7 +2,7 @@ version: "3"
 services:
   react-app:
     build:
-      context: .
+      context: ./frontend/
       target: dev
     image: react-app
     stdin_open: true
@@ -20,7 +20,7 @@ services:
       - mern-app
   api-server:
     build:
-      context: .
+      context: ./backend/
       target: dev
     image: api-server
     ports:
