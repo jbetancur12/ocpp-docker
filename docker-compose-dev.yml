@@ -4,7 +4,7 @@ services:
     build:
       context: ./frontend/
       target: dev
-    image: react-app
+    image: react-app-dev
     stdin_open: true
     env_file: .env
     environment:
