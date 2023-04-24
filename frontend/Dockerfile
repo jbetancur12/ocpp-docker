@@ -15,5 +15,6 @@ CMD ["npm", "start"]
 FROM base as dev
 ENV NODE_ENV=development
 RUN npm install
+RUN npm run build 
 COPY . .
 CMD ["npm", "start"]

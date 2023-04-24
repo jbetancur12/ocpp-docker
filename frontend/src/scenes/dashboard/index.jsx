@@ -51,12 +51,12 @@ const Dashboard = () => {
         {
             id: "online",
             label: "Online",
-            value: dataOnline ? Number((dataOnline.length && dataOnline[0].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
+            value: dataOnline.length > 0 ? Number((dataOnline.length && dataOnline[0].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
         },
         {
             id: "offline",
             label: "Offline",
-            value: dataOnline ? Number((dataOnline && dataOnline[1].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
+            value: dataOnline.length > 0 ? Number((dataOnline && dataOnline[1].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
         }
     ]
 
