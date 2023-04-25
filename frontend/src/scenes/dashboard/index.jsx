@@ -39,6 +39,10 @@ const Dashboard = () => {
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
     const { data, isLoading } = useGetDashboardQuery();
     const { data: dataOnline, isLoading: isLoadingOnline } = useGetChargerPointsOnlineQuery();
+    console.log("🚀 ~ file: index.jsx:42 ~ Dashboard ~ isLoadingOnline:", isLoadingOnline)
+    console.log("🚀 ~ file: index.jsx:42 ~ Dashboard ~ dataOnline:", dataOnline)
+
+    
     const [graphData, setGraphData] = useState({
         salesGraph: [],
         salesByPeriod: []
@@ -47,18 +51,18 @@ const Dashboard = () => {
     const [dateTitle, setDateTitle] = React.useState(t("dashboard.datePicker.title.last7Days"))
 
   
-    const dataPie = [
-        {
-            id: "online",
-            label: "Online",
-            value: dataOnline ? Number((dataOnline.length && dataOnline[0].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
-        },
-        {
-            id: "offline",
-            label: "Offline",
-            value: dataOnline ? Number((dataOnline && dataOnline[1].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
-        }
-    ]
+    // const dataPie = [
+    //     {
+    //         id: "online",
+    //         label: "Online",
+    //         value: isLoadingOnline ? Number((dataOnline.length && dataOnline[0].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
+    //     },
+    //     {
+    //         id: "offline",
+    //         label: "Offline",
+    //         value: isLoadingOnline ? Number((dataOnline[1].count / (dataOnline[0].count + dataOnline[1].count)) * 100).toFixed(2) : 0
+    //     }
+    // ]
 
     const columns = [
         //{ field: "_id", headerName: "ID", flex: 1 },
@@ -190,7 +194,7 @@ const Dashboard = () => {
                 <StatBox title={t("dashboard.statbox.monthIncome")} value={data && data.salesMonth.length > 0 && currencyFormatter.format(Number(data.salesMonth[0].SUM)) || 0} increase="+5%" description="Since last month" icon={<PersonAdd sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />} />
                 <StatBox title={t("dashboard.statbox.yearIncome")} value={data && data.salesYear.length > 0 && currencyFormatter.format(Number(data.salesYear[0].SUM)) || 0} increase="+43%" description="Since last month" icon={<Traffic sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />} />
                 {/* <Box gridColumn="span 8" gridRow="span 1" sx={{ "& .MuiDataGrid-root": { border: "none", borderRadius: "5rem" } }}> */}
-                <StatBox title={t("dashboard.statbox.totalCP")} increase={dataOnline ? dataOnline[0].count : 0} description={"Online"} value={data && data.CPcount} icon={<Email sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />} />
+                <StatBox title={t("dashboard.statbox.totalCP")} increase={isLoadingOnline && dataOnline ? dataOnline[0].count : 0} description={"Online"} value={data && data.CPcount} icon={<Email sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />} />
                 <StatBox title={t("dashboard.statbox.totalEnergy")} value={data && data.totalPower.length > 0 && new Intl.NumberFormat("en-US", {
                     maximumFractionDigits: 1,
                 }).format((data.totalPower[0].sum) / 1000) + " kWh" || 0 + " kWh"} icon={<Email sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />} />
@@ -229,9 +233,9 @@ const Dashboard = () => {
                     </FlexBetween>
                     <FlexBetween>
                         <Typography variant="h6" sx={{ color: theme.palette.secondary[100], display: "flex", alignItems: "center" }}>
-                            <div style={{ width: "10px", height: "10px", borderRadius: "50px", background: "green", marginRight: "10px" }}></div> {t("dashboard.statbox.onlineCPS")}
+                            <div style={{ width: "px", height: "10px", borderRadius: "50px", background: "green", marginRight: "10px" }}></div> {t("dashboard.statbox.onlineCPS")}
                         </Typography>
-                        {dataOnline ? dataOnline[0].count : 0}
+                        {isLoadingOnline && dataOnline ? dataOnline[0].count : 0}
                     </FlexBetween>
                     <FlexBetween>
                         <Typography variant="h6" sx={{ color: theme.palette.secondary[100], display: "flex", alignItems: "center" }}>
@@ -244,12 +248,12 @@ const Dashboard = () => {
                         <Typography variant="h6" sx={{ color: theme.palette.secondary[100], display: "flex", alignItems: "center" }}>
                             <div style={{ width: "10px", height: "10px", borderRadius: "50px", background: "red", marginRight: "10px" }}></div> {t("dashboard.statbox.faultedCPS")}
                         </Typography>
-                        0
+                        0 
                     </FlexBetween>
                     {/* <ResponsivePie
       data={dataPie}
       margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-      innerRadius={0}
+      innerRadius={0} //
       padAngle={0.7}
       cornerRadius={3}
       activeOuterRadiusOffset={8}

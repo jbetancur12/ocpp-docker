@@ -1,17 +1,18 @@
 import express from 'express';
-import userCtrl from '../controllers/user.controller';
-import authCtrl from '../controllers/auth.controller';
+import {
+    getAllUsersHandler,
+    getMeHandler,
+  } from '../controllers/user.controller';
+  import { deserializeUser } from '../middleware/deserializeUser';
+  import { requireUser } from '../middleware/requireUser';
+  import { restrictTo } from '../middleware/restrictTo';
 
 const router = express.Router();
 
-router.route('/api/users').get(userCtrl.list).post(userCtrl.create);
+router.route('/api/users').get(getAllUsersHandler)
 
 router
-  .route('/api/users/:userId')
-  .get(authCtrl.requireSignin, userCtrl.read)
-  .put(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.update)
-  .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.remove);
-
-router.param('userId', userCtrl.userByID);
+  .route('/api/users/me')
+  .get(getMeHandler)
 
 export default router;

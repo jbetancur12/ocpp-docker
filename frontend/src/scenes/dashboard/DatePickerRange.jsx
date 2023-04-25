@@ -98,7 +98,6 @@ const DatePickerRange = ({setGraphData, setUnit, setDateTitle}) => {
 
     const { data, isLoading } = useGetDashboardGraphQuery(params);
 
-    console.log("jjjjjjjjj", data)
     setGraphData(data)
     setUnit(getUnit(diffDays))
 

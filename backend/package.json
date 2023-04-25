@@ -28,6 +28,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "config": "^3.3.9",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
@@ -43,6 +44,7 @@
     "lodash": "^4.17.20",
     "mongoose": "^5.10.15",
     "nanoid": "^3.1.30",
+    "redis": "^4.6.5",
     "uuid": "^8.3.2",
     "webpack": "^5.64.1",
     "webpack-dev-middleware": "^4.0.2",

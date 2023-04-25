@@ -22,11 +22,12 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    required: true
+    required: true,
+    default: "user",
   },
   id_tag: {
     type: String,
-    required: true,
+    // required: true,
     unique: true
   },
   salt: String,
@@ -49,6 +50,7 @@ UserSchema.virtual('password')
 
 UserSchema.methods = {
   authenticate: function (plainText) {
+    
     return this.encryptPassword(plainText) === this.hashed_password;
   },
   encryptPassword: function (password) {
