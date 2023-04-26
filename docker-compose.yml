@@ -39,8 +39,6 @@ services:
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB
       - REDIS_HOSTNAME=redis
-      - ACCESS_TOKEN_PRIVATE_KEY = $ACCESS_TOKEN_PRIVATE_KEY
-      - ACCESS_TOKEN_PUBLIC_KEY = $ACCESS_TOKEN_PUBLIC_KEY
     networks:
       - mern-app
     depends_on:

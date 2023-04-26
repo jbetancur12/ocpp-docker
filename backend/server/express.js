@@ -29,8 +29,8 @@ app.use(cors());
 app.use(sse);
 
 
-app.use('/', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/', userRoutes);
 // app.use('/', chargerPointsRoutes);
 app.use('/', costRoutes);
 // app.use('/', transactionsRoutes);

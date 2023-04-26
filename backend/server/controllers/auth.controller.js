@@ -72,8 +72,8 @@ export const registerHandler = async (
       }
   
       // Create an Access Token
-      const { accessToken } = await signToken(user);
-  
+      const { access_token: accessToken } = await signToken(user);
+   
       // Send Access Token in Cookie
       res.cookie('accessToken', accessToken, accessTokenCookieOptions);
       res.cookie('logged_in', true, {

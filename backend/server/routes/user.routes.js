@@ -9,7 +9,10 @@ import {
 
 const router = express.Router();
 
-router.route('/api/users').get(getAllUsersHandler)
+router.use(deserializeUser, requireUser)
+
+
+router.route('/api/users').get(restrictTo("admin"), getAllUsersHandler)
 
 router
   .route('/api/users/me')

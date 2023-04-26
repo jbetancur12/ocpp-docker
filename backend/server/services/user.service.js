@@ -41,9 +41,11 @@ export const signToken = async (user) => {
     }
   );
 
-  // Create a Session
+  console.log("USER", user)
+
+//   Create a Session
   redisClient.set(user._id, JSON.stringify(user), {
-    EX: 60 * 60,
+    EX: 15 * 60 * 60
   });
 
   // Return access token
